@@ -3742,7 +3742,7 @@ export default function Arabiq() {
 
             {/* How pricing works */}
             <div style={{ background:"#fff", borderRadius:22,
-              border:`1.5px solid ${C.gray200}`, padding:"36px 20px",
+              border:`1.5px solid ${C.gray200}`, padding:"36px 32px",
               marginBottom:36 }}>
               <div style={{ textAlign:"center", marginBottom:30 }}>
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
@@ -3754,18 +3754,18 @@ export default function Arabiq() {
                 </p>
               </div>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",
-                gap:28 }}>
+                gap:16 }}>
                 {[
-                  { icon:"👤", title:"Choose a teacher", desc:"Browse teacher profiles and pick someone whose style, dialect, and rate suits you." },
-                  { icon:"📅", title:"Book a slot", desc:"Pick an available time slot directly from your teacher's calendar." },
-                  { icon:"💳", title:"Pay per session", desc:"Pay securely at the time of booking. Your teacher's rate is shown upfront - no surprises." },
-                  { icon:"🎓", title:"Attend and learn", desc:"Join your private video classroom. Book again whenever you're ready." },
+                  { icon:"🌱", title:"Trial session - half price", desc:"Your first session with any teacher is always 50% off their regular rate. A 30-minute taster so you can meet the teacher and decide if the fit is right before committing." },
+                  { icon:"🎓", title:"Regular session - teacher's rate", desc:"A full 60-minute private lesson at your chosen teacher's rate. Rates range from £8 to £15 per session depending on the teacher." },
+                  { icon:"💳", title:"Pay only when you book", desc:"No monthly fees, no subscriptions, no minimum sessions. You pay at the time of booking and only for the sessions you actually take." },
+                  { icon:"🔒", title:"No hidden charges", desc:"The price shown on each teacher's profile is exactly what you pay. Arabiq never adds booking fees or platform charges on top." },
                 ].map((s,i)=>(
-                  <div key={i} style={{ textAlign:"center", padding:"0 8px" }}>
-                    <div style={{ fontSize:36, marginBottom:12 }}>{s.icon}</div>
+                  <div key={i} style={{ background:C.cream, borderRadius:14, padding:"22px 20px" }}>
+                    <div style={{ fontSize:32, marginBottom:12 }}>{s.icon}</div>
                     <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
-                      fontSize:16, fontWeight:700, marginBottom:6 }}>{s.title}</h3>
-                    <p style={{ color:C.gray600, fontSize:13, lineHeight:1.65 }}>{s.desc}</p>
+                      fontSize:16, fontWeight:700, marginBottom:8 }}>{s.title}</h3>
+                    <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7, margin:0 }}>{s.desc}</p>
                   </div>
                 ))}
               </div>
