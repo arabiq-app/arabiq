@@ -4138,7 +4138,7 @@ export default function Arabiq() {
             </div>
 
             {[
-              { title:"1. Who we are", content:"Arabiq Ltd operates arabiq.app, an online platform connecting students with native Arabic teachers for private 1-on-1 video lessons. When we refer to "Arabiq", "we", "us", or "our" in this policy, we mean Arabiq Ltd. Our contact email is hello@arabiq.app." },
+              { title:"1. Who we are", content:"Arabiq Ltd operates arabiq.app, an online platform connecting students with native Arabic teachers for private 1-on-1 video lessons. When we refer to Arabiq, we, us, or our in this policy, we mean Arabiq Ltd. Our contact email is hello@arabiq.app." },
               { title:"2. What information we collect", content:"We collect information you provide when you register an account - including your name, email address, and password. When you make a booking we collect the details necessary to process your payment through Stripe, though we do not store your full card details on our servers. We also collect data about how you use the platform such as bookings made, sessions attended, and pages visited." },
               { title:"3. How we use your information", content:"We use your information to provide and improve the Arabiq service - including processing bookings, sending confirmation emails, facilitating video lessons, and providing customer support. We do not sell your personal data to third parties. We do not use your data for advertising purposes." },
               { title:"4. Payments", content:"All payments are processed securely by Stripe. Arabiq does not store your card details. Stripe's privacy policy applies to the processing of your payment information and can be found at stripe.com/privacy." },
@@ -4171,7 +4171,7 @@ export default function Arabiq() {
             </div>
 
             {[
-              { title:"1. About Arabiq", content:"Arabiq Ltd ("Arabiq") operates arabiq.app, a platform that connects students with independent native Arabic teachers for private 1-on-1 video lessons. By using Arabiq you agree to these terms. If you do not agree, please do not use the platform." },
+              { title:"1. About Arabiq", content:"Arabiq Ltd ('Arabiq') operates arabiq.app, a platform that connects students with independent native Arabic teachers for private 1-on-1 video lessons. By using Arabiq you agree to these terms. If you do not agree, please do not use the platform." },
               { title:"2. Your account", content:"You must be at least 18 years old to create an account on Arabiq. You are responsible for keeping your login credentials secure. You must provide accurate information when registering. Arabiq reserves the right to suspend or close accounts that violate these terms." },
               { title:"3. Bookings and payments", content:"When you book a session, you agree to pay the stated price at the time of booking. All payments are processed securely through Stripe. Prices are displayed in British Pounds (GBP) and are inclusive of all platform fees. Arabiq takes a platform commission from each booking to cover operating costs." },
               { title:"4. Cancellation and refunds", content:"You may cancel a booking more than 24 hours before the scheduled session time for a full refund. Cancellations made within 24 hours of the session are non-refundable, to protect the teacher's time. Refunds are processed within 3-5 business days. If a teacher cancels a session, you will receive a full refund automatically." },
@@ -4419,3 +4419,5 @@ export default function Arabiq() {
     </div>
   );
 }
+
+   
