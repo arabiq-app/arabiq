@@ -54,7 +54,7 @@ const TEACHERS = [
     qualifications: ["MA Applied Linguistics - University of Oxford","BA Arabic Language & Literature - Cairo University","CELTA Certified English & Arabic Teacher","Quranic Arabic Specialist"],
     experience: "8 years of private teaching experience with over 200 students across the UK, France, and the Arab world. Former lecturer at the British Council Cairo.",
     teachingStyle: "Patient and structured. Fatima builds strong grammatical foundations before introducing conversation. She uses real-world materials - news articles, literature, and audio clips - to keep lessons engaging and relevant.",
-    dialects: ["Modern Standard Arabic","Egyptian Arabic"],
+    dialects: ["Modern Standard Arabic (Fusha)","Egyptian Arabic"],
     studentCount: 312,
     totalSessions: 1240,
   },
@@ -68,7 +68,7 @@ const TEACHERS = [
     qualifications: ["BA Arabic Journalism - American University of Beirut","Certificate in Language Coaching - International Coaching Federation","Published author of two Arabic language learning guides"],
     experience: "10 years of professional language coaching. Former Arabic instructor at the Goethe-Institut Beirut. Regular contributor to language learning publications.",
     teachingStyle: "Conversational and immersive. Omar believes fluency comes from speaking, not just studying. Lessons are discussion-driven with grammar corrections integrated naturally rather than through formal drills.",
-    dialects: ["Levantine Arabic","Modern Standard Arabic"],
+    dialects: ["Levantine Arabic","Modern Standard Arabic (Fusha)"],
     studentCount: 276,
     totalSessions: 890,
   },
@@ -82,7 +82,7 @@ const TEACHERS = [
     qualifications: ["Ijazah (Licence) in Quranic Recitation - Zaytuna Institute Tunis","Diploma in Islamic Studies - Al-Azhar University Cairo","Tajweed Certification - International Quran Teaching Academy","BA Arabic Language - University of Tunis"],
     experience: "7 years of teaching Quranic Arabic and Tajweed to students in over 15 countries. Has helped over 190 students complete their first full Quran recitation.",
     teachingStyle: "Gentle, encouraging, and deeply knowledgeable. Nour creates a calm learning environment and is exceptionally skilled at explaining complex Quranic concepts in simple, accessible terms for non-native speakers.",
-    dialects: ["Quranic Arabic","Modern Standard Arabic","Tunisian Arabic"],
+    dialects: ["Modern Standard Arabic (Fusha)","Maghrebi Arabic"],
     studentCount: 198,
     totalSessions: 620,
   },
@@ -96,11 +96,40 @@ const TEACHERS = [
     qualifications: ["MBA International Business - London Business School","BA Arabic & Translation Studies - UAE University","Certified Corporate Language Trainer","Advanced Certificate in Arabic for Business Communication"],
     experience: "12 years of corporate language training. Former Head of Arabic Learning at a leading Dubai-based professional training firm. Has delivered training programmes for multinational companies across the GCC.",
     teachingStyle: "Goal-oriented and efficient. Yasmin tailors every lesson to the student's specific professional context - whether that is negotiating contracts, networking at events, or understanding Gulf business culture. Results-driven with clear milestones.",
-    dialects: ["Gulf Arabic","Modern Standard Arabic","Emirati Arabic"],
+    dialects: ["Gulf Arabic","Modern Standard Arabic (Fusha)"],
     studentCount: 401,
     totalSessions: 1580,
   },
 ];
+
+// Normalise any legacy dialect names to the current approved list
+const DIALECT_MAP = {
+  "modern standard arabic": "Modern Standard Arabic (Fusha)",
+  "modern standard arabic (fusha)": "Modern Standard Arabic (Fusha)",
+  "msa": "Modern Standard Arabic (Fusha)",
+  "fusha": "Modern Standard Arabic (Fusha)",
+  "egyptian arabic": "Egyptian Arabic",
+  "levantine arabic": "Levantine Arabic",
+  "levantine": "Levantine Arabic",
+  "gulf arabic": "Gulf Arabic",
+  "gulf": "Gulf Arabic",
+  "emirati arabic": "Gulf Arabic",
+  "maghrebi arabic": "Maghrebi Arabic",
+  "moroccan arabic": "Maghrebi Arabic",
+  "tunisian arabic": "Maghrebi Arabic",
+  "north african arabic": "Maghrebi Arabic",
+  "quranic arabic": "Modern Standard Arabic (Fusha)",
+};
+const APPROVED_DIALECTS = ["Modern Standard Arabic (Fusha)","Egyptian Arabic","Levantine Arabic","Gulf Arabic","Maghrebi Arabic"];
+
+function normaliseDialects(dialects) {
+  if (!dialects || dialects.length === 0) return ["Modern Standard Arabic (Fusha)"];
+  return [...new Set(
+    dialects
+      .map(d => DIALECT_MAP[d.toLowerCase()] || d)
+      .filter(d => APPROVED_DIALECTS.includes(d))
+  )];
+}
 
 const SESSION_TYPES = [
   {
@@ -653,7 +682,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                       fontSize:22, fontWeight:800, margin:0 }}>Dialects Taught</h2>
                   </div>
                   <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-                    {teacher.dialects.map((d,i)=>(
+                    {normaliseDialects(teacher.dialects).map((d,i)=>(
                       <div key={d} style={{ display:"flex", alignItems:"center", gap:16,
                         padding:"16px 20px", background:i===0?C.lb:"#fff",
                         borderRadius:12, border:`1px solid ${i===0?C.gray200:C.gray100}` }}>
@@ -2904,14 +2933,23 @@ function AdminPanel({ onExit, onTeachersChanged }) {
               {/* Dialects */}
               <div style={{ marginBottom:14 }}>
                 <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
-                  marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Dialects Taught (comma separated)</label>
-                <input type="text"
-                  value={newTeacher.dialects||""}
-                  onChange={e=>setNewTeacher(t=>({...t,dialects:e.target.value}))}
-                  placeholder="Modern Standard Arabic, Egyptian Arabic"
-                  style={{ width:"100%", padding:"10px 12px", borderRadius:9,
-                    border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
-                    outline:"none", color:C.navy, boxSizing:"border-box" }} />
+                  marginBottom:8, textTransform:"uppercase", letterSpacing:0.5 }}>Dialects Taught</label>
+                <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+                  {["Modern Standard Arabic (Fusha)","Egyptian Arabic","Levantine Arabic","Gulf Arabic","Maghrebi Arabic"].map(d=>{
+                    const sel = (newTeacher.dialects||[]).includes(d);
+                    return (
+                      <button key={d} onClick={()=>setNewTeacher(t=>({...t,
+                        dialects:sel?(t.dialects||[]).filter(x=>x!==d):[...(t.dialects||[]),d]}))}
+                        style={{ padding:"7px 14px", borderRadius:20, cursor:"pointer",
+                          fontFamily:"inherit", fontWeight:600, fontSize:12,
+                          border:`2px solid ${sel?C.gold:C.gray200}`,
+                          background:sel?"#FEF9EC":"#fff",
+                          color:sel?"#92400E":C.gray600 }}>
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Languages */}
@@ -2988,9 +3026,9 @@ function AdminPanel({ onExit, onTeachersChanged }) {
                       qualifications: typeof newTeacher.qualifications==="string"
                         ? newTeacher.qualifications.split("\n").map(s=>s.trim()).filter(Boolean)
                         : (newTeacher.qualifications||[]),
-                      dialects: typeof newTeacher.dialects==="string"
-                        ? newTeacher.dialects.split(",").map(s=>s.trim()).filter(Boolean)
-                        : (newTeacher.dialects||[newTeacher.speciality||"Arabic"]),
+                      dialects: Array.isArray(newTeacher.dialects) && newTeacher.dialects.length > 0
+                        ? newTeacher.dialects
+                        : ["Modern Standard Arabic (Fusha)"],
                       avatar: initials,
                       accent: C.navy,
                       price: Number(newTeacher.price)||10,
