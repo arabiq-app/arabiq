@@ -1208,7 +1208,7 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const dialects = ["Modern Standard Arabic","Egyptian Arabic","Levantine Arabic","Gulf Arabic","Quranic Arabic","Moroccan Arabic"];
+  const dialects = ["Modern Standard Arabic (Fusha)","Egyptian Arabic","Levantine Arabic","Gulf Arabic","Maghrebi Arabic"];
 
   const validate = () => {
     const e = {};
