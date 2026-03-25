@@ -5,9 +5,9 @@ import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateT
    DESIGN TOKENS
 ───────────────────────────────────────────────────────────────── */
 const C = {
-  navy:    "#1A3470",
-  navy2:   "#0D2055",
-  navyDk:  "#0B1A3B",
+  navy:    "#0F2557",
+  navy2:   "#0A1C45",
+  navyDk:  "#080F2E",
   gold:    "#C9961A",
   goldLt:  "#F0C842",
   cream:   "#FDFAF4",
@@ -317,7 +317,7 @@ function TeacherCard({ t, onBook, onView }) {
   const [hov, setHov] = useState(false);
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-      onClick={()=>onView && onView(t)}
+      onClick={()=>{ onView && onView(t); window.scrollTo(0,0); }}
       style={{ background:"#fff", borderRadius:20, padding:"26px 22px",
         border:`1.5px solid ${hov?C.gold:C.gray200}`,
         boxShadow: hov?"0 20px 60px rgba(26,52,112,0.14)":"0 4px 20px rgba(26,52,112,0.06)",
@@ -502,7 +502,9 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
           </div>
 
           {/* Tabs bar - sits at bottom of hero */}
-          <div style={{ display:"flex", gap:0, marginTop:32, borderBottom:"none" }}>
+          <div style={{ display:"flex", gap:0, marginTop:32, borderBottom:"none",
+            overflowX:"auto", WebkitOverflowScrolling:"touch",
+            scrollbarWidth:"none", msOverflowStyle:"none" }}>
             {tabs.map(([id,label])=>(
               <button key={id} onClick={()=>setActiveTab(id)}
                 style={{ padding:"13px 22px", background:"none", border:"none",
@@ -3437,7 +3439,7 @@ export default function Arabiq() {
               </p>
               <div style={{ display:"flex", gap:12, justifyContent:"center",
                 flexWrap:"wrap" }}>
-                <button onClick={()=>setPage("teachers")}
+                <button onClick={()=>{ setPage("teachers"); window.scrollTo(0,0); }}
                   style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
                     color:C.navy, border:"none", borderRadius:12,
                     padding:"14px 28px", fontWeight:800, fontSize:15,
@@ -3685,7 +3687,7 @@ export default function Arabiq() {
 
             {/* How pricing works */}
             <div style={{ background:"#fff", borderRadius:22,
-              border:`1.5px solid ${C.gray200}`, padding:"36px 40px",
+              border:`1.5px solid ${C.gray200}`, padding:"36px 20px",
               marginBottom:36 }}>
               <div style={{ textAlign:"center", marginBottom:30 }}>
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
@@ -3704,7 +3706,7 @@ export default function Arabiq() {
                   { icon:"💳", title:"Pay per session", desc:"Pay securely at the time of booking. Your teacher's rate is shown upfront - no surprises." },
                   { icon:"🎓", title:"Attend and learn", desc:"Join your private video classroom. Book again whenever you're ready." },
                 ].map((s,i)=>(
-                  <div key={i} style={{ textAlign:"center" }}>
+                  <div key={i} style={{ textAlign:"center", padding:"0 8px" }}>
                     <div style={{ fontSize:36, marginBottom:12 }}>{s.icon}</div>
                     <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
                       fontSize:16, fontWeight:700, marginBottom:6 }}>{s.title}</h3>
