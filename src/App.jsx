@@ -275,7 +275,8 @@ function Modal({ title, onClose, children, maxW=500 }) {
       justifyContent:"center", zIndex:800, padding:16 }}
       onClick={onClose}>
       <div style={{ background:"#fff", borderRadius:24, width:"100%", maxWidth:maxW,
-        maxHeight:"90vh", overflowY:"auto", boxShadow:"0 40px 120px rgba(0,0,0,0.25)" }}
+        maxHeight:"95vh", overflowY:"auto", boxShadow:"0 40px 120px rgba(0,0,0,0.25)",
+        margin:"0 8px" }}
         onClick={e=>e.stopPropagation()}>
         <div style={{ padding:"22px 28px", borderBottom:`1px solid ${C.gray100}`,
           display:"flex", justifyContent:"space-between", alignItems:"center",
@@ -519,7 +520,8 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
 
       {/* Main content */}
       <div style={{ maxWidth:1100, margin:"0 auto", padding:"36px 40px 60px" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 340px", gap:32, alignItems:"start" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"minmax(0,1fr) minmax(0,320px)", gap:32, alignItems:"start",
+            gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))" }}>
 
           {/* LEFT - tab content */}
           <div>
@@ -1439,7 +1441,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
     <div style={{ paddingTop:72, minHeight:"100vh", background:C.cream }}>
       {/* Banner */}
       <div style={{ background:`linear-gradient(135deg,${C.navy} 0%,${C.navy2} 100%)`,
-        padding:"40px 40px 70px", position:"relative", overflow:"hidden" }}>
+        padding:"32px 16px 56px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:-60, right:-60, width:280, height:280,
           borderRadius:"50%", border:`2px solid rgba(201,150,26,0.12)` }} />
         <div style={{ maxWidth:1100, margin:"0 auto", position:"relative", zIndex:2 }}>
@@ -1496,11 +1498,11 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
         </div>
       </div>
 
-      <div style={{ maxWidth:1100, margin:"0 auto", padding:"32px 40px" }}>
+      <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 16px" }}>
 
         {/* ── OVERVIEW ── */}
         {tab==="overview" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
             {/* Next session or no booking */}
             {nextSession ? (
               <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
@@ -1741,7 +1743,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
 
         {/* ── PROGRESS ── */}
         {tab==="progress" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
 
             {/* Progress bar */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
@@ -1837,7 +1839,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
         {/* ── VOCABULARY ── */}
         {/* ── SETTINGS ── */}
         {tab==="settings" && (
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
             <div style={{ background:"#fff", borderRadius:20, padding:26,
               border:`1.5px solid ${C.gray200}` }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
@@ -3175,11 +3177,29 @@ export default function Arabiq() {
         ::-webkit-scrollbar { width:6px; height:6px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:${C.gray200}; border-radius:3px; }
+
+        /* ── MOBILE RESPONSIVE ── */
+        @media (max-width: 768px) {
+          /* Navbar */
+          nav { padding: 0 16px !important; }
+
+          /* Hero */
+          section { padding-left: 16px !important; padding-right: 16px !important; }
+
+          /* Grids - stack to single column */
+          .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+
+          /* Page containers */
+          div[style*="maxWidth:1100"] { padding-left: 16px !important; padding-right: 16px !important; }
+          div[style*="maxWidth:900"] { padding-left: 16px !important; padding-right: 16px !important; }
+          div[style*="maxWidth:780"] { padding-left: 16px !important; padding-right: 16px !important; }
+          div[style*="maxWidth:860"] { padding-left: 16px !important; padding-right: 16px !important; }
+        }
       `}</style>
 
       {/* ───── NAVBAR ───── */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
-        padding:"0 28px",
+        padding:"0 16px",
         background: scrolled ? "rgba(255,255,255,0.97)" : onHome ? "transparent" : "#fff",
         boxShadow: scrolled||!onHome ? "0 1px 24px rgba(26,52,112,0.09)" : "none",
         backdropFilter: scrolled ? "blur(12px)" : "none",
@@ -3195,7 +3215,8 @@ export default function Arabiq() {
         {/* Centre + Right: ALL tabs in one unified pill row */}
         <div style={{ display:"flex", alignItems:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
-          borderRadius:12, padding:4, flexShrink:0 }}>
+          borderRadius:12, padding:4, flexShrink:0,
+          overflowX:"auto", maxWidth:"calc(100vw - 120px)" }}>
 
           {/* Page tabs */}
           {NAV_TABS.map(tab=>{
@@ -3300,17 +3321,17 @@ export default function Arabiq() {
                 one lesson at a time.
               </h1>
 
-              <p style={{ color:"rgba(255,255,255,0.7)", fontSize:17, lineHeight:1.75,
-                maxWidth:540, margin:"0 auto 38px" }}>
+              <p style={{ color:"rgba(255,255,255,0.7)", fontSize:15, lineHeight:1.75,
+                maxWidth:540, margin:"0 auto 32px", padding:"0 8px" }}>
                 The first Arabic-only learning platform for private 1-on-1 classes with expert native teachers, rigorously vetted by Arabiq - selected for their exceptional expertise and experience. Start with a trial from just £4.
               </p>
 
               <div style={{ display:"flex", gap:12, justifyContent:"center",
-                flexWrap:"wrap" }}>
+                flexWrap:"wrap", padding:"0 16px" }}>
                 <button onClick={()=>setAuthModal("register")}
                   style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
                     color:C.navy, border:"none", borderRadius:14,
-                    padding:"16px 34px", fontWeight:800, fontSize:16, cursor:"pointer",
+                    padding:"16px 28px", fontWeight:800, fontSize:15, cursor:"pointer",
                     fontFamily:"inherit", boxShadow:`0 8px 28px rgba(201,150,26,0.4)`,
                     transition:"transform 0.2s" }}
                   onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
@@ -3327,8 +3348,8 @@ export default function Arabiq() {
               </div>
 
               {/* Stats */}
-              <div style={{ display:"flex", gap:36, justifyContent:"center",
-                marginTop:60, flexWrap:"wrap" }}>
+              <div style={{ display:"flex", gap:24, justifyContent:"center",
+                marginTop:48, flexWrap:"wrap", padding:"0 16px" }}>
                 {[[`${liveTeachers.filter(t=>t.available).length}`,"Expert Teachers"],["1-on-1","Private Classes"],
                   ["30 min","Trial Sessions"],["£4","Starting From"]].map(([num,label])=>(
                   <div key={label} style={{ textAlign:"center" }}>
@@ -3343,7 +3364,7 @@ export default function Arabiq() {
           </section>
 
           {/* Featured Teachers */}
-          <section style={{ padding:"76px 40px", background:C.cream }}>
+          <section style={{ padding:"56px 16px", background:C.cream }}>
             <div style={{ maxWidth:1100, margin:"0 auto" }}>
               <div style={{ textAlign:"center", marginBottom:44 }}>
                 <p style={{ color:C.gold, fontWeight:700, fontSize:12,
@@ -3374,7 +3395,7 @@ export default function Arabiq() {
           </section>
 
           {/* How it works strip */}
-          <section style={{ padding:"70px 40px", background:C.navy }}>
+          <section style={{ padding:"56px 16px", background:C.navy }}>
             <div style={{ maxWidth:900, margin:"0 auto" }}>
               <div style={{ textAlign:"center", marginBottom:50 }}>
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
@@ -3384,7 +3405,7 @@ export default function Arabiq() {
                 </p>
               </div>
               <div style={{ display:"grid",
-                gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))", gap:30 }}>
+                gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))", gap:30 }}>
                 {STEPS.map((s,i)=>(
                   <div key={i} style={{ textAlign:"center" }}>
                     <div style={{ width:72, height:72, borderRadius:18, margin:"0 auto 16px",
@@ -3404,7 +3425,7 @@ export default function Arabiq() {
           </section>
 
           {/* Early adopter section */}
-          <section style={{ padding:"60px 40px", background:C.cream }}>
+          <section style={{ padding:"48px 16px", background:C.cream }}>
             <div style={{ maxWidth:760, margin:"0 auto", textAlign:"center" }}>
               <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
                 fontSize:34, fontWeight:800, marginBottom:14 }}>
@@ -3451,7 +3472,7 @@ export default function Arabiq() {
       {!viewingTeacher && page==="teachers" && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream,
           animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:1100, margin:"0 auto", padding:"36px 24px" }}>
+          <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 16px" }}>
             <div style={{ marginBottom:32 }}>
               <p style={{ color:C.gold, fontWeight:700, fontSize:12,
                 letterSpacing:2, textTransform:"uppercase", marginBottom:6 }}>
@@ -3518,7 +3539,7 @@ export default function Arabiq() {
             </div>
 
             <div style={{ display:"grid",
-              gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:32,
+              gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))", gap:32,
               marginBottom:64 }}>
               {STEPS.map((s,i)=>(
                 <div key={i} style={{ textAlign:"center" }}>
@@ -3580,7 +3601,7 @@ export default function Arabiq() {
             </div>
 
             {/* Session type cards */}
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)",
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",
               gap:22, alignItems:"stretch", marginBottom:56, maxWidth:720, margin:"0 auto 56px" }}>
               {SESSION_TYPES.map((s)=>(
                 <div key={s.name} style={{
@@ -3675,7 +3696,7 @@ export default function Arabiq() {
                   Simple, fair, and completely transparent.
                 </p>
               </div>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",
                 gap:28 }}>
                 {[
                   { icon:"👤", title:"Choose a teacher", desc:"Browse teacher profiles and pick someone whose style, dialect, and rate suits you." },
@@ -3861,7 +3882,7 @@ export default function Arabiq() {
               </p>
             </div>
 
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:28 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:28 }}>
 
               {/* LEFT - Contact form */}
               <div style={{ background:"#fff", borderRadius:20, padding:"36px 32px",
@@ -4050,7 +4071,7 @@ export default function Arabiq() {
               <p style={{ color:"rgba(255,255,255,0.65)", fontSize:16, lineHeight:1.8, maxWidth:560, margin:"0 auto 32px" }}>
                 Share your expertise with students around the world. Set your own schedule, your own rates, and teach from anywhere.
               </p>
-              <button onClick={()=>setAuthModal("register")}
+              <button onClick={()=>{ setPage("contact"); window.scrollTo(0,0); }}
                 style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`, color:C.navy, border:"none", borderRadius:14, padding:"15px 32px", fontWeight:800, fontSize:16, cursor:"pointer", fontFamily:"inherit", boxShadow:"0 8px 28px rgba(201,150,26,0.4)" }}>
                 Apply to Teach →
               </button>
@@ -4111,7 +4132,7 @@ export default function Arabiq() {
                 Create your teacher profile today. Our team will review your application and be in touch within 48 hours.
               </p>
               <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
-                <button onClick={()=>setAuthModal("register")}
+                <button onClick={()=>{ setPage("contact"); window.scrollTo(0,0); }}
                   style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`, color:C.navy, border:"none", borderRadius:12, padding:"14px 30px", fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit" }}>
                   Apply to Teach →
                 </button>
@@ -4274,7 +4295,7 @@ export default function Arabiq() {
                 <div style={{ width:4, height:28, background:`linear-gradient(180deg,${C.gold},${C.goldLt})`, borderRadius:2 }} />
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>What We Stand For</h2>
               </div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18 }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))", gap:18 }}>
                 {[
                   { icon:"🎓", title:"Excellence in Teaching", desc:"Every teacher on Arabiq is personally reviewed. We only accept teachers with verified native fluency, relevant qualifications, and a proven track record of teaching results." },
                   { icon:"🤝", title:"Personal Connection", desc:"We believe the best language learning happens in a genuine 1-on-1 relationship between student and teacher. No group classes. No algorithms. Just real human connection." },
@@ -4419,5 +4440,3 @@ export default function Arabiq() {
     </div>
   );
 }
-
-   
