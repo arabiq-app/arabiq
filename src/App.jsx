@@ -32,7 +32,7 @@ const DB = {
   users: [
     { id: 1, name: "Alex Johnson",   email: "student@arabiq.com", password: "demo123",
       joined: "January 2026", plan: "Fluent", level: "Intermediate",
-      dialect: "Modern Standard Arabic", avatar: "AJ", bookings: [],
+      dialect: "Modern Standard Arabic (Fusha)", avatar: "AJ", bookings: [],
       totalSessions: 22, sessionsLeft: 6, progress: 62 },
   ],
   admins: [{ email: "hello@arabiq.app", password: "ProjectArabiq2026!" }],
@@ -3046,6 +3046,7 @@ export default function Arabiq() {
   const [bookingTeacher,setBookingTeacher]= useState(null);
   const [viewingTeacher,setViewingTeacher]= useState(null);
   const [filterLevel,   setFilterLevel]  = useState("All");
+  const [filterDialect, setFilterDialect] = useState("All");
   const [scrolled,      setScrolled]     = useState(false);
   const [toast,         setToast]        = useState(null);
   const [profileTab,    setProfileTab]   = useState("overview");
@@ -3490,8 +3491,10 @@ export default function Arabiq() {
             </div>
 
             {/* Filters */}
-            <div style={{ display:"flex", gap:8, marginBottom:28,
+            <div style={{ display:"flex", gap:8, marginBottom:16,
               flexWrap:"wrap", alignItems:"center" }}>
+              <span style={{ fontSize:11, fontWeight:700, color:C.gray600,
+                textTransform:"uppercase", letterSpacing:0.5, marginRight:4 }}>Level:</span>
               {["All","Beginner","Intermediate","Advanced"].map(l=>(
                 <button key={l} onClick={()=>setFilterLevel(l)}
                   style={{ padding:"8px 18px", borderRadius:28, cursor:"pointer",
@@ -3501,15 +3504,29 @@ export default function Arabiq() {
                     fontWeight:600, fontSize:13, fontFamily:"inherit",
                     transition:"all 0.2s" }}>{l}</button>
               ))}
+            </div>
+            <div style={{ display:"flex", gap:8, marginBottom:28,
+              flexWrap:"wrap", alignItems:"center" }}>
+              <span style={{ fontSize:11, fontWeight:700, color:C.gray600,
+                textTransform:"uppercase", letterSpacing:0.5, marginRight:4 }}>Dialect:</span>
+              {["All","Modern Standard Arabic (Fusha)","Egyptian Arabic","Levantine Arabic","Gulf Arabic","Maghrebi Arabic"].map(d=>(
+                <button key={d} onClick={()=>setFilterDialect(d)}
+                  style={{ padding:"8px 18px", borderRadius:28, cursor:"pointer",
+                    border:`2px solid ${filterDialect===d?C.gold:C.gray200}`,
+                    background:filterDialect===d?"#FEF9EC":"#fff",
+                    color:filterDialect===d?"#92400E":C.gray600,
+                    fontWeight:600, fontSize:13, fontFamily:"inherit",
+                    transition:"all 0.2s" }}>{d==="All"?"All Dialects":d}</button>
+              ))}
               <span style={{ marginLeft:"auto", color:C.gray400, fontSize:13 }}>
-                {liveTeachers.filter(t=>filterLevel==="All"||t.level.includes(filterLevel)).length} teachers
+                {liveTeachers.filter(t=>(filterLevel==="All"||t.level.includes(filterLevel))&&(filterDialect==="All"||t.dialects?.some(d=>d.toLowerCase().includes(filterDialect.split(" ")[0].toLowerCase()))||t.speciality?.toLowerCase().includes(filterDialect.split(" ")[0].toLowerCase()))).length} teachers
               </span>
             </div>
 
             <div style={{ display:"grid",
               gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:22 }}>
-              {TEACHERS
-                .filter(t=>filterLevel==="All"||t.level.includes(filterLevel))
+              {liveTeachers
+                .filter(t=>(filterLevel==="All"||t.level.includes(filterLevel))&&(filterDialect==="All"||t.dialects?.some(d=>d.toLowerCase().includes(filterDialect.split(" ")[0].toLowerCase()))||t.speciality?.toLowerCase().includes(filterDialect.split(" ")[0].toLowerCase())))
                 .map(t=>(
                   <TeacherCard key={t.id} t={t}
                     onBook={t=>{ if(!currentUser){setAuthModal("login");}else{setBookingTeacher(t);} }}
