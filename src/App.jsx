@@ -3306,12 +3306,15 @@ export default function Arabiq() {
 
       {/* ───── NAVBAR ───── */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
-        padding:isMobile?"0 12px":"0 28px",
+        padding:isMobile?"0 16px":"0 28px",
         background: scrolled ? "rgba(255,255,255,0.97)" : onHome ? "transparent" : "#fff",
         boxShadow: scrolled||!onHome ? "0 1px 24px rgba(26,52,112,0.09)" : "none",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         transition:"all 0.3s ease",
-        display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center" }}>
+        display: isMobile ? "flex" : "grid",
+        gridTemplateColumns: isMobile ? undefined : "1fr auto 1fr",
+        justifyContent: isMobile ? "space-between" : undefined,
+        alignItems:"center" }}>
 
         {/* Left: Logo */}
         <div onClick={()=>{ setPage("home"); setViewingTeacher(null); window.scrollTo(0,0); }}
