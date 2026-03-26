@@ -4433,16 +4433,12 @@ export default function Arabiq() {
                   { label:"Find a Teacher",  action:()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }},
                   { label:"How It Works",    action:()=>{ setPage("how"); setViewingTeacher(null); window.scrollTo(0,0); }},
                   { label:"Pricing",         action:()=>{ setPage("pricing"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"Reviews",         action:()=>{}},
                 ]],
                 ["Company", [
                   { label:"About Us",        action:()=>{ setPage("about"); setViewingTeacher(null); window.scrollTo(0,0); }},
                   { label:"Teach on Arabiq", action:()=>{ setPage("teach"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"Blog",            action:()=>{}},
-                  { label:"Careers",         action:()=>{}},
                 ]],
                 ["Support", [
-                  { label:"Help Centre",     action:()=>{}},
                   { label:"Contact Us",      action:()=>{ setPage("contact"); setViewingTeacher(null); window.scrollTo(0,0); }},
                   { label:"Privacy Policy",  action:()=>{ setPage("privacy"); setViewingTeacher(null); window.scrollTo(0,0); }},
                   { label:"Terms",           action:()=>{ setPage("terms"); setViewingTeacher(null); window.scrollTo(0,0); }},
