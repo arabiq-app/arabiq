@@ -3305,12 +3305,12 @@ export default function Arabiq() {
 
       {/* ───── NAVBAR ───── */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
-        padding:"0 24px",
+        padding:isMobile?"0 12px":"0 24px",
         background: scrolled ? "rgba(255,255,255,0.97)" : onHome ? "transparent" : "#fff",
         boxShadow: scrolled||!onHome ? "0 1px 24px rgba(26,52,112,0.09)" : "none",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         transition:"all 0.3s ease",
-        display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center" }}>
+        display:"grid", gridTemplateColumns:"auto 1fr auto", alignItems:"center", gap:8 }}>
 
         {/* Left: Logo */}
         <div onClick={()=>{ setPage("home"); setViewingTeacher(null); window.scrollTo(0,0); }} style={{ cursor:"pointer",
@@ -3318,32 +3318,34 @@ export default function Arabiq() {
           <Logo height={onHome&&!scrolled?26:24} light={navLight} />
         </div>
 
-        {/* Centre: page tabs pill — hidden on mobile, use bottom nav instead */}
-        {!isMobile && <div style={{ display:"flex", alignItems:"center", gap:1,
+        {/* Centre: page tabs — compact on mobile, full on desktop */}
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
-          borderRadius:12, padding:4, flexShrink:1,
-          overflowX:"auto", maxWidth:"calc(100vw - 260px)" }}>
+          borderRadius:12, padding:isMobile?2:4 }}>
           {NAV_TABS.filter(t=>t.id!=="profile").map(tab=>{
             const active = page===tab.id;
+            const mobileLabels = { home:"Home", teachers:"Teachers", how:"How", pricing:"Pricing" };
             return (
               <button key={tab.id} onClick={()=>{ setPage(tab.id); setViewingTeacher(null); window.scrollTo(0,0); }}
                 style={{ background: active
                     ? (navLight ? "rgba(255,255,255,0.18)" : "#fff")
                     : "transparent",
                   border:"none", cursor:"pointer",
-                  padding:"8px 15px", borderRadius:8,
-                  fontSize:14, fontWeight: active?700:500,
+                  padding: isMobile ? "6px 8px" : "8px 15px",
+                  borderRadius:8,
+                  fontSize: isMobile ? 11 : 14,
+                  fontWeight: active?700:500,
                   color: active
                     ? (navLight?"#fff":C.navy)
                     : (navLight?"rgba(255,255,255,0.65)":C.gray600),
                   fontFamily:"inherit", transition:"all 0.15s",
                   whiteSpace:"nowrap",
                   boxShadow: active&&!navLight ? "0 1px 4px rgba(26,52,112,0.1)" : "none" }}>
-                {tab.label}
+                {isMobile ? mobileLabels[tab.id] || tab.label : tab.label}
               </button>
             );
           })}
-        </div>}
+        </div>
 
         {/* Right: auth buttons or user profile — always visible, never inside scroll */}
         <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0, justifyContent:"flex-end" }}>
@@ -4478,7 +4480,6 @@ export default function Arabiq() {
       )}
 
       {page !== "profile" && (
-        <div style={{ height: isMobile ? 72 : 0 }} />
         <footer style={{ background:"#0D1F4A", padding:isMobile?"32px 20px 24px":"48px 40px 28px" }}>
           <div style={{ maxWidth:1100, margin:"0 auto" }}>
             <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr 1fr":"1fr auto auto auto", gap:isMobile?24:32, marginBottom:36 }}>
@@ -4562,43 +4563,6 @@ export default function Arabiq() {
             setPage("profile");
             window.scrollTo(0,0);
           }} />
-      )}
-
-      {/* ── MOBILE BOTTOM NAV ── */}
-      {isMobile && page !== "admin" && (
-        <div style={{ position:"fixed", bottom:0, left:0, right:0, zIndex:200,
-          background:"rgba(255,255,255,0.97)", backdropFilter:"blur(12px)",
-          borderTop:`1px solid ${C.gray200}`,
-          display:"flex", alignItems:"center", justifyContent:"space-around",
-          padding:"8px 0 12px", boxShadow:"0 -4px 20px rgba(26,52,112,0.08)" }}>
-          {[
-            { icon:"🏠", label:"Home",     id:"home" },
-            { icon:"👤", label:"Teachers", id:"teachers" },
-            { icon:"📋", label:"How",      id:"how" },
-            { icon:"💷", label:"Pricing",  id:"pricing" },
-            ...(currentUser ? [{ icon:"👤", label:"Profile", id:"profile" }] : []),
-          ].map(tab=>(
-            <button key={tab.id}
-              onClick={()=>{ setPage(tab.id); setViewingTeacher(null); window.scrollTo(0,0); }}
-              style={{ display:"flex", flexDirection:"column", alignItems:"center",
-                gap:3, background:"none", border:"none", cursor:"pointer",
-                fontFamily:"inherit", padding:"4px 8px", minWidth:56,
-                opacity: page===tab.id ? 1 : 0.45 }}>
-              <span style={{ fontSize:20 }}>{tab.icon}</span>
-              <span style={{ fontSize:10, fontWeight: page===tab.id?700:500,
-                color: page===tab.id ? C.navy : C.gray600 }}>{tab.label}</span>
-            </button>
-          ))}
-          {!currentUser && (
-            <button onClick={()=>setAuthModal("register")}
-              style={{ display:"flex", flexDirection:"column", alignItems:"center",
-                gap:3, background:"none", border:"none", cursor:"pointer",
-                fontFamily:"inherit", padding:"4px 8px", minWidth:56 }}>
-              <span style={{ fontSize:20 }}>✨</span>
-              <span style={{ fontSize:10, fontWeight:600, color:C.gold }}>Sign Up</span>
-            </button>
-          )}
-        </div>
       )}
 
       {toast && <Toast msg={toast.msg} type={toast.type||"ok"}
