@@ -3320,7 +3320,7 @@ export default function Arabiq() {
         </div>
 
         {/* Centre + Right: full pill on desktop, hidden on mobile */}
-        {!isMobile && <div style={{ display:"flex", alignItems:"center", gap:1,
+        {!isMobile && <div style={{ display:"inline-flex", alignItems:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
           borderRadius:12, padding:4, flexShrink:0 }}>
           {NAV_TABS.filter(t=>t.id!=="profile").map(tab=>{
@@ -3342,8 +3342,6 @@ export default function Arabiq() {
               </button>
             );
           })}
-          <div style={{ width:1, height:20, margin:"0 4px",
-            background: navLight?"rgba(255,255,255,0.2)":C.gray200, flexShrink:0 }} />
         </div>}
 
         {/* Right: desktop = full buttons, mobile = avatar/signup + hamburger */}
