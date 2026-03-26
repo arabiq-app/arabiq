@@ -3311,18 +3311,18 @@ export default function Arabiq() {
         boxShadow: scrolled||!onHome ? "0 1px 24px rgba(26,52,112,0.09)" : "none",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         transition:"all 0.3s ease",
-        display:"flex", alignItems:"center", justifyContent:"space-between", gap:16 }}>
+        display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center" }}>
 
         {/* Left: Logo */}
-        <div onClick={()=>{ setPage("home"); setViewingTeacher(null); window.scrollTo(0,0); }} style={{ cursor:"pointer",
-          display:"inline-block", flexShrink:0 }}>
+        <div onClick={()=>{ setPage("home"); setViewingTeacher(null); window.scrollTo(0,0); }}
+          style={{ cursor:"pointer", display:"inline-block", justifySelf:"start" }}>
           <Logo height={onHome&&!scrolled?26:24} light={navLight} />
         </div>
 
         {/* Centre + Right: full pill on desktop, hidden on mobile */}
         {!isMobile && <div style={{ display:"inline-flex", alignItems:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
-          borderRadius:12, padding:4, flexShrink:0 }}>
+          borderRadius:12, padding:4, justifySelf:"center" }}>
           {NAV_TABS.filter(t=>t.id!=="profile").map(tab=>{
             const active = page===tab.id;
             return (
@@ -3345,7 +3345,7 @@ export default function Arabiq() {
         </div>}
 
         {/* Right: desktop = full buttons, mobile = avatar/signup + hamburger */}
-        <div style={{ display:"flex", alignItems:"center", gap:isMobile?8:8, flexShrink:0 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:isMobile?8:8, flexShrink:0, justifyContent:"flex-end" }}>
           {currentUser ? (
             <div style={{ display:"flex", alignItems:"center", gap:isMobile?8:8 }}>
               {!isMobile && (
