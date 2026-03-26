@@ -3105,6 +3105,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
 ───────────────────────────────────────────────────────────────── */
 export default function Arabiq() {
   const isMobile = useIsMobile();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [page,          setPage]         = useState("home");  // home|teachers|how|pricing|profile|admin|teacher|contact
   const [liveTeachers,  setLiveTeachers]  = useState(TEACHERS); // loaded from Supabase, falls back to hardcoded
   const [currentUser,   setCurrentUser]  = useState(null);
@@ -3305,12 +3306,12 @@ export default function Arabiq() {
 
       {/* ───── NAVBAR ───── */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
-        padding:isMobile?"0 12px":"0 24px",
+        padding:isMobile?"0 12px":"0 28px",
         background: scrolled ? "rgba(255,255,255,0.97)" : onHome ? "transparent" : "#fff",
         boxShadow: scrolled||!onHome ? "0 1px 24px rgba(26,52,112,0.09)" : "none",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         transition:"all 0.3s ease",
-        display:"grid", gridTemplateColumns:"auto 1fr auto", alignItems:"center", gap:8 }}>
+        display:"flex", alignItems:"center", justifyContent:"space-between", gap:16 }}>
 
         {/* Left: Logo */}
         <div onClick={()=>{ setPage("home"); setViewingTeacher(null); window.scrollTo(0,0); }} style={{ cursor:"pointer",
@@ -3318,79 +3319,150 @@ export default function Arabiq() {
           <Logo height={onHome&&!scrolled?26:24} light={navLight} />
         </div>
 
-        {/* Centre: page tabs — compact on mobile, full on desktop */}
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:1,
+        {/* Centre + Right: full pill on desktop, hidden on mobile */}
+        {!isMobile && <div style={{ display:"flex", alignItems:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
-          borderRadius:12, padding:isMobile?2:4 }}>
+          borderRadius:12, padding:4, flexShrink:0 }}>
           {NAV_TABS.filter(t=>t.id!=="profile").map(tab=>{
             const active = page===tab.id;
-            const mobileLabels = { home:"Home", teachers:"Teachers", how:"How", pricing:"Pricing" };
             return (
               <button key={tab.id} onClick={()=>{ setPage(tab.id); setViewingTeacher(null); window.scrollTo(0,0); }}
                 style={{ background: active
                     ? (navLight ? "rgba(255,255,255,0.18)" : "#fff")
                     : "transparent",
                   border:"none", cursor:"pointer",
-                  padding: isMobile ? "6px 8px" : "8px 15px",
-                  borderRadius:8,
-                  fontSize: isMobile ? 11 : 14,
-                  fontWeight: active?700:500,
+                  padding:"8px 15px", borderRadius:8,
+                  fontSize:14, fontWeight: active?700:500,
                   color: active
                     ? (navLight?"#fff":C.navy)
                     : (navLight?"rgba(255,255,255,0.65)":C.gray600),
-                  fontFamily:"inherit", transition:"all 0.15s",
-                  whiteSpace:"nowrap",
+                  fontFamily:"inherit", transition:"all 0.15s", whiteSpace:"nowrap",
                   boxShadow: active&&!navLight ? "0 1px 4px rgba(26,52,112,0.1)" : "none" }}>
-                {isMobile ? mobileLabels[tab.id] || tab.label : tab.label}
+                {tab.label}
               </button>
             );
           })}
-        </div>
+          <div style={{ width:1, height:20, margin:"0 4px",
+            background: navLight?"rgba(255,255,255,0.2)":C.gray200, flexShrink:0 }} />
+        </div>}
 
-        {/* Right: auth buttons or user profile — always visible, never inside scroll */}
-        <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0, justifyContent:"flex-end" }}>
+        {/* Right: desktop = full buttons, mobile = avatar/signup + hamburger */}
+        <div style={{ display:"flex", alignItems:"center", gap:isMobile?8:8, flexShrink:0 }}>
           {currentUser ? (
-            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-              {/* Quick access buttons */}
-              {!isMobile && <button onClick={()=>goProfile("sessions")}
-                style={{ background: navLight?"rgba(255,255,255,0.1)":C.lb,
-                  border: navLight?"1px solid rgba(255,255,255,0.2)":`1px solid ${C.gray200}`,
-                  borderRadius:8, padding:"7px 13px", cursor:"pointer",
-                  fontFamily:"inherit", fontSize:13, fontWeight:600,
-                  color: navLight?"#fff":C.navy, whiteSpace:"nowrap" }}>
-                My Bookings
-              </button>}
+            <div style={{ display:"flex", alignItems:"center", gap:isMobile?8:8 }}>
+              {!isMobile && (
+                <button onClick={()=>goProfile("sessions")}
+                  style={{ background: navLight?"rgba(255,255,255,0.1)":C.lb,
+                    border: navLight?"1px solid rgba(255,255,255,0.2)":`1px solid ${C.gray200}`,
+                    borderRadius:8, padding:"7px 13px", cursor:"pointer",
+                    fontFamily:"inherit", fontSize:13, fontWeight:600,
+                    color: navLight?"#fff":C.navy, whiteSpace:"nowrap" }}>
+                  My Bookings
+                </button>
+              )}
               <UserDropdown user={currentUser}
                 onProfile={(tab)=>goProfile(tab||"overview")}
                 onLogout={()=>{ setCurrentUser(null); setPage("home"); setViewingTeacher(null);
                   fire("You have been logged out."); }} />
             </div>
           ) : (
-            <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-              <div style={{ width:1, height:20,
-                background: navLight?"rgba(255,255,255,0.2)":C.gray200 }} />
-              <button onClick={()=>setAuthModal("login")}
-                style={{ background:"transparent", border:"none", cursor:"pointer",
-                  padding:"8px 15px", borderRadius:8, fontSize:14, fontWeight:600,
-                  color: navLight?"rgba(255,255,255,0.82)":C.gray600,
-                  fontFamily:"inherit", transition:"all 0.15s", whiteSpace:"nowrap" }}
-                onMouseEnter={e=>e.currentTarget.style.color=navLight?"#fff":C.navy}
-                onMouseLeave={e=>e.currentTarget.style.color=navLight?"rgba(255,255,255,0.82)":C.gray600}>
-                Log In
-              </button>
+            <div style={{ display:"flex", alignItems:"center", gap:isMobile?6:6 }}>
+              {!isMobile && (
+                <>
+                  <div style={{ width:1, height:20, background: navLight?"rgba(255,255,255,0.2)":C.gray200 }} />
+                  <button onClick={()=>setAuthModal("login")}
+                    style={{ background:"transparent", border:"none", cursor:"pointer",
+                      padding:"8px 15px", borderRadius:8, fontSize:14, fontWeight:600,
+                      color: navLight?"rgba(255,255,255,0.82)":C.gray600,
+                      fontFamily:"inherit", transition:"all 0.15s", whiteSpace:"nowrap" }}
+                    onMouseEnter={e=>e.currentTarget.style.color=navLight?"#fff":C.navy}
+                    onMouseLeave={e=>e.currentTarget.style.color=navLight?"rgba(255,255,255,0.82)":C.gray600}>
+                    Log In
+                  </button>
+                </>
+              )}
               <button onClick={()=>setAuthModal("register")}
                 style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
                   color:C.navy, border:"none", borderRadius:8,
-                  padding:"8px 15px", fontSize:14, fontWeight:800,
+                  padding:isMobile?"7px 12px":"8px 15px",
+                  fontSize:isMobile?13:14, fontWeight:800,
                   cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap",
-                  boxShadow:"0 2px 8px rgba(201,150,26,0.35)", transition:"opacity 0.15s" }}
-                onMouseEnter={e=>e.currentTarget.style.opacity="0.9"}
-                onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
-                Sign Up Free
+                  boxShadow:"0 2px 8px rgba(201,150,26,0.35)" }}>
+                {isMobile ? "Sign Up" : "Sign Up Free"}
               </button>
             </div>
           )}
+
+          {/* Hamburger button — mobile only */}
+          {isMobile && (
+            <button onClick={()=>setMobileMenuOpen(o=>!o)}
+              style={{ background:"none", border:"none", cursor:"pointer",
+                padding:"6px", display:"flex", flexDirection:"column",
+                gap:5, justifyContent:"center", alignItems:"center" }}>
+              <span style={{ display:"block", width:22, height:2, borderRadius:2,
+                background: navLight?"#fff":C.navy,
+                transition:"all 0.3s",
+                transform: mobileMenuOpen?"rotate(45deg) translate(5px,5px)":"none" }} />
+              <span style={{ display:"block", width:22, height:2, borderRadius:2,
+                background: navLight?"#fff":C.navy,
+                transition:"all 0.3s",
+                opacity: mobileMenuOpen?0:1 }} />
+              <span style={{ display:"block", width:22, height:2, borderRadius:2,
+                background: navLight?"#fff":C.navy,
+                transition:"all 0.3s",
+                transform: mobileMenuOpen?"rotate(-45deg) translate(5px,-5px)":"none" }} />
+            </button>
+          )}
         </div>
+
+        {/* Mobile slide-down menu */}
+        {isMobile && mobileMenuOpen && (
+          <div style={{ position:"absolute", top:72, left:0, right:0,
+            background:"rgba(255,255,255,0.98)", backdropFilter:"blur(16px)",
+            borderBottom:`1px solid ${C.gray200}`,
+            boxShadow:"0 20px 60px rgba(26,52,112,0.15)",
+            zIndex:200, padding:"8px 0 20px",
+            animation:"fadeIn 0.2s ease" }}>
+            {[
+              { label:"Home",           action:()=>{ setPage("home"); setViewingTeacher(null); }},
+              { label:"Find a Teacher", action:()=>{ setPage("teachers"); setViewingTeacher(null); }},
+              { label:"How It Works",   action:()=>{ setPage("how"); setViewingTeacher(null); }},
+              { label:"Pricing",        action:()=>{ setPage("pricing"); setViewingTeacher(null); }},
+              { label:"About Us",       action:()=>{ setPage("about"); setViewingTeacher(null); }},
+              { label:"Contact Us",     action:()=>{ setPage("contact"); setViewingTeacher(null); }},
+              ...(currentUser ? [
+                { label:"My Profile",   action:()=>goProfile("overview") },
+                { label:"My Bookings",  action:()=>goProfile("sessions") },
+              ] : [
+                { label:"Log In",       action:()=>setAuthModal("login"), gold:false },
+              ]),
+            ].map(({label, action, gold})=>(
+              <button key={label} onClick={()=>{ action(); window.scrollTo(0,0); setMobileMenuOpen(false); }}
+                style={{ display:"block", width:"100%", textAlign:"left",
+                  padding:"14px 24px", background:"none", border:"none",
+                  borderBottom:`1px solid ${C.gray100}`,
+                  fontSize:16, fontWeight:600,
+                  color: gold ? C.gold : C.navy,
+                  cursor:"pointer", fontFamily:"inherit" }}
+                onMouseEnter={e=>e.currentTarget.style.background=C.lb}
+                onMouseLeave={e=>e.currentTarget.style.background="none"}>
+                {label}
+              </button>
+            ))}
+            {!currentUser && (
+              <div style={{ padding:"16px 24px 4px" }}>
+                <button onClick={()=>{ setAuthModal("register"); setMobileMenuOpen(false); }}
+                  style={{ width:"100%", padding:"14px",
+                    background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                    color:"#fff", border:"none", borderRadius:12,
+                    fontWeight:800, fontSize:16, cursor:"pointer",
+                    fontFamily:"inherit" }}>
+                  Create Free Account →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </nav>
 
       {/* ───── HOME ───── */}
