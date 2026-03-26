@@ -3318,8 +3318,8 @@ export default function Arabiq() {
           <Logo height={onHome&&!scrolled?26:24} light={navLight} />
         </div>
 
-        {/* Centre: page tabs pill */}
-        <div style={{ display:"flex", alignItems:"center", gap:1,
+        {/* Centre: page tabs pill — hidden on mobile, use bottom nav instead */}
+        {!isMobile && <div style={{ display:"flex", alignItems:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
           borderRadius:12, padding:4, flexShrink:1,
           overflowX:"auto", maxWidth:"calc(100vw - 260px)" }}>
@@ -3343,7 +3343,7 @@ export default function Arabiq() {
               </button>
             );
           })}
-        </div>
+        </div>}
 
         {/* Right: auth buttons or user profile — always visible, never inside scroll */}
         <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0, justifyContent:"flex-end" }}>
