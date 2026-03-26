@@ -1052,7 +1052,10 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
         <p style={{ color:C.gray600, fontSize:13, marginBottom:24, lineHeight:1.6 }}>
           A confirmation has been sent to your email. Your video link will arrive 30 minutes before the session.
         </p>
-        <Btn label="View My Bookings" variant="primary" onClick={()=>{ if(onGoBookings) onGoBookings(); else { onClose(); window.scrollTo(0,0); }}} full />
+        <Btn label="View My Bookings" variant="primary" onClick={()=>{
+          if(onGoBookings) { onGoBookings(); }
+          else { onClose(); window.scrollTo(0,0); }
+        }} full />
       </div>
     </Modal>
   );
@@ -1448,6 +1451,8 @@ function UserDropdown({ user, onProfile, onLogout }) {
 function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
   const [tab, setTab] = useState(initTab);
   const [cancelConfirm, setCancelConfirm] = useState(null);
+
+  useEffect(()=>{ setTab(initTab); },[initTab]);
 
   // Derive bookings - match by email OR by id in user.bookings array
   const myBookings = DB.bookings.filter(b =>
@@ -4485,7 +4490,12 @@ export default function Arabiq() {
           onClose={()=>{ setBookingTeacher(null); goProfile("sessions"); }}
           onBooked={handleBooked}
           onNeedAuth={()=>{ setBookingTeacher(null); setAuthModal("login"); }}
-          onGoBookings={()=>{ setBookingTeacher(null); setProfileTab("sessions"); setPage("profile"); window.scrollTo(0,0); }} />
+          onGoBookings={()=>{
+            setBookingTeacher(null);
+            setProfileTab("sessions");
+            setPage("profile");
+            window.scrollTo(0,0);
+          }} />
       )}
 
       {toast && <Toast msg={toast.msg} type={toast.type||"ok"}
