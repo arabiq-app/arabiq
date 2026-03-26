@@ -1,4 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
+  useEffect(()=>{
+    const h = ()=>setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", h);
+    return ()=>window.removeEventListener("resize", h);
+  },[]);
+  return isMobile;
+}
 import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher } from "./lib/supabase.js";
 
 /* ─────────────────────────────────────────────────────────────────
@@ -303,7 +313,7 @@ function Modal({ title, onClose, children, maxW=500 }) {
       backdropFilter:"blur(6px)", display:"flex", alignItems:"center",
       justifyContent:"center", zIndex:800, padding:16 }}
       onClick={onClose}>
-      <div style={{ background:"#fff", borderRadius:24, width:"100%", maxWidth:maxW,
+      <div style={{ background:"#fff", borderRadius:16, width:"100%", maxWidth:maxW,
         maxHeight:"95vh", overflowY:"auto", boxShadow:"0 40px 120px rgba(0,0,0,0.25)",
         margin:"0 8px" }}
         onClick={e=>e.stopPropagation()}>
@@ -414,6 +424,7 @@ function TeacherCard({ t, onBook, onView }) {
    TEACHER PROFILE PAGE
 ───────────────────────────────────────────────────────────────── */
 function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
+  const isMobile = useIsMobile();
   const trialPrice = 3;
   const [activeTab, setActiveTab] = useState("about");
   const tabs = [["about","About"],["qualifications","Qualifications"],["teaching","Teaching Style"],["dialects","Dialects"],["reviews","Reviews"]];
@@ -423,7 +434,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
 
       {/* Full-width hero banner */}
       <div style={{ background:`linear-gradient(135deg,${C.navyDk} 0%,${teacher.accent} 60%,#1A3470 100%)`,
-        paddingTop:72, position:"relative", overflow:"hidden" }}>
+        paddingTop:72, position:"relative", overflow:"hidden", width:"100%" }}>
 
         {/* Decorative circles */}
         <div style={{ position:"absolute", top:-80, right:-80, width:400, height:400,
@@ -432,7 +443,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
           borderRadius:"50%", border:"1px solid rgba(255,255,255,0.05)", pointerEvents:"none" }} />
 
         {/* Back button inside banner */}
-        <div style={{ maxWidth:1100, margin:"0 auto", padding:"20px 40px 0", position:"relative", zIndex:2 }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", padding:isMobile?"12px 16px 0":"20px 40px 0", position:"relative", zIndex:2 }}>
           <button onClick={onBack}
             style={{ background:"rgba(255,255,255,0.1)", border:"1px solid rgba(255,255,255,0.18)",
               cursor:"pointer", display:"inline-flex", alignItems:"center", gap:7,
@@ -445,7 +456,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
         </div>
 
         {/* Teacher hero content */}
-        <div style={{ maxWidth:1100, margin:"0 auto", padding:"32px 40px 0", position:"relative", zIndex:2 }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", padding:isMobile?"16px 16px 0":"32px 40px 0", position:"relative", zIndex:2 }}>
           <div style={{ display:"flex", gap:32, alignItems:"flex-end", flexWrap:"wrap" }}>
 
             {/* Name block with avatar inline */}
@@ -551,8 +562,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
 
       {/* Main content */}
       <div style={{ maxWidth:1100, margin:"0 auto", padding:"36px 40px 60px" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"minmax(0,1fr) minmax(0,320px)", gap:32, alignItems:"start",
-            gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))" }}>
+        <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 320px", gap:isMobile?20:32, alignItems:"start" }}>
 
           {/* LEFT - tab content */}
           <div>
@@ -1100,7 +1110,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       {step === 1 && (
         <>
           <div style={{ fontSize:13, fontWeight:700, color:C.navy, marginBottom:10 }}>Session Type</div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:22 }}>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:20 }}>
             {["Trial","Regular"].map(type=>(
               <button key={type} onClick={()=>setSType(type)}
                 style={{ padding:"14px 16px", borderRadius:12, cursor:"pointer",
@@ -1459,6 +1469,7 @@ function UserDropdown({ user, onProfile, onLogout }) {
    PROFILE PAGE
 ───────────────────────────────────────────────────────────────── */
 function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
+  const isMobile = useIsMobile();
   const [tab, setTab] = useState(initTab);
   const [cancelConfirm, setCancelConfirm] = useState(null);
 
@@ -1487,7 +1498,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
     <div style={{ paddingTop:72, minHeight:"100vh", background:C.cream }}>
       {/* Banner */}
       <div style={{ background:`linear-gradient(135deg,${C.navy} 0%,${C.navy2} 100%)`,
-        padding:"32px 16px 56px", position:"relative", overflow:"hidden" }}>
+        padding:isMobile?"24px 16px 48px":"40px 40px 70px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:-60, right:-60, width:280, height:280,
           borderRadius:"50%", border:`2px solid rgba(201,150,26,0.12)` }} />
         <div style={{ maxWidth:1100, margin:"0 auto", position:"relative", zIndex:2 }}>
@@ -1511,7 +1522,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                   bg="rgba(201,150,26,0.2)" color={C.goldLt} size={12} />
               </div>
             </div>
-            <div style={{ display:"flex", gap:24, flexWrap:"wrap" }}>
+            <div style={{ display:"flex", gap:isMobile?12:24, flexWrap:"wrap" }}>
               {[["🎓",totalSessions,"Sessions"],["⏱️",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1),"Hours"],
                 ["📊",`${calculatedProgress}%`,"Progress"]].map(([ic,val,label])=>(
                 <div key={label} style={{ textAlign:"center" }}>
@@ -1530,7 +1541,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
       <div style={{ background:"#fff", borderBottom:`1px solid ${C.gray200}`,
         position:"sticky", top:72, zIndex:50 }}>
         <div style={{ maxWidth:1100, margin:"0 auto", padding:"0 40px",
-          display:"flex", overflowX:"auto" }}>
+          display:"flex", overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
           {subTabs.map(([id,label])=>(
             <button key={id} onClick={()=>setTab(id)}
               style={{ padding:"15px 18px", background:"none", border:"none",
@@ -1544,11 +1555,11 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
         </div>
       </div>
 
-      <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 16px" }}>
+      <div style={{ maxWidth:1100, margin:"0 auto", padding:isMobile?"16px 16px":"36px 24px" }}>
 
         {/* ── OVERVIEW ── */}
         {tab==="overview" && (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
             {/* Next session or no booking */}
             {nextSession ? (
               <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
@@ -1789,7 +1800,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
 
         {/* ── PROGRESS ── */}
         {tab==="progress" && (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
 
             {/* Progress bar */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
@@ -1885,7 +1896,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
         {/* ── VOCABULARY ── */}
         {/* ── SETTINGS ── */}
         {tab==="settings" && (
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
             <div style={{ background:"#fff", borderRadius:20, padding:26,
               border:`1.5px solid ${C.gray200}` }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
@@ -1979,6 +1990,7 @@ function StatusBadge({ s }) {
 }
 
 function AdminPanel({ onExit, onTeachersChanged }) {
+  const isMobile = useIsMobile();
   const [page, setPage]           = useState("dashboard");
   const [sCollapsed, setSCollapsed]= useState(false);
   const [adminUsers, setAdminUsers]= useState([...DB.users,
@@ -2021,7 +2033,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
 
   const fire = (msg)=>{ setToast(msg); setTimeout(()=>setToast(null),3000); };
 
-  const W = sCollapsed ? 64 : 224;
+  const W = isMobile ? 0 : (sCollapsed ? 64 : 224);
 
   const navItems = [
     { id:"dashboard", label:"Dashboard", icon:"📊" },
@@ -2039,7 +2051,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
       background:"#F0F4FF" }}>
       {/* Sidebar */}
       <aside style={{ width:W, minHeight:"100vh", background:C.navyDk,
-        display:"flex", flexDirection:"column", position:"fixed", top:0, left:0,
+        display:isMobile?"none":"flex", flexDirection:"column", position:"fixed", top:0, left:0,
         zIndex:50, transition:"width 0.25s ease", overflow:"hidden" }}>
         {/* Logo / collapse */}
         <div style={{ padding: sCollapsed?"18px 14px":"20px 18px",
@@ -2120,8 +2132,8 @@ function AdminPanel({ onExit, onTeachersChanged }) {
       </aside>
 
       {/* Main */}
-      <main style={{ marginLeft:W, flex:1, padding:"28px 32px",
-        transition:"margin-left 0.25s ease", minWidth:0 }}>
+      <main style={{ marginLeft:W, flex:1, padding:isMobile?"60px 12px 16px":"28px 32px",
+        transition:"margin-left 0.25s ease", minWidth:0, width:"100%" }}>
         {/* Top bar */}
         <div style={{ display:"flex", justifyContent:"space-between",
           alignItems:"center", marginBottom:24 }}>
@@ -3092,6 +3104,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
    MAIN APP
 ───────────────────────────────────────────────────────────────── */
 export default function Arabiq() {
+  const isMobile = useIsMobile();
   const [page,          setPage]         = useState("home");  // home|teachers|how|pricing|profile|admin|teacher|contact
   const [liveTeachers,  setLiveTeachers]  = useState(TEACHERS); // loaded from Supabase, falls back to hardcoded
   const [currentUser,   setCurrentUser]  = useState(null);
@@ -3228,28 +3241,65 @@ export default function Arabiq() {
         @keyframes toastIn { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
         @keyframes fadeIn  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing:border-box; }
-        body { margin:0; }
+        body { margin:0; overflow-x:hidden; }
         textarea, select, input { font-family:inherit; }
         ::-webkit-scrollbar { width:6px; height:6px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:${C.gray200}; border-radius:3px; }
 
-        /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 768px) {
-          /* Navbar */
-          nav { padding: 0 16px !important; }
+          /* All grids stack to 1 column */
+          [style*="gridTemplateColumns"] { grid-template-columns: 1fr !important; }
 
-          /* Hero */
-          section { padding-left: 16px !important; padding-right: 16px !important; }
+          /* Remove wide padding on all containers */
+          [style*="padding: 56px 40px"], [style*="padding:56px 40px"],
+          [style*="padding: 72px 40px"], [style*="padding:72px 40px"],
+          [style*="padding: 60px 40px"], [style*="padding:60px 40px"],
+          [style*="padding: 48px 40px"], [style*="padding:48px 40px"],
+          [style*="padding: 36px 40px"], [style*="padding:36px 40px"],
+          [style*="padding: 44px 40px"], [style*="padding:44px 40px"] {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+          }
 
-          /* Grids - stack to single column */
-          .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr !important; }
+          /* Tables - make scrollable */
+          table { font-size: 11px !important; }
+          th, td { padding: 8px 8px !important; }
 
-          /* Page containers */
-          div[style*="maxWidth:1100"] { padding-left: 16px !important; padding-right: 16px !important; }
-          div[style*="maxWidth:900"] { padding-left: 16px !important; padding-right: 16px !important; }
-          div[style*="maxWidth:780"] { padding-left: 16px !important; padding-right: 16px !important; }
-          div[style*="maxWidth:860"] { padding-left: 16px !important; padding-right: 16px !important; }
+          /* Modals - full width */
+          [style*="maxWidth:500"], [style*="maxWidth:460"],
+          [style*="maxWidth:560"], [style*="maxWidth:420"] {
+            margin: 8px !important;
+            max-height: 95vh !important;
+          }
+
+          /* Hide non-essential nav items */
+          .nav-hide-mobile { display: none !important; }
+
+          /* Fix teacher profile sidebar stacking */
+          [style*="gridTemplateColumns:"1fr 340px""],
+          [style*="gridTemplateColumns:"1fr 320px""] {
+            grid-template-columns: 1fr !important;
+          }
+
+          /* Fix hero text sizes */
+          [style*="fontSize:"clamp"] { font-size: clamp(28px,8vw,44px) !important; }
+
+          /* Contact page 2-col grid */
+          [style*="gridTemplateColumns:"1fr 1fr""] {
+            grid-template-columns: 1fr !important;
+          }
+
+          /* Booking flow */
+          [style*="gridTemplateColumns:"1fr 1fr""] {
+            grid-template-columns: 1fr !important;
+          }
+
+          /* Fix overflow on pricing table */
+          [style*="overflow:"hidden""] { overflow-x: auto !important; }
+
+          /* Footer */
+          footer [style*="display:"flex""] { flex-wrap: wrap !important; }
         }
       `}</style>
 
@@ -3300,14 +3350,14 @@ export default function Arabiq() {
           {currentUser ? (
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
               {/* Quick access buttons */}
-              <button onClick={()=>goProfile("sessions")}
+              {!isMobile && <button onClick={()=>goProfile("sessions")}
                 style={{ background: navLight?"rgba(255,255,255,0.1)":C.lb,
                   border: navLight?"1px solid rgba(255,255,255,0.2)":`1px solid ${C.gray200}`,
                   borderRadius:8, padding:"7px 13px", cursor:"pointer",
                   fontFamily:"inherit", fontSize:13, fontWeight:600,
                   color: navLight?"#fff":C.navy, whiteSpace:"nowrap" }}>
                 My Bookings
-              </button>
+              </button>}
               <UserDropdown user={currentUser}
                 onProfile={(tab)=>goProfile(tab||"overview")}
                 onLogout={()=>{ setCurrentUser(null); setPage("home"); setViewingTeacher(null);
@@ -3345,7 +3395,7 @@ export default function Arabiq() {
       {page==="home" && !viewingTeacher && (
         <div style={{ animation:"fadeIn 0.4s ease" }}>
           {/* Hero */}
-          <section style={{ minHeight:"100vh", paddingTop:72,
+          <section style={{ minHeight:"100vh", paddingTop:72, overflowX:"hidden",
             background:`url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231A3470' fill-opacity='0.04'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z'/%3E%3C/g%3E%3C/svg%3E"), linear-gradient(160deg,${C.navy} 0%,${C.navy2} 100%)`,
             display:"flex", alignItems:"center", justifyContent:"center",
             position:"relative", overflow:"hidden" }}>
@@ -3362,7 +3412,7 @@ export default function Arabiq() {
               lineHeight:1, userSelect:"none", letterSpacing:12,
               pointerEvents:"none" }}>عربي</div>
 
-            <div style={{ textAlign:"center", maxWidth:760, padding:"100px 24px 80px",
+            <div style={{ textAlign:"center", maxWidth:760, padding:isMobile?"80px 20px 60px":"100px 24px 80px",
               position:"relative", zIndex:2 }}>
               <div style={{ display:"inline-flex", alignItems:"center", gap:8,
                 background:"rgba(201,150,26,0.15)",
@@ -3386,8 +3436,8 @@ export default function Arabiq() {
                 The first Arabic-only learning platform for private 1-on-1 classes with expert native teachers, rigorously vetted by Arabiq - selected for their exceptional expertise and experience. Start with a trial from just £3.
               </p>
 
-              <div style={{ display:"flex", gap:12, justifyContent:"center",
-                flexWrap:"wrap", padding:"0 16px" }}>
+              <div style={{ display:"flex", gap:10, justifyContent:"center",
+                flexWrap:"wrap", padding:"0 20px", width:"100%" }}>
                 <button onClick={()=>setAuthModal("register")}
                   style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
                     color:C.navy, border:"none", borderRadius:14,
@@ -3408,8 +3458,8 @@ export default function Arabiq() {
               </div>
 
               {/* Stats */}
-              <div style={{ display:"flex", gap:24, justifyContent:"center",
-                marginTop:48, flexWrap:"wrap", padding:"0 16px" }}>
+              <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,auto)", gap:isMobile?16:32,
+                justifyContent:"center", marginTop:48, padding:"0 20px" }}>
                 {[[`${liveTeachers.filter(t=>t.available).length}`,"Expert Teachers"],["1-on-1","Private Classes"],
                   ["30 min","Trial Sessions"],["£3","Starting From"]].map(([num,label])=>(
                   <div key={label} style={{ textAlign:"center" }}>
@@ -3424,7 +3474,7 @@ export default function Arabiq() {
           </section>
 
           {/* Featured Teachers */}
-          <section style={{ padding:"56px 16px", background:C.cream }}>
+          <section style={{ padding:isMobile?"40px 16px":"56px 24px", background:C.cream }}>
             <div style={{ maxWidth:1100, margin:"0 auto" }}>
               <div style={{ textAlign:"center", marginBottom:44 }}>
                 <p style={{ color:C.gold, fontWeight:700, fontSize:12,
@@ -3455,7 +3505,7 @@ export default function Arabiq() {
           </section>
 
           {/* How it works strip */}
-          <section style={{ padding:"56px 16px", background:C.navy }}>
+          <section style={{ padding:isMobile?"40px 16px":"56px 24px", background:C.navy }}>
             <div style={{ maxWidth:900, margin:"0 auto" }}>
               <div style={{ textAlign:"center", marginBottom:50 }}>
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
@@ -3485,7 +3535,7 @@ export default function Arabiq() {
           </section>
 
           {/* Early adopter section */}
-          <section style={{ padding:"48px 16px", background:C.cream }}>
+          <section style={{ padding:isMobile?"36px 16px":"48px 24px", background:C.cream }}>
             <div style={{ maxWidth:760, margin:"0 auto", textAlign:"center" }}>
               <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
                 fontSize:34, fontWeight:800, marginBottom:14 }}>
@@ -3532,7 +3582,7 @@ export default function Arabiq() {
       {!viewingTeacher && page==="teachers" && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream,
           animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:1100, margin:"0 auto", padding:"24px 16px" }}>
+          <div style={{ maxWidth:1100, margin:"0 auto", padding:isMobile?"16px 16px":"36px 24px" }}>
             <div style={{ marginBottom:32 }}>
               <p style={{ color:C.gold, fontWeight:700, fontSize:12,
                 letterSpacing:2, textTransform:"uppercase", marginBottom:6 }}>
@@ -3598,7 +3648,7 @@ export default function Arabiq() {
       {page==="how" && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream,
           animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:900, margin:"0 auto", padding:"50px 40px 70px" }}>
+          <div style={{ maxWidth:900, margin:"0 auto", padding:isMobile?"20px 16px 40px":"50px 40px 70px" }}>
             <div style={{ textAlign:"center", marginBottom:56 }}>
               <p style={{ color:C.gold, fontWeight:700, fontSize:12,
                 letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>
@@ -3658,7 +3708,7 @@ export default function Arabiq() {
       {page==="pricing" && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream,
           animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:1000, margin:"0 auto", padding:"56px 24px" }}>
+          <div style={{ maxWidth:1000, margin:"0 auto", padding:isMobile?"16px 16px":"56px 24px" }}>
 
             {/* Header */}
             <div style={{ textAlign:"center", marginBottom:56 }}>
@@ -3944,7 +3994,7 @@ export default function Arabiq() {
       {/* ───── CONTACT US ───── */}
       {page==="contact" && !viewingTeacher && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream, animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:860, margin:"0 auto", padding:"48px 32px 80px" }}>
+          <div style={{ maxWidth:860, margin:"0 auto", padding:isMobile?"16px 16px 40px":"48px 32px 80px" }}>
 
             {/* Header */}
             <div style={{ textAlign:"center", marginBottom:52 }}>
@@ -3958,7 +4008,7 @@ export default function Arabiq() {
               </p>
             </div>
 
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:28 }}>
+            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:isMobile?20:28 }}>
 
               {/* LEFT - Contact form */}
               <div style={{ background:"#fff", borderRadius:20, padding:"36px 32px",
@@ -4154,7 +4204,7 @@ export default function Arabiq() {
             </div>
           </div>
 
-          <div style={{ maxWidth:900, margin:"0 auto", padding:"60px 40px" }}>
+          <div style={{ maxWidth:900, margin:"0 auto", padding:isMobile?"16px 16px 40px":"60px 40px" }}>
 
             {/* Why teach on Arabiq */}
             <div style={{ textAlign:"center", marginBottom:48 }}>
@@ -4226,7 +4276,7 @@ export default function Arabiq() {
       {/* ───── PRIVACY POLICY ───── */}
       {page==="privacy" && !viewingTeacher && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream, animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:780, margin:"0 auto", padding:"56px 40px 80px" }}>
+          <div style={{ maxWidth:780, margin:"0 auto", padding:isMobile?"16px 16px 40px":"56px 40px 80px" }}>
 
             <div style={{ marginBottom:40 }}>
               <p style={{ color:C.gold, fontWeight:700, fontSize:12, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>Legal</p>
@@ -4259,7 +4309,7 @@ export default function Arabiq() {
       {/* ───── TERMS & CONDITIONS ───── */}
       {page==="terms" && !viewingTeacher && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream, animation:"fadeIn 0.3s ease" }}>
-          <div style={{ maxWidth:780, margin:"0 auto", padding:"56px 40px 80px" }}>
+          <div style={{ maxWidth:780, margin:"0 auto", padding:isMobile?"16px 16px 40px":"56px 40px 80px" }}>
 
             <div style={{ marginBottom:40 }}>
               <p style={{ color:C.gold, fontWeight:700, fontSize:12, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>Legal</p>
@@ -4340,7 +4390,7 @@ export default function Arabiq() {
             </div>
           </div>
 
-          <div style={{ maxWidth:900, margin:"0 auto", padding:"60px 40px" }}>
+          <div style={{ maxWidth:900, margin:"0 auto", padding:isMobile?"16px 16px 40px":"60px 40px" }}>
 
             {/* Mission */}
             <div style={{ background:"#fff", borderRadius:20, padding:"40px 44px", border:`1.5px solid ${C.gray200}`, marginBottom:24, boxShadow:"0 2px 16px rgba(26,52,112,0.06)" }}>
@@ -4428,10 +4478,10 @@ export default function Arabiq() {
       )}
 
       {page !== "profile" && (
-        <footer style={{ background:"#0D1F4A", padding:"48px 40px 28px" }}>
+        <div style={{ height: isMobile ? 72 : 0 }} />
+        <footer style={{ background:"#0D1F4A", padding:isMobile?"32px 20px 24px":"48px 40px 28px" }}>
           <div style={{ maxWidth:1100, margin:"0 auto" }}>
-            <div style={{ display:"flex", justifyContent:"space-between",
-              flexWrap:"wrap", gap:32, marginBottom:36 }}>
+            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr 1fr":"1fr auto auto auto", gap:isMobile?24:32, marginBottom:36 }}>
               <div style={{ maxWidth:270 }}>
                 <div style={{ marginBottom:14 }}><Logo height={22} light /></div>
                 <p style={{ color:"rgba(255,255,255,0.45)", fontSize:13,
@@ -4512,6 +4562,43 @@ export default function Arabiq() {
             setPage("profile");
             window.scrollTo(0,0);
           }} />
+      )}
+
+      {/* ── MOBILE BOTTOM NAV ── */}
+      {isMobile && page !== "admin" && (
+        <div style={{ position:"fixed", bottom:0, left:0, right:0, zIndex:200,
+          background:"rgba(255,255,255,0.97)", backdropFilter:"blur(12px)",
+          borderTop:`1px solid ${C.gray200}`,
+          display:"flex", alignItems:"center", justifyContent:"space-around",
+          padding:"8px 0 12px", boxShadow:"0 -4px 20px rgba(26,52,112,0.08)" }}>
+          {[
+            { icon:"🏠", label:"Home",     id:"home" },
+            { icon:"👤", label:"Teachers", id:"teachers" },
+            { icon:"📋", label:"How",      id:"how" },
+            { icon:"💷", label:"Pricing",  id:"pricing" },
+            ...(currentUser ? [{ icon:"👤", label:"Profile", id:"profile" }] : []),
+          ].map(tab=>(
+            <button key={tab.id}
+              onClick={()=>{ setPage(tab.id); setViewingTeacher(null); window.scrollTo(0,0); }}
+              style={{ display:"flex", flexDirection:"column", alignItems:"center",
+                gap:3, background:"none", border:"none", cursor:"pointer",
+                fontFamily:"inherit", padding:"4px 8px", minWidth:56,
+                opacity: page===tab.id ? 1 : 0.45 }}>
+              <span style={{ fontSize:20 }}>{tab.icon}</span>
+              <span style={{ fontSize:10, fontWeight: page===tab.id?700:500,
+                color: page===tab.id ? C.navy : C.gray600 }}>{tab.label}</span>
+            </button>
+          ))}
+          {!currentUser && (
+            <button onClick={()=>setAuthModal("register")}
+              style={{ display:"flex", flexDirection:"column", alignItems:"center",
+                gap:3, background:"none", border:"none", cursor:"pointer",
+                fontFamily:"inherit", padding:"4px 8px", minWidth:56 }}>
+              <span style={{ fontSize:20 }}>✨</span>
+              <span style={{ fontSize:10, fontWeight:600, color:C.gold }}>Sign Up</span>
+            </button>
+          )}
+        </div>
       )}
 
       {toast && <Toast msg={toast.msg} type={toast.type||"ok"}
