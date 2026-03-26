@@ -3255,12 +3255,12 @@ export default function Arabiq() {
 
       {/* ───── NAVBAR ───── */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
-        padding:"0 16px",
+        padding:"0 24px",
         background: scrolled ? "rgba(255,255,255,0.97)" : onHome ? "transparent" : "#fff",
         boxShadow: scrolled||!onHome ? "0 1px 24px rgba(26,52,112,0.09)" : "none",
         backdropFilter: scrolled ? "blur(12px)" : "none",
         transition:"all 0.3s ease",
-        display:"flex", alignItems:"center", justifyContent:"space-between", gap:16 }}>
+        display:"grid", gridTemplateColumns:"1fr auto 1fr", alignItems:"center" }}>
 
         {/* Left: Logo */}
         <div onClick={()=>{ setPage("home"); setViewingTeacher(null); window.scrollTo(0,0); }} style={{ cursor:"pointer",
@@ -3296,7 +3296,7 @@ export default function Arabiq() {
         </div>
 
         {/* Right: auth buttons or user profile — always visible, never inside scroll */}
-        <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0, justifyContent:"flex-end" }}>
           {currentUser ? (
             <div style={{ display:"flex", alignItems:"center", gap:8 }}>
               {/* Quick access buttons */}
