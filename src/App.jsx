@@ -135,8 +135,8 @@ const SESSION_TYPES = [
   {
     name: "Trial Session",
     duration: "30 min",
-    price: "From £4",
-    priceNote: "half your teacher's rate",
+    price: "£3",
+    priceNote: "flat rate for all teachers",
     icon: "🌱",
     desc: "Perfect for meeting your teacher and seeing if the chemistry is right. No commitment - just a taster.",
     features: [
@@ -414,7 +414,7 @@ function TeacherCard({ t, onBook, onView }) {
    TEACHER PROFILE PAGE
 ───────────────────────────────────────────────────────────────── */
 function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
-  const trialPrice = Math.round(teacher.price * 0.5);
+  const trialPrice = 3;
   const [activeTab, setActiveTab] = useState("about");
   const tabs = [["about","About"],["qualifications","Qualifications"],["teaching","Teaching Style"],["dialects","Dialects"],["reviews","Reviews"]];
 
@@ -995,7 +995,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const [done,    setDone]    = useState(false);
   const [booking, setBooking] = useState(null);
 
-  const trialPrice = Math.round(teacher.price * 0.5);
+  const trialPrice = 3;
   const price = sType === "Trial" ? trialPrice : teacher.price;
 
   const doBook = () => {
@@ -2670,7 +2670,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
                 General Settings
               </div>
               {[["Platform Name","Arabiq"],["Support Email","support@arabiq.com"],
-                ["Trial Session Price","£4–£6"],["Commission Rate","15%"]].map(([label,val])=>(
+                ["Trial Session Price","£3"],["Commission Rate","15%"]].map(([label,val])=>(
                 <div key={label} style={{ marginBottom:14 }}>
                   <label style={{ display:"block", fontSize:10, fontWeight:700,
                     color:C.gray600, marginBottom:4, textTransform:"uppercase",
@@ -3350,7 +3350,7 @@ export default function Arabiq() {
                 border:"1px solid rgba(201,150,26,0.3)",
                 borderRadius:40, padding:"7px 18px", marginBottom:26 }}>
                 <span style={{ color:C.goldLt, fontSize:13, fontWeight:600 }}>
-                  ✦ Expert 1-on-1 Arabic lessons - book your first for just £4
+                  ✦ Expert 1-on-1 Arabic lessons - book your first for just £3
                 </span>
               </div>
 
@@ -3364,7 +3364,7 @@ export default function Arabiq() {
 
               <p style={{ color:"rgba(255,255,255,0.7)", fontSize:15, lineHeight:1.75,
                 maxWidth:540, margin:"0 auto 32px", padding:"0 8px" }}>
-                The first Arabic-only learning platform for private 1-on-1 classes with expert native teachers, rigorously vetted by Arabiq - selected for their exceptional expertise and experience. Start with a trial from just £4.
+                The first Arabic-only learning platform for private 1-on-1 classes with expert native teachers, rigorously vetted by Arabiq - selected for their exceptional expertise and experience. Start with a trial from just £3.
               </p>
 
               <div style={{ display:"flex", gap:12, justifyContent:"center",
@@ -3392,7 +3392,7 @@ export default function Arabiq() {
               <div style={{ display:"flex", gap:24, justifyContent:"center",
                 marginTop:48, flexWrap:"wrap", padding:"0 16px" }}>
                 {[[`${liveTeachers.filter(t=>t.available).length}`,"Expert Teachers"],["1-on-1","Private Classes"],
-                  ["30 min","Trial Sessions"],["£4","Starting From"]].map(([num,label])=>(
+                  ["30 min","Trial Sessions"],["£3","Starting From"]].map(([num,label])=>(
                   <div key={label} style={{ textAlign:"center" }}>
                     <div style={{ fontSize:30, fontWeight:800, color:C.goldLt,
                       fontFamily:"'Playfair Display',serif" }}>{num}</div>
@@ -3626,7 +3626,7 @@ export default function Arabiq() {
               </h2>
               <p style={{ color:"rgba(255,255,255,0.65)", marginBottom:26,
                 fontSize:14 }}>
-                Book a trial session for just half the regular price.
+                Book a trial session for just £3 - the same flat rate for every teacher.
               </p>
               <Btn label="Find My Teacher →" variant="gold" size="lg"
                 onClick={()=>setPage("teachers")} />
@@ -3826,7 +3826,7 @@ export default function Arabiq() {
                       </td>
                       <td style={{ padding:"14px 20px" }}>
                         <span style={{ fontWeight:800, color:C.navy, fontSize:15 }}>
-                          £{Math.round(t.price*0.5)}
+                          £3
                         </span>
                         <span style={{ color:C.gray400, fontSize:12 }}> /session</span>
                       </td>
@@ -3892,7 +3892,7 @@ export default function Arabiq() {
               padding:"44px 40px", textAlign:"center" }}>
               <h2 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
                 fontSize:28, fontWeight:800, marginBottom:10 }}>
-                Start with a trial session from just £4
+                Start with a trial session from just £3
               </h2>
               <p style={{ color:"rgba(255,255,255,0.65)", fontSize:15,
                 marginBottom:28, lineHeight:1.7 }}>
@@ -4388,7 +4388,7 @@ export default function Arabiq() {
                 Ready to start learning?
               </h2>
               <p style={{ color:"rgba(255,255,255,0.65)", fontSize:15, lineHeight:1.7, marginBottom:28 }}>
-                Browse our verified teachers and book your first trial session from just £4.
+                Browse our verified teachers and book your first trial session from just £3.
               </p>
               <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
                 <button onClick={()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }}
