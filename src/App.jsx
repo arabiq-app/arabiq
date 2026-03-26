@@ -1019,6 +1019,16 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       const u = DB.users.find(u=>u.id===currentUser.id);
       if (u) u.bookings = [...(u.bookings||[]), b];
     }
+    // Remove the booked slot from the teacher's available slots
+    const teacherRef = TEACHERS.find(t=>t.id===teacher.id);
+    if (teacherRef) {
+      teacherRef.slots = (teacherRef.slots||[]).filter(s=>s!==slot);
+      // If no slots left, mark teacher as unavailable
+      if (teacherRef.slots.length === 0) teacherRef.available = false;
+    }
+    // Also update the local teacher object so the UI reflects immediately
+    teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
+    if (teacher.slots.length === 0) teacher.available = false;
     setBooking(b);
     setDone(true);
     onBooked && onBooked(b);
@@ -3258,14 +3268,12 @@ export default function Arabiq() {
           <Logo height={onHome&&!scrolled?26:24} light={navLight} />
         </div>
 
-        {/* Centre + Right: ALL tabs in one unified pill row */}
+        {/* Centre: page tabs pill */}
         <div style={{ display:"flex", alignItems:"center", gap:1,
           background: navLight ? "rgba(255,255,255,0.08)" : C.gray100,
-          borderRadius:12, padding:4, flexShrink:0,
-          overflowX:"auto", maxWidth:"calc(100vw - 120px)" }}>
-
-          {/* Page tabs */}
-          {NAV_TABS.map(tab=>{
+          borderRadius:12, padding:4, flexShrink:1,
+          overflowX:"auto", maxWidth:"calc(100vw - 260px)" }}>
+          {NAV_TABS.filter(t=>t.id!=="profile").map(tab=>{
             const active = page===tab.id;
             return (
               <button key={tab.id} onClick={()=>{ setPage(tab.id); setViewingTeacher(null); window.scrollTo(0,0); }}
@@ -3285,24 +3293,30 @@ export default function Arabiq() {
               </button>
             );
           })}
+        </div>
 
-          {/* Divider (only when logged out) */}
-          {!currentUser && (
-            <div style={{ width:1, height:20, margin:"0 4px",
-              background: navLight?"rgba(255,255,255,0.2)":C.gray200,
-              flexShrink:0 }} />
-          )}
-
-          {/* Auth buttons - same size/padding as tabs */}
+        {/* Right: auth buttons or user profile — always visible, never inside scroll */}
+        <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0 }}>
           {currentUser ? (
-            <div style={{ padding:"0 4px" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              {/* Quick access buttons */}
+              <button onClick={()=>goProfile("sessions")}
+                style={{ background: navLight?"rgba(255,255,255,0.1)":C.lb,
+                  border: navLight?"1px solid rgba(255,255,255,0.2)":`1px solid ${C.gray200}`,
+                  borderRadius:8, padding:"7px 13px", cursor:"pointer",
+                  fontFamily:"inherit", fontSize:13, fontWeight:600,
+                  color: navLight?"#fff":C.navy, whiteSpace:"nowrap" }}>
+                My Bookings
+              </button>
               <UserDropdown user={currentUser}
                 onProfile={(tab)=>goProfile(tab||"overview")}
                 onLogout={()=>{ setCurrentUser(null); setPage("home"); setViewingTeacher(null);
                   fire("You have been logged out."); }} />
             </div>
           ) : (
-            <>
+            <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+              <div style={{ width:1, height:20,
+                background: navLight?"rgba(255,255,255,0.2)":C.gray200 }} />
               <button onClick={()=>setAuthModal("login")}
                 style={{ background:"transparent", border:"none", cursor:"pointer",
                   padding:"8px 15px", borderRadius:8, fontSize:14, fontWeight:600,
@@ -3322,7 +3336,7 @@ export default function Arabiq() {
                 onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
                 Sign Up Free
               </button>
-            </>
+            </div>
           )}
         </div>
       </nav>
