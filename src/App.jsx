@@ -1008,7 +1008,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const trialPrice = 3;
   const price = sType === "Trial" ? trialPrice : teacher.price;
 
-  const doBook = () => {
+  const doBook = async () => {
     const b = {
       id: `BK-${++DB.nextBookingId}`,
       teacherId: teacher.id,
@@ -1033,12 +1033,37 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
     const teacherRef = TEACHERS.find(t=>t.id===teacher.id);
     if (teacherRef) {
       teacherRef.slots = (teacherRef.slots||[]).filter(s=>s!==slot);
-      // If no slots left, mark teacher as unavailable
       if (teacherRef.slots.length === 0) teacherRef.available = false;
     }
-    // Also update the local teacher object so the UI reflects immediately
     teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
     if (teacher.slots.length === 0) teacher.available = false;
+
+    // Send booking confirmation email
+    try {
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "booking_confirmation",
+          to: email,
+          data: {
+            id: b.id,
+            studentName: name,
+            studentEmail: email,
+            teacherName: teacher.name,
+            slot: b.slot,
+            sessionType: sType,
+            topic: b.topic,
+            price: price,
+            whereby_room_url: b.whereby_room_url || null,
+          }
+        })
+      });
+    } catch(e) {
+      // Email failure should not block the booking
+      console.error("Email send failed:", e);
+    }
+
     setBooking(b);
     setDone(true);
     onBooked && onBooked(b);
@@ -1290,6 +1315,12 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
           plan:"None", level, dialect, avatar:init,
           bookings:[], totalSessions:0, sessionsLeft:0, progress:0 };
         DB.users.push(u);
+        // Send welcome email
+        fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "welcome", to: email, data: { name } })
+        }).catch(()=>{});
         setSuccess(true); setLoading(false);
         setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
       }
