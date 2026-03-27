@@ -74,9 +74,9 @@ const welcomeEmail = (name) => ({
   `,
 });
 
-// Booking confirmation email
+// Booking confirmation email (includes video room link)
 const bookingConfirmationEmail = (booking) => ({
-  subject: `Booking Confirmed — ${booking.sessionType} with ${booking.teacherName} ✅`,
+  subject: `Booking Confirmed - ${booking.sessionType} with ${booking.teacherName}`,
   html: `
     <div style="${baseStyle}">
       ${headerHtml}
@@ -87,14 +87,14 @@ const bookingConfirmationEmail = (booking) => ({
             You are all booked!
           </h1>
           <p style="color: #6B7280; font-size: 15px; margin: 0;">
-            Your session has been confirmed
+            Your session with ${booking.teacherName} is confirmed.
           </p>
         </div>
-        
+
         <div style="background: linear-gradient(135deg, #1A3470, #2A4A9A); border-radius: 14px; padding: 24px; margin-bottom: 24px; color: #fff;">
           <div style="font-size: 11px; font-weight: 700; color: #F0C842; letter-spacing: 1px; margin-bottom: 8px;">SESSION DETAILS</div>
           <div style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">${booking.slot}</div>
-          <div style="font-size: 14px; color: rgba(255,255,255,0.7);">with ${booking.teacherName}</div>
+          <div style="font-size: 14px; color: rgba(255,255,255,0.7);">with ${booking.teacherName} · ${booking.sessionType} session</div>
         </div>
 
         <div style="background: #ffffff; border-radius: 12px; border: 1px solid #E8EDF8; overflow: hidden; margin-bottom: 24px;">
@@ -103,8 +103,8 @@ const bookingConfirmationEmail = (booking) => ({
             ['Session Type', booking.sessionType],
             ['Teacher', booking.teacherName],
             ['Topic', booking.topic || 'General Arabic'],
-            ['Duration', booking.sessionType === 'Trial' ? '25 minutes' : '55 minutes'],
-            ['Amount Paid', `$${booking.price.toFixed(2)}`],
+            ['Duration', booking.sessionType === 'Trial' ? '30 minutes' : '60 minutes'],
+            ['Amount Paid', `£${booking.price.toFixed(2)}`],
           ].map(([label, value]) => `
             <div style="display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #F3F4F6;">
               <span style="color: #6B7280; font-size: 13px;">${label}</span>
@@ -113,18 +113,41 @@ const bookingConfirmationEmail = (booking) => ({
           `).join('')}
         </div>
 
+        ${booking.whereby_room_url ? `
+        <div style="background: linear-gradient(135deg, #C9961A, #F0C842); border-radius: 14px; padding: 24px; margin-bottom: 24px; text-align: center;">
+          <div style="font-size: 11px; font-weight: 700; color: #1A3470; letter-spacing: 1px; margin-bottom: 8px;">YOUR VIDEO CLASSROOM</div>
+          <p style="color: #1A3470; font-size: 14px; margin: 0 0 16px; font-weight: 600;">
+            Click the button below at the time of your session to join your private Arabic lesson.
+          </p>
+          <a href="${booking.whereby_room_url}" style="display: inline-block; background: #1A3470; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-weight: 800; font-size: 15px;">
+            Join My Arabic Lesson →
+          </a>
+          <p style="color: #1A3470; font-size: 12px; margin: 12px 0 0; opacity: 0.7;">
+            Save this email — this is your classroom link
+          </p>
+        </div>
+        ` : `
         <div style="background: #ECFDF5; border: 1px solid #059669; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px;">
           <p style="color: #059669; font-size: 13px; font-weight: 600; margin: 0;">
-            🔒 Your video room link will be sent 30 minutes before your session. Keep an eye on your inbox!
+            Your video room link will appear in your dashboard when you log in. You can also find it in your booking confirmation.
           </p>
+        </div>
+        `}
+
+        <div style="background: #EEF2FB; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;">
+          <h3 style="color: #1A3470; font-size: 14px; font-weight: 700; margin: 0 0 10px;">Before your session:</h3>
+          <p style="color: #374151; font-size: 13px; margin: 5px 0;">✅ Test your camera and microphone beforehand</p>
+          <p style="color: #374151; font-size: 13px; margin: 5px 0;">✅ Find a quiet space with a good internet connection</p>
+          <p style="color: #374151; font-size: 13px; margin: 5px 0;">✅ Have a notebook ready for vocabulary notes</p>
+          <p style="color: #374151; font-size: 13px; margin: 5px 0;">✅ Join a few minutes early so you are ready to start</p>
         </div>
 
         <div style="text-align: center; margin: 28px 0;">
-          ${buttonHtml(APP_URL, 'View My Dashboard →')}
+          ${buttonHtml(APP_URL, 'View My Bookings →')}
         </div>
 
         <p style="color: #9CA3AF; font-size: 13px; text-align: center;">
-          Need to cancel or reschedule? Contact us at support@arabiq.app at least 24 hours before your session.
+          Need to cancel? Contact support@arabiq.app at least 24 hours before your session for a full refund.
         </p>
       </div>
       ${footerHtml}
