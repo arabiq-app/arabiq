@@ -4553,74 +4553,127 @@ export default function Arabiq() {
       )}
 
       {page !== "profile" && (
-        <footer style={{ background:"#0D1F4A", padding:isMobile?"32px 20px 24px":"48px 40px 28px" }}>
+        <footer style={{ background:"#0D1F4A", padding:isMobile?"36px 24px 28px":"48px 40px 28px" }}>
           <div style={{ maxWidth:1100, margin:"0 auto" }}>
-            <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr 1fr":"1fr auto auto auto", gap:isMobile?24:32, marginBottom:36 }}>
-              <div style={{ maxWidth:270, textAlign:isMobile?"center":"left",
-                gridColumn: isMobile?"1 / -1":"auto" }}>
-                <div style={{ marginBottom:14, display:"flex",
-                  justifyContent:isMobile?"center":"flex-start" }}>
-                  <Logo height={22} light />
+
+            {isMobile ? (
+              /* ── MOBILE FOOTER ── clean stacked layout */
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}>
+
+                {/* Logo + tagline */}
+                <div style={{ textAlign:"center", marginBottom:28 }}>
+                  <div style={{ marginBottom:12 }}><Logo height={24} light /></div>
+                  <p style={{ color:"rgba(255,255,255,0.5)", fontSize:13, lineHeight:1.7, margin:0, maxWidth:280 }}>
+                    The premium platform for 1-on-1 Arabic learning with verified native teachers.
+                  </p>
                 </div>
-                <p style={{ color:"rgba(255,255,255,0.45)", fontSize:13,
-                  lineHeight:1.75 }}>
-                  The premium platform for 1-on-1 Arabic learning with verified native teachers.
-                </p>
-                {/* Admin access link */}
-                <div onClick={()=>setPage("admin")}
-                  style={{ marginTop:14, display:"inline-flex",
-                    alignItems:"center", gap:6, cursor:"pointer",
-                    color:C.gold, fontSize:12, fontWeight:600,
-                    background:"rgba(201,150,26,0.1)",
-                    padding:"5px 12px", borderRadius:8,
-                    border:"1px solid rgba(201,150,26,0.2)" }}>
-                  ⚙️ Admin Panel
-                </div>
-              </div>
-              {[
-                ["Platform", [
-                  { label:"Find a Teacher",  action:()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"How It Works",    action:()=>{ setPage("how"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"Pricing",         action:()=>{ setPage("pricing"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                ]],
-                ["Company", [
-                  { label:"About Us",        action:()=>{ setPage("about"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"Teach on Arabiq", action:()=>{ setPage("teach"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                ]],
-                ["Support", [
-                  { label:"Contact Us",      action:()=>{ setPage("contact"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"Privacy Policy",  action:()=>{ setPage("privacy"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                  { label:"Terms",           action:()=>{ setPage("terms"); setViewingTeacher(null); window.scrollTo(0,0); }},
-                ]],
-              ].map(([title,links])=>(
-                <div key={title} style={{ textAlign:isMobile?"center":"left" }}>
-                  <div style={{ color:C.gold, fontWeight:700, fontSize:12,
-                    marginBottom:14, letterSpacing:1 }}>{title}</div>
-                  {links.map(({label,action})=>(
+
+                {/* Links in two columns */}
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0 32px", marginBottom:24, width:"100%" }}>
+                  {[
+                    { label:"Find a Teacher",  action:()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"About Us",        action:()=>{ setPage("about"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"How It Works",    action:()=>{ setPage("how"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"Teach on Arabiq", action:()=>{ setPage("teach"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"Pricing",         action:()=>{ setPage("pricing"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"Contact Us",      action:()=>{ setPage("contact"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"Privacy Policy",  action:()=>{ setPage("privacy"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    { label:"Terms",           action:()=>{ setPage("terms"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                  ].map(({label,action})=>(
                     <div key={label} onClick={action}
-                      style={{ color:"rgba(255,255,255,0.45)", fontSize:13,
-                        marginBottom:9, cursor:"pointer", transition:"color 0.2s" }}
-                      onMouseEnter={e=>e.currentTarget.style.color="#fff"}
-                      onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,0.45)"}>
+                      style={{ color:"rgba(255,255,255,0.5)", fontSize:13, fontWeight:500,
+                        padding:"9px 0", borderBottom:"1px solid rgba(255,255,255,0.06)",
+                        cursor:"pointer", textAlign:"center" }}>
                       {label}
                     </div>
                   ))}
                 </div>
-              ))}
-            </div>
-            <div style={{ borderTop:"1px solid rgba(255,255,255,0.07)",
-              paddingTop:20, display:"flex",
-              justifyContent:isMobile?"center":"space-between",
-              flexDirection:isMobile?"column":"row",
-              alignItems:isMobile?"center":"flex-start",
-              flexWrap:"wrap", gap:10, textAlign:isMobile?"center":"left" }}>
-              <span style={{ color:"rgba(255,255,255,0.25)", fontSize:12 }}>
-                © 2026 Arabiq Ltd. All rights reserved.
-              </span>
-              <span style={{ color:"rgba(255,255,255,0.25)", fontSize:12 }}>
-                Built with ❤️ for Arabic learners worldwide
-              </span>
-            </div>
+
+                {/* Admin Panel */}
+                <div onClick={()=>setPage("admin")}
+                  style={{ marginBottom:24, display:"inline-flex",
+                    alignItems:"center", gap:6, cursor:"pointer",
+                    color:C.gold, fontSize:12, fontWeight:600,
+                    background:"rgba(201,150,26,0.1)",
+                    padding:"6px 14px", borderRadius:8,
+                    border:"1px solid rgba(201,150,26,0.2)" }}>
+                  ⚙️ Admin Panel
+                </div>
+
+                {/* Copyright */}
+                <div style={{ borderTop:"1px solid rgba(255,255,255,0.07)",
+                  paddingTop:18, width:"100%", textAlign:"center" }}>
+                  <div style={{ color:"rgba(255,255,255,0.25)", fontSize:11, marginBottom:4 }}>
+                    © 2026 Arabiq Ltd. All rights reserved.
+                  </div>
+                  <div style={{ color:"rgba(255,255,255,0.2)", fontSize:11 }}>
+                    Built with ❤️ for Arabic learners worldwide
+                  </div>
+                </div>
+              </div>
+
+            ) : (
+              /* ── DESKTOP FOOTER ── original layout */
+              <>
+                <div style={{ display:"grid", gridTemplateColumns:"1fr auto auto auto", gap:32, marginBottom:36 }}>
+                  <div style={{ maxWidth:270 }}>
+                    <div style={{ marginBottom:14 }}><Logo height={22} light /></div>
+                    <p style={{ color:"rgba(255,255,255,0.45)", fontSize:13, lineHeight:1.75 }}>
+                      The premium platform for 1-on-1 Arabic learning with verified native teachers.
+                    </p>
+                    <div onClick={()=>setPage("admin")}
+                      style={{ marginTop:14, display:"inline-flex",
+                        alignItems:"center", gap:6, cursor:"pointer",
+                        color:C.gold, fontSize:12, fontWeight:600,
+                        background:"rgba(201,150,26,0.1)",
+                        padding:"5px 12px", borderRadius:8,
+                        border:"1px solid rgba(201,150,26,0.2)" }}>
+                      ⚙️ Admin Panel
+                    </div>
+                  </div>
+                  {[
+                    ["Platform", [
+                      { label:"Find a Teacher",  action:()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                      { label:"How It Works",    action:()=>{ setPage("how"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                      { label:"Pricing",         action:()=>{ setPage("pricing"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    ]],
+                    ["Company", [
+                      { label:"About Us",        action:()=>{ setPage("about"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                      { label:"Teach on Arabiq", action:()=>{ setPage("teach"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    ]],
+                    ["Support", [
+                      { label:"Contact Us",      action:()=>{ setPage("contact"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                      { label:"Privacy Policy",  action:()=>{ setPage("privacy"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                      { label:"Terms",           action:()=>{ setPage("terms"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                    ]],
+                  ].map(([title,links])=>(
+                    <div key={title}>
+                      <div style={{ color:C.gold, fontWeight:700, fontSize:12,
+                        marginBottom:14, letterSpacing:1 }}>{title}</div>
+                      {links.map(({label,action})=>(
+                        <div key={label} onClick={action}
+                          style={{ color:"rgba(255,255,255,0.45)", fontSize:13,
+                            marginBottom:9, cursor:"pointer", transition:"color 0.2s" }}
+                          onMouseEnter={e=>e.currentTarget.style.color="#fff"}
+                          onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,0.45)"}>
+                          {label}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ borderTop:"1px solid rgba(255,255,255,0.07)",
+                  paddingTop:20, display:"flex", justifyContent:"space-between",
+                  flexWrap:"wrap", gap:10 }}>
+                  <span style={{ color:"rgba(255,255,255,0.25)", fontSize:12 }}>
+                    © 2026 Arabiq Ltd. All rights reserved.
+                  </span>
+                  <span style={{ color:"rgba(255,255,255,0.25)", fontSize:12 }}>
+                    Built with ❤️ for Arabic learners worldwide
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </footer>
       )}
