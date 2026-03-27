@@ -3134,6 +3134,15 @@ export default function Arabiq() {
     return ()=>window.removeEventListener("scroll",h);
   },[]);
 
+  // Secret admin URL — visit arabiq.app?admin to access admin panel
+  useEffect(()=>{
+    const params = new URLSearchParams(window.location.search);
+    if(params.get("admin") !== null) {
+      setPage("admin");
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  },[]);
+
   const goProfile = (tab="overview") => {
     if (!currentUser) { setAuthModal("login"); return; }
     setProfileTab(tab);
@@ -4571,16 +4580,7 @@ export default function Arabiq() {
                   </p>
                 </div>
 
-                {/* Admin Panel button */}
-                <div onClick={()=>setPage("admin")}
-                  style={{ marginBottom:28, display:"inline-flex",
-                    alignItems:"center", gap:6, cursor:"pointer",
-                    color:C.gold, fontSize:12, fontWeight:600,
-                    background:"rgba(201,150,26,0.1)",
-                    padding:"6px 14px", borderRadius:8,
-                    border:"1px solid rgba(201,150,26,0.2)" }}>
-                  ⚙️ Admin Panel
-                </div>
+
 
                 {/* 3 column links */}
                 <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr",
@@ -4639,15 +4639,7 @@ export default function Arabiq() {
                     <p style={{ color:"rgba(255,255,255,0.45)", fontSize:13, lineHeight:1.75 }}>
                       The premium platform for 1-on-1 Arabic learning with verified native teachers.
                     </p>
-                    <div onClick={()=>setPage("admin")}
-                      style={{ marginTop:14, display:"inline-flex",
-                        alignItems:"center", gap:6, cursor:"pointer",
-                        color:C.gold, fontSize:12, fontWeight:600,
-                        background:"rgba(201,150,26,0.1)",
-                        padding:"5px 12px", borderRadius:8,
-                        border:"1px solid rgba(201,150,26,0.2)" }}>
-                      ⚙️ Admin Panel
-                    </div>
+
                   </div>
                   {[
                     ["Platform", [
