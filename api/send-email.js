@@ -5,10 +5,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const baseStyle = `font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;`;
 const headerHtml = `
   <div style="background: #1A3470; padding: 36px 40px 28px; border-radius: 12px 12px 0 0; text-align: center;">
-    <div style="display: inline-block; position: relative; padding-top: 14px;">
-      <div style="position: absolute; top: 0; left: 3px; width: 22px; height: 12px; background: #C9961A; transform: skewX(-20deg); border-radius: 1px;"></div>
-      <span style="color: #ffffff; font-size: 34px; font-weight: 800; letter-spacing: -1px; font-family: Georgia, serif; position: relative; z-index: 1;">Arabiq</span>
-    </div>
+    <span style="color: #ffffff; font-size: 34px; font-weight: 800; letter-spacing: -1px; font-family: Georgia, serif;">Arabiq</span>
     <div style="margin-top: 16px; height: 2px; background: linear-gradient(90deg, transparent, #C9961A, transparent); border-radius: 2px;"></div>
   </div>
 `;
