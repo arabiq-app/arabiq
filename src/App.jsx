@@ -1009,8 +1009,36 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const price = sType === "Trial" ? trialPrice : teacher.price;
 
   const doBook = async () => {
+    const bookingId = `BK-${++DB.nextBookingId}`;
+
+    // Step 1 — Create Whereby room
+    let whereby_room_url = null;
+    let whereby_host_url = null;
+    try {
+      const roomRes = await fetch("/api/create-room", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId,
+          teacherName: teacher.name,
+          studentName: name,
+          sessionType: sType,
+          slot,
+        })
+      });
+      if (roomRes.ok) {
+        const roomData = await roomRes.json();
+        whereby_room_url = roomData.roomUrl;
+        whereby_host_url = roomData.hostRoomUrl;
+      }
+    } catch(e) {
+      console.error("Room creation failed:", e);
+      // Continue booking even if room creation fails
+    }
+
+    // Step 2 — Create booking record
     const b = {
-      id: `BK-${++DB.nextBookingId}`,
+      id: bookingId,
       teacherId: teacher.id,
       teacherName: teacher.name,
       teacherAvatar: teacher.avatar,
@@ -1023,6 +1051,8 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       topic: note || `${sType === "Trial" ? "Intro Session" : "Regular Lesson"}`,
       status: "confirmed",
       booked: new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),
+      whereby_room_url,
+      whereby_host_url,
     };
     DB.bookings.push(b);
     if (currentUser) {
@@ -1038,7 +1068,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
     teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
     if (teacher.slots.length === 0) teacher.available = false;
 
-    // Send booking confirmation email
+    // Step 3 — Send confirmation email with room URL
     try {
       await fetch("/api/send-email", {
         method: "POST",
@@ -1055,12 +1085,11 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
             sessionType: sType,
             topic: b.topic,
             price: price,
-            whereby_room_url: b.whereby_room_url || null,
+            whereby_room_url,
           }
         })
       });
     } catch(e) {
-      // Email failure should not block the booking
       console.error("Email send failed:", e);
     }
 
@@ -1620,6 +1649,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                       Book Another
                     </button>
                     <button
+                      onClick={()=>{ if(nextSession?.whereby_room_url) window.open(nextSession.whereby_room_url, "_blank"); }}
                       style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
                         color:C.navy, border:"none", borderRadius:10,
                         padding:"10px 18px", fontWeight:800, fontSize:13,
@@ -1744,6 +1774,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                     {b.status==="confirmed" && (
                       <div style={{ display:"flex", gap:8 }}>
                         <button
+                          onClick={()=>{ if(b.whereby_room_url) window.open(b.whereby_room_url, "_blank"); }}
                           style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
                             color:C.navy, border:"none", borderRadius:8,
                             padding:"8px 16px", fontWeight:800, fontSize:12,
