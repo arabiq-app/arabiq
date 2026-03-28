@@ -3172,6 +3172,15 @@ export default function Arabiq() {
       setPage("admin");
       window.history.replaceState({}, "", window.location.pathname);
     }
+    if(params.get("bookings") !== null) {
+      if(currentUser) {
+        setProfileTab("sessions");
+        setPage("profile");
+      } else {
+        setAuthModal("login");
+      }
+      window.history.replaceState({}, "", window.location.pathname);
+    }
   },[]);
 
   const goProfile = (tab="overview") => {
