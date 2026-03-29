@@ -41,6 +41,40 @@ const cancellationEmail = (booking) => ({
   html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;"><h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Booking Cancelled</h1><p style="color:#6B7280;font-size:15px;margin:0 0 24px;">Your booking ${booking.id} with ${booking.teacherName} has been cancelled.</p><p style="color:#374151;font-size:14px;margin:0 0 24px;">A full refund of <strong>£${Number(booking.price).toFixed(2)}</strong> will appear on your card within 3-5 business days.</p><div style="text-align:center;margin:28px 0;">${goldBtn(APP_URL, 'Book Another Session →')}</div><p style="color:#9CA3AF;font-size:13px;text-align:center;">Questions? Contact support@arabiq.app</p></div>${footerHtml}</div>`,
 });
 
+const teacherNotificationEmail = (booking) => ({
+  subject: `New Booking - ${booking.sessionType} session on ${booking.slot}`,
+  html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+    <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">New session booked! 📅</h1>
+    <p style="color:#6B7280;font-size:15px;margin:0 0 24px;">A student has booked a ${booking.sessionType.toLowerCase()} session with you.</p>
+    <div style="background:linear-gradient(135deg,#1A3470,#2A4A9A);border-radius:14px;padding:24px;margin-bottom:24px;color:#fff;">
+      <div style="font-size:11px;font-weight:700;color:#F0C842;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;">Session Details</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:4px;color:#fff;">${booking.slot}</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.8);">${booking.sessionType} · ${booking.sessionType === 'Trial' ? '30 mins' : '60 mins'}</div>
+    </div>
+    <div style="background:#fff;border-radius:12px;border:1px solid #E8EDF8;overflow:hidden;margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Student Name</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.studentName}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Session Type</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.sessionType}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Topic / Goal</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.topic || 'General Arabic'}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;"><span style="color:#6B7280;font-size:13px;">Booking Reference</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.id}</span></div>
+    </div>
+    ${booking.hostRoomUrl ? `
+    <div style="background:linear-gradient(135deg,#C9961A,#F0C842);border-radius:14px;padding:28px;margin-bottom:24px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:#1A3470;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;">Your Host Classroom Link</div>
+      <p style="color:#1A3470;font-size:15px;margin:0 0 20px;font-weight:600;line-height:1.5;">Click below at the time of the session to start the lesson. Your host link gives you full control of the classroom.</p>
+      <a href="${booking.hostRoomUrl}" style="display:inline-block;background:#1A3470;color:#ffffff;text-decoration:none;padding:16px 36px;border-radius:12px;font-weight:800;font-size:16px;">Start Lesson →</a>
+      <p style="color:#1A3470;font-size:12px;margin:16px 0 0;opacity:0.75;">&#128274; This is your host link — do not share it with the student</p>
+    </div>
+    ` : ''}
+    <div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;">
+      <h3 style="color:#1A3470;font-size:14px;font-weight:700;margin:0 0 10px;">Before the session:</h3>
+      <p style="color:#374151;font-size:13px;margin:5px 0;">✓ Test your camera and microphone</p>
+      <p style="color:#374151;font-size:13px;margin:5px 0;">✓ Prepare your lesson materials</p>
+      <p style="color:#374151;font-size:13px;margin:5px 0;">✓ Join a few minutes early to welcome the student</p>
+    </div>
+    <p style="color:#9CA3AF;font-size:13px;text-align:center;">If the student cancels, you will be notified immediately. Questions? Contact hello@arabiq.app</p>
+  </div>${footerHtml}</div>`,
+});
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -68,6 +102,9 @@ export default async function handler(req, res) {
         break;
       case 'cancellation':
         emailContent = cancellationEmail(data);
+        break;
+      case 'teacher_notification':
+        emailContent = teacherNotificationEmail(data);
         break;
       default:
         return res.status(400).json({ error: `Unknown type: ${type}` });
