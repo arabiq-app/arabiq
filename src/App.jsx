@@ -9,7 +9,7 @@ function useIsMobile() {
   },[]);
   return isMobile;
 }
-import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher } from "./lib/supabase.js";
+import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange } from "./lib/supabase.js";
 
 /* ─────────────────────────────────────────────────────────────────
    DESIGN TOKENS
@@ -1375,34 +1375,88 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
     return Object.keys(e).length === 0;
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!validate()) return;
     setLoading(true);
-    setTimeout(()=>{
-      if (mode==="login") {
-        const u = DB.users.find(u=>u.email===email && u.password===pw);
-        if (!u) { setErrors({email:"Invalid email or password"}); setLoading(false); return; }
-        setLoading(false); onAuth(u); onClose();
-      } else {
-        if (DB.users.find(u=>u.email===email)) {
-          setErrors({email:"Account already exists"}); setLoading(false); return;
+    try {
+      if (mode === "login") {
+        // Try Supabase login first
+        try {
+          const data = await signIn({ email, password: pw });
+          const profile = await getCurrentUser();
+          const u = profile || {
+            id: data.user.id,
+            name: data.user.user_metadata?.name || email.split("@")[0],
+            email,
+            avatar: (data.user.user_metadata?.name || email).split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2),
+            plan: "None",
+            level: data.user.user_metadata?.level || "Beginner",
+            dialect: data.user.user_metadata?.dialect || "Modern Standard Arabic (Fusha)",
+            bookings: [],
+            totalSessions: 0,
+            sessionsLeft: 0,
+            progress: 0,
+            joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
+          };
+          setLoading(false);
+          onAuth(u);
+          onClose();
+        } catch(supabaseErr) {
+          // Fall back to in-memory login for demo accounts
+          const u = DB.users.find(u=>u.email===email && u.password===pw);
+          if (!u) { setErrors({email:"Invalid email or password"}); setLoading(false); return; }
+          setLoading(false); onAuth(u); onClose();
         }
-        const init = name.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2);
-        const u = { id:DB.users.length+1, name, email, password:pw,
-          joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
-          plan:"None", level, dialect, avatar:init,
-          bookings:[], totalSessions:0, sessionsLeft:0, progress:0 };
-        DB.users.push(u);
-        // Send welcome email
-        fetch("/api/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "welcome", to: email, data: { name } })
-        }).catch(()=>{});
-        setSuccess(true); setLoading(false);
-        setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
+      } else {
+        // Try Supabase registration first
+        try {
+          const data = await signUp({ email, password: pw, name, level, dialect });
+          const init = name.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2);
+          const u = {
+            id: data.user?.id || DB.users.length + 1,
+            name, email,
+            avatar: init,
+            plan: "None",
+            level, dialect,
+            bookings: [],
+            totalSessions: 0,
+            sessionsLeft: 0,
+            progress: 0,
+            joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
+          };
+          // Send welcome email
+          fetch("/api/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ type: "welcome", to: email, data: { name } })
+          }).catch(()=>{});
+          setSuccess(true);
+          setLoading(false);
+          setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
+        } catch(supabaseErr) {
+          // Fall back to in-memory registration
+          if (DB.users.find(u=>u.email===email)) {
+            setErrors({email:"Account already exists"}); setLoading(false); return;
+          }
+          const init = name.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2);
+          const u = { id:DB.users.length+1, name, email, password:pw,
+            joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
+            plan:"None", level, dialect, avatar:init,
+            bookings:[], totalSessions:0, sessionsLeft:0, progress:0 };
+          DB.users.push(u);
+          fetch("/api/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ type: "welcome", to: email, data: { name } })
+          }).catch(()=>{});
+          setSuccess(true); setLoading(false);
+          setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
+        }
       }
-    }, 900);
+    } catch(err) {
+      setErrors({email: err.message || "Something went wrong. Please try again."});
+      setLoading(false);
+    }
   };
 
   if (success) return (
@@ -3231,6 +3285,29 @@ export default function Arabiq() {
   const [adminLogin,    setAdminLogin]   = useState({ open:false, email:"", pw:"", err:"" });
 
   const fire = (msg,type="ok")=>{ setToast({msg,type}); };
+
+  // Restore Supabase session on page load
+  useEffect(()=>{
+    getCurrentUser().then(profile => {
+      if (profile) {
+        const u = {
+          id: profile.id,
+          name: profile.name || profile.email?.split("@")[0],
+          email: profile.email,
+          avatar: profile.avatar || profile.name?.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2) || "U",
+          plan: profile.plan || "None",
+          level: profile.level || "Beginner",
+          dialect: profile.dialect || "Modern Standard Arabic (Fusha)",
+          bookings: [],
+          totalSessions: profile.total_sessions || 0,
+          sessionsLeft: profile.sessions_left || 0,
+          progress: profile.progress || 0,
+          joined: profile.joined ? new Date(profile.joined).toLocaleDateString("en-GB",{month:"long",year:"numeric"}) : "",
+        };
+        setCurrentUser(u);
+      }
+    }).catch(()=>{});
+  },[]);
 
   // Load teachers from Supabase on mount
   useEffect(()=>{
