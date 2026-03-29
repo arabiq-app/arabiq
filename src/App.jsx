@@ -1071,7 +1071,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
     teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
     if (teacher.slots.length === 0) teacher.available = false;
 
-    // Step 3 — Send confirmation email with room URL
+    // Step 3 — Send confirmation email to student
     try {
       await fetch("/api/send-email", {
         method: "POST",
@@ -1093,7 +1093,33 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
         })
       });
     } catch(e) {
-      console.error("Email send failed:", e);
+      console.error("Student email failed:", e);
+    }
+
+    // Step 4 — Send notification email to teacher
+    if (teacher.email) {
+      try {
+        await fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "teacher_notification",
+            to: teacher.email,
+            data: {
+              id: b.id,
+              studentName: name,
+              studentEmail: email,
+              teacherName: teacher.name,
+              slot: b.slot,
+              sessionType: sType,
+              topic: b.topic,
+              hostRoomUrl: whereby_host_url,
+            }
+          })
+        });
+      } catch(e) {
+        console.error("Teacher email failed:", e);
+      }
     }
 
     setBooking(b);
