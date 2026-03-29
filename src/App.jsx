@@ -1026,14 +1026,17 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
           slot,
         })
       });
-      if (roomRes.ok) {
-        const roomData = await roomRes.json();
+      const roomData = await roomRes.json();
+      console.log("Room creation response:", roomRes.status, roomData);
+      if (roomRes.ok && roomData.roomUrl) {
         whereby_room_url = roomData.roomUrl;
         whereby_host_url = roomData.hostRoomUrl;
+        console.log("Room created:", whereby_room_url);
+      } else {
+        console.error("Room creation failed:", roomData);
       }
     } catch(e) {
-      console.error("Room creation failed:", e);
-      // Continue booking even if room creation fails
+      console.error("Room creation error:", e);
     }
 
     // Step 2 — Create booking record
