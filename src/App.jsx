@@ -962,20 +962,40 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                   </div>
                 </div>
                 <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                  {teacher.slots.slice(0,6).map(s=>(
-                    <div key={s} onClick={()=>teacher.available && onBook(teacher)}
-                      style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-                        padding:"10px 14px", background:C.cream, borderRadius:9,
-                        fontSize:13, color:C.navy, fontWeight:500,
-                        cursor:teacher.available ? "pointer" : "default",
-                        border:`1px solid ${C.gray200}`,
-                        transition:"all 0.15s" }}
-                      onMouseEnter={e=>{ if(teacher.available) e.currentTarget.style.background=C.lb; }}
-                      onMouseLeave={e=>e.currentTarget.style.background=C.cream}>
-                      <span>{s}</span>
-                      {teacher.available && <span style={{ color:C.gold, fontSize:12 }}>Book →</span>}
-                    </div>
-                  ))}
+                  {(() => {
+                    const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+                    const grouped = {};
+                    teacher.slots.forEach(s => {
+                      const parts = s.split(" ");
+                      const day = parts[0];
+                      const time = parts.slice(1).join(" ");
+                      if (!grouped[day]) grouped[day] = [];
+                      grouped[day].push({ full: s, time });
+                    });
+                    const dayNames = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday", Sun:"Sunday" };
+                    return dayOrder.filter(d => grouped[d]).map(day => (
+                      <div key={day}>
+                        <div style={{ fontSize:11, fontWeight:700, color:C.gold,
+                          letterSpacing:1, textTransform:"uppercase",
+                          marginBottom:4, marginTop:4 }}>{dayNames[day]}</div>
+                        {grouped[day].map(({full, time}) => (
+                          <div key={full} onClick={()=>teacher.available && onBook(teacher)}
+                            style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
+                              padding:"9px 14px", background:C.cream, borderRadius:9,
+                              fontSize:13, color:C.navy, fontWeight:600,
+                              cursor:teacher.available ? "pointer" : "default",
+                              border:`1px solid ${C.gray200}`,
+                              marginBottom:4,
+                              transition:"all 0.15s" }}
+                            onMouseEnter={e=>{ if(teacher.available) e.currentTarget.style.background=C.lb; }}
+                            onMouseLeave={e=>e.currentTarget.style.background=C.cream}>
+                            <span>🕐 {time}</span>
+                            {teacher.available && <span style={{ color:C.gold, fontSize:12, fontWeight:700 }}>Book →</span>}
+                          </div>
+                        ))}
+                      </div>
+                    ));
+                  })()}
                   {teacher.slots.length > 6 && (
                     <div style={{ color:C.gray400, fontSize:12, textAlign:"center", paddingTop:4 }}>
                       +{teacher.slots.length - 6} more available
