@@ -1407,52 +1407,34 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
           if (!u) { setErrors({email:"Invalid email or password"}); setLoading(false); return; }
           setLoading(false); onAuth(u); onClose();
         }
-      } else {
-        // Try Supabase registration first
-        try {
-          const data = await signUp({ email, password: pw, name, level, dialect });
-          const init = name.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2);
-          const u = {
-            id: data.user?.id || DB.users.length + 1,
-            name, email,
-            avatar: init,
-            plan: "None",
-            level, dialect,
-            bookings: [],
-            totalSessions: 0,
-            sessionsLeft: 0,
-            progress: 0,
-            joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
-          };
-          // Send welcome email
-          fetch("/api/send-email", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ type: "welcome", to: email, data: { name } })
-          }).catch(()=>{});
-          setSuccess(true);
-          setLoading(false);
-          setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
-        } catch(supabaseErr) {
-          // Fall back to in-memory registration
-          if (DB.users.find(u=>u.email===email)) {
-            setErrors({email:"Account already exists"}); setLoading(false); return;
-          }
-          const init = name.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2);
-          const u = { id:DB.users.length+1, name, email, password:pw,
-            joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
-            plan:"None", level, dialect, avatar:init,
-            bookings:[], totalSessions:0, sessionsLeft:0, progress:0 };
-          DB.users.push(u);
-          fetch("/api/send-email", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ type: "welcome", to: email, data: { name } })
-          }).catch(()=>{});
-          setSuccess(true); setLoading(false);
-          setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
-        }
+        
       }
+ } else {
+        const data = await signUp({ email, password: pw, name, level, dialect });
+        const init = name.split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2);
+        const u = {
+          id: data.user?.id || Date.now(),
+          name, email,
+          avatar: init,
+          plan: "None",
+          level, dialect,
+          bookings: [],
+          totalSessions: 0,
+          sessionsLeft: 0,
+          progress: 0,
+          joined: new Date().toLocaleDateString("en-GB",{month:"long",year:"numeric"}),
+        };
+        fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "welcome", to: email, data: { name } })
+        }).catch(()=>{});
+        setSuccess(true);
+        setLoading(false);
+        setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
+      }   
+        
+        
     } catch(err) {
       setErrors({email: err.message || "Something went wrong. Please try again."});
       setLoading(false);
