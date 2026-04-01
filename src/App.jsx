@@ -1540,12 +1540,7 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
               {mode==="login"?"Sign up free":"Log in"}
             </span>
           </p>
-
-          {mode==="login" && (
-            <p style={{ textAlign:"center", fontSize:12, color:C.gray400, marginTop:10 }}>
-              Demo: student@arabiq.com · demo123
-            </p>
-          )}
+            
         </div>
       </div>
     </div>
