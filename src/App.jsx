@@ -3244,8 +3244,6 @@ function AdminPanel({ onExit, onTeachersChanged }) {
    MAIN APP
 ───────────────────────────────────────────────────────────────── */
 export default function Arabiq() {
-console.log("SUPABASE URL:", import.meta.env.VITE_SUPABASE_URL);
-console.log("SUPABASE KEY:", import.meta.env.VITE_SUPABASE_ANON_KEY);
   
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
