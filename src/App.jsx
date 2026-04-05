@@ -1406,8 +1406,6 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
           const u = DB.users.find(u=>u.email===email && u.password===pw);
           if (!u) { setErrors({email:"Invalid email or password"}); setLoading(false); return; }
           setLoading(false); onAuth(u); onClose();
-        }
-        
       }
  } else {
         const data = await signUp({ email, password: pw, name, level, dialect });
