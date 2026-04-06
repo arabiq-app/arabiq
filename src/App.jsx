@@ -2090,7 +2090,6 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                         background:on?C.gold:"#fff", transition:"left 0.2s" }} />
                     </div>
                   </div>
-                    
                 ))}
               </div>
               <div style={{ background:"#fff", borderRadius:20, padding:26,
