@@ -1235,15 +1235,17 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
             ? <p style={{ color:C.gray400, fontSize:13, textAlign:"center", padding:"20px 0" }}>
                 No available slots at this time.
               </p>
-            : <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:22 }}>
+            : <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:22 }}>
                 {teacher.slots.map(s=>(
                   <button key={s} onClick={()=>setSlot(s)}
-                    style={{ padding:"11px 14px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
+                    style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
                       border:`2px solid ${slot===s?C.gold:C.gray200}`,
                       background: slot===s?"#FEF9EC":"#fff",
                       color: slot===s?"#92400E":C.gray800,
-                      fontWeight: slot===s?700:500, fontSize:13, transition:"all 0.2s" }}>
-                    {s}
+                      fontWeight: slot===s?700:500, fontSize:13, transition:"all 0.2s",
+                      textAlign:"left" }}>
+                    📅 {getNextSlotDate(s)}
+
                   </button>
                 ))}
               </div>
