@@ -2071,7 +2071,8 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                 </div>
               ))}
               <Btn label="Save Changes" variant="primary" />
-            </div>
+
+</div>
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
               <div style={{ background:"#fff", borderRadius:20, padding:26,
                 border:`1.5px solid ${C.gray200}` }}>
@@ -2089,6 +2090,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                         background:on?C.gold:"#fff", transition:"left 0.2s" }} />
                     </div>
                   </div>
+                    
                 ))}
               </div>
               <div style={{ background:"#fff", borderRadius:20, padding:26,
