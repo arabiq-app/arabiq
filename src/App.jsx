@@ -1770,8 +1770,6 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
               border:`1.5px solid ${C.gray200}` }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
                 letterSpacing:1, marginBottom:14 }}>CURRENT PLAN</div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22,
-                fontWeight:800, color:C.navy, marginBottom:10 }}>{user.plan}</div>
               <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
                 <div style={{ flex:1, height:8, background:C.lb, borderRadius:99 }}>
                   <div style={{ width:`${Math.max(5,(user.sessionsLeft/8)*100)}%`,
