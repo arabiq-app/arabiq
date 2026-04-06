@@ -1016,6 +1016,21 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
 /* ─────────────────────────────────────────────────────────────────
    BOOKING FLOW (3 steps + success)
 ───────────────────────────────────────────────────────────────── */
+function getNextSlotDate(slotStr) {
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const parts = slotStr.split(" ");
+  const dayStr = parts[0];
+  const time = parts.slice(1).join(" ");
+  const targetDay = days.indexOf(dayStr);
+  if (targetDay === -1) return slotStr;
+  const now = new Date();
+  const diff = (targetDay - now.getDay() + 7) % 7 || 7;
+  const next = new Date(now);
+  next.setDate(now.getDate() + diff);
+  const dateLabel = next.toLocaleDateString("en-GB", { weekday:"long", day:"numeric", month:"long" });
+  return `${dateLabel}, ${time}`;
+}
+
 function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGoBookings }) {
   const [step,    setStep]    = useState(1);
   const [slot,    setSlot]    = useState(null);
