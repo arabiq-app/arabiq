@@ -1592,7 +1592,6 @@ function UserDropdown({ user, onProfile, onLogout }) {
           <div style={{ padding:"14px 16px", borderBottom:`1px solid ${C.gray100}` }}>
             <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>{user.name}</div>
             <div style={{ color:C.gray400, fontSize:12 }}>{user.email}</div>
-            <Chip label={`${user.plan} Plan`} bg={C.lb} color={C.navy} size={11} />
           </div>
           {[["👤","My Profile",()=>{onProfile();setOpen(false);}],
             ["📅","My Bookings",()=>{onProfile("sessions");setOpen(false);}],
@@ -1674,8 +1673,6 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                 <span style={{ color:"rgba(255,255,255,0.55)", fontSize:13 }}>
                   📅 Joined {user.joined}
                 </span>
-                <Chip label={`${user.plan} Plan`}
-                  bg="rgba(201,150,26,0.2)" color={C.goldLt} size={12} />
               </div>
             </div>
             <div style={{ display:"flex", gap:isMobile?12:24, flexWrap:"wrap" }}>
