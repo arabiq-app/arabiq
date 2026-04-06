@@ -1675,9 +1675,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                 <span style={{ color:"rgba(255,255,255,0.55)", fontSize:13 }}>
                   📅 Joined {user.joined}
                 </span>
-                <Chip label={`${user.plan} Plan`}
-                  bg="rgba(201,150,26,0.2)" color={C.goldLt} size={12} />
-              </div>
+               
             </div>
             <div style={{ display:"flex", gap:isMobile?12:24, flexWrap:"wrap" }}>
               {[["🎓",totalSessions,"Sessions"],["⏱️",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1),"Hours"],
