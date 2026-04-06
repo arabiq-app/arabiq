@@ -3395,9 +3395,6 @@ export default function Arabiq() {
                 setAdminLogin(s=>({...s,authed:true}));
               else setAdminLogin(s=>({...s,err:"Invalid credentials. Try hello@arabiq.app / ProjectArabiq2026!"}));
             }} />
-            <p style={{ textAlign:"center", fontSize:12, color:C.gray400, marginTop:16 }}>
-              Demo: hello@arabiq.app · ProjectArabiq2026!
-            </p>
             <div style={{ marginTop:16, textAlign:"center" }}>
               <span onClick={()=>{setPage("home");setAdminLogin({open:false,email:"",pw:"",err:"",authed:false});}}
                 style={{ color:C.gold, fontSize:13, cursor:"pointer", fontWeight:600 }}>
