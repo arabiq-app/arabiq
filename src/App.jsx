@@ -2071,7 +2071,6 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                 </div>
               ))}
               <Btn label="Save Changes" variant="primary" />
-
 </div>
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
               <div style={{ background:"#fff", borderRadius:20, padding:26,
