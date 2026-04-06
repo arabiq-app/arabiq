@@ -2052,7 +2052,6 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
 
         {/* ── VOCABULARY ── */}
         {/* ── SETTINGS ── */}
-{/* ── SETTINGS ── */}
         {tab==="settings" && (
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
             <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
