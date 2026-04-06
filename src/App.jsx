@@ -3296,7 +3296,7 @@ export default function Arabiq() {
           totalSessions: profile.total_sessions || 0,
           sessionsLeft: profile.sessions_left || 0,
           progress: profile.progress || 0,
-          joined: profile.joined ? new Date(profile.joined).toLocaleDateString("en-GB",{month:"long",year:"numeric"}) : "",
+joined: profile.created_at ? new Date(profile.created_at).toLocaleDateString("en-GB",{month:"long",year:"numeric"}) : "",
         };
         setCurrentUser(u);
       }
