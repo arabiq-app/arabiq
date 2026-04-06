@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef, useCallback } from "react";
 
 function useIsMobile() {
@@ -1015,22 +1016,6 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
 /* ─────────────────────────────────────────────────────────────────
    BOOKING FLOW (3 steps + success)
 ───────────────────────────────────────────────────────────────── */
-
-function getNextSlotDate(slotStr) {
-  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const parts = slotStr.split(" ");
-  const dayStr = parts[0];
-  const time = parts.slice(1).join(" ");
-  const targetDay = days.indexOf(dayStr);
-  if (targetDay === -1) return slotStr;
-  const now = new Date();
-  const diff = (targetDay - now.getDay() + 7) % 7 || 7;
-  const next = new Date(now);
-  next.setDate(now.getDate() + diff);
-  const dateLabel = next.toLocaleDateString("en-GB", { weekday:"long", day:"numeric", month:"long" });
-  return `${dateLabel}, ${time}`;
-}
-
 function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGoBookings }) {
   const [step,    setStep]    = useState(1);
   const [slot,    setSlot]    = useState(null);
@@ -1040,13 +1025,12 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const [note,    setNote]    = useState("");
   const [done,    setDone]    = useState(false);
   const [booking, setBooking] = useState(null);
+
   const trialPrice = 3;
   const price = sType === "Trial" ? trialPrice : teacher.price;
+
   const doBook = async () => {
     const bookingId = `BK-${++DB.nextBookingId}`;
-
-
-
 
     // Step 1 — Create Whereby room
     let whereby_room_url = null;
@@ -1675,7 +1659,9 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
                 <span style={{ color:"rgba(255,255,255,0.55)", fontSize:13 }}>
                   📅 Joined {user.joined}
                 </span>
-               
+                <Chip label={`${user.plan} Plan`}
+                  bg="rgba(201,150,26,0.2)" color={C.goldLt} size={12} />
+              </div>
             </div>
             <div style={{ display:"flex", gap:isMobile?12:24, flexWrap:"wrap" }}>
               {[["🎓",totalSessions,"Sessions"],["⏱️",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1),"Hours"],
@@ -2054,32 +2040,51 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
         {/* ── SETTINGS ── */}
         {tab==="settings" && (
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
-            <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
-              <div style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:1, marginBottom:18 }}>ACCOUNT DETAILS</div>
-              {[["Full Name",user.name],["Email Address",user.email],["Learning Level",user.level],["Dialect Focus",user.dialect]].map(([label,val])=>(
+            <div style={{ background:"#fff", borderRadius:20, padding:26,
+              border:`1.5px solid ${C.gray200}` }}>
+              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
+                letterSpacing:1, marginBottom:18 }}>ACCOUNT DETAILS</div>
+              {[["Full Name",user.name],["Email Address",user.email],
+                ["Learning Level",user.level],["Dialect Focus",user.dialect]].map(([label,val])=>(
                 <div key={label} style={{ marginBottom:14 }}>
-                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600, marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
-                  <input defaultValue={val} style={{ width:"100%", padding:"11px 13px", borderRadius:10, border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit", outline:"none", color:C.navy, boxSizing:"border-box" }} />
+                  <label style={{ display:"block", fontSize:11, fontWeight:700,
+                    color:C.gray600, marginBottom:5, textTransform:"uppercase",
+                    letterSpacing:0.5 }}>{label}</label>
+                  <input defaultValue={val}
+                    style={{ width:"100%", padding:"11px 13px", borderRadius:10,
+                      border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
+                      outline:"none", color:C.navy, boxSizing:"border-box" }} />
                 </div>
               ))}
               <Btn label="Save Changes" variant="primary" />
             </div>
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
-              <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
-                <div style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:1, marginBottom:18 }}>NOTIFICATIONS</div>
-                {[["Session reminders",true],["Teacher messages",true],["Progress reports",false],["Promotions",false]].map(([label,on])=>(
-                  <div key={label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
+              <div style={{ background:"#fff", borderRadius:20, padding:26,
+                border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ color:C.gold, fontWeight:700, fontSize:11,
+                  letterSpacing:1, marginBottom:18 }}>NOTIFICATIONS</div>
+                {[["Session reminders",true],["Teacher messages",true],
+                  ["Progress reports",false],["Promotions",false]].map(([label,on])=>(
+                  <div key={label} style={{ display:"flex", justifyContent:"space-between",
+                    alignItems:"center", marginBottom:14 }}>
                     <span style={{ fontSize:14, color:C.gray800 }}>{label}</span>
-                    <div style={{ width:44, height:24, borderRadius:99, background:on?C.navy:C.gray200, position:"relative", cursor:"pointer" }}>
-                      <div style={{ position:"absolute", top:3, left:on?23:3, width:18, height:18, borderRadius:"50%", background:on?C.gold:"#fff", transition:"left 0.2s" }} />
+                    <div style={{ width:44, height:24, borderRadius:99,
+                      background:on?C.navy:C.gray200, position:"relative", cursor:"pointer" }}>
+                      <div style={{ position:"absolute", top:3,
+                        left:on?23:3, width:18, height:18, borderRadius:"50%",
+                        background:on?C.gold:"#fff", transition:"left 0.2s" }} />
                     </div>
                   </div>
                 ))}
               </div>
-              <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
-                <div style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:1, marginBottom:14 }}>BILLING</div>
-                <div style={{ display:"flex", gap:10, alignItems:"center", marginBottom:10 }}>
-                  <div style={{ background:C.navy, borderRadius:6, padding:"3px 10px", color:"#fff", fontSize:11, fontWeight:700 }}>VISA</div>
+              <div style={{ background:"#fff", borderRadius:20, padding:26,
+                border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ color:C.gold, fontWeight:700, fontSize:11,
+                  letterSpacing:1, marginBottom:14 }}>BILLING</div>
+                <div style={{ display:"flex", gap:10, alignItems:"center",
+                  marginBottom:10 }}>
+                  <div style={{ background:C.navy, borderRadius:6, padding:"3px 10px",
+                    color:"#fff", fontSize:11, fontWeight:700 }}>VISA</div>
                   <span style={{ color:C.gray800, fontSize:14 }}>•••• •••• •••• 4291</span>
                 </div>
                 <div style={{ color:C.gray600, fontSize:13, marginBottom:14 }}>
