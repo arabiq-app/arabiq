@@ -2052,53 +2052,35 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
 
         {/* ── VOCABULARY ── */}
         {/* ── SETTINGS ── */}
+{/* ── SETTINGS ── */}
         {tab==="settings" && (
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
-            <div style={{ background:"#fff", borderRadius:20, padding:26,
-              border:`1.5px solid ${C.gray200}` }}>
-              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                letterSpacing:1, marginBottom:18 }}>ACCOUNT DETAILS</div>
-              {[["Full Name",user.name],["Email Address",user.email],
-                ["Learning Level",user.level],["Dialect Focus",user.dialect]].map(([label,val])=>(
+            <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
+              <div style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:1, marginBottom:18 }}>ACCOUNT DETAILS</div>
+              {[["Full Name",user.name],["Email Address",user.email],["Learning Level",user.level],["Dialect Focus",user.dialect]].map(([label,val])=>(
                 <div key={label} style={{ marginBottom:14 }}>
-                  <label style={{ display:"block", fontSize:11, fontWeight:700,
-                    color:C.gray600, marginBottom:5, textTransform:"uppercase",
-                    letterSpacing:0.5 }}>{label}</label>
-                  <input defaultValue={val}
-                    style={{ width:"100%", padding:"11px 13px", borderRadius:10,
-                      border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
-                      outline:"none", color:C.navy, boxSizing:"border-box" }} />
+                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600, marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
+                  <input defaultValue={val} style={{ width:"100%", padding:"11px 13px", borderRadius:10, border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit", outline:"none", color:C.navy, boxSizing:"border-box" }} />
                 </div>
               ))}
               <Btn label="Save Changes" variant="primary" />
-</div>
+            </div>
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
-              <div style={{ background:"#fff", borderRadius:20, padding:26,
-                border:`1.5px solid ${C.gray200}` }}>
-                <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                  letterSpacing:1, marginBottom:18 }}>NOTIFICATIONS</div>
-                {[["Session reminders",true],["Teacher messages",true],
-                  ["Progress reports",false],["Promotions",false]].map(([label,on])=>(
-                  <div key={label} style={{ display:"flex", justifyContent:"space-between",
-                    alignItems:"center", marginBottom:14 }}>
+              <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:1, marginBottom:18 }}>NOTIFICATIONS</div>
+                {[["Session reminders",true],["Teacher messages",true],["Progress reports",false],["Promotions",false]].map(([label,on])=>(
+                  <div key={label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:14 }}>
                     <span style={{ fontSize:14, color:C.gray800 }}>{label}</span>
-                    <div style={{ width:44, height:24, borderRadius:99,
-                      background:on?C.navy:C.gray200, position:"relative", cursor:"pointer" }}>
-                      <div style={{ position:"absolute", top:3,
-                        left:on?23:3, width:18, height:18, borderRadius:"50%",
-                        background:on?C.gold:"#fff", transition:"left 0.2s" }} />
+                    <div style={{ width:44, height:24, borderRadius:99, background:on?C.navy:C.gray200, position:"relative", cursor:"pointer" }}>
+                      <div style={{ position:"absolute", top:3, left:on?23:3, width:18, height:18, borderRadius:"50%", background:on?C.gold:"#fff", transition:"left 0.2s" }} />
                     </div>
                   </div>
                 ))}
               </div>
-              <div style={{ background:"#fff", borderRadius:20, padding:26,
-                border:`1.5px solid ${C.gray200}` }}>
-                <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                  letterSpacing:1, marginBottom:14 }}>BILLING</div>
-                <div style={{ display:"flex", gap:10, alignItems:"center",
-                  marginBottom:10 }}>
-                  <div style={{ background:C.navy, borderRadius:6, padding:"3px 10px",
-                    color:"#fff", fontSize:11, fontWeight:700 }}>VISA</div>
+              <div style={{ background:"#fff", borderRadius:20, padding:26, border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:1, marginBottom:14 }}>BILLING</div>
+                <div style={{ display:"flex", gap:10, alignItems:"center", marginBottom:10 }}>
+                  <div style={{ background:C.navy, borderRadius:6, padding:"3px 10px", color:"#fff", fontSize:11, fontWeight:700 }}>VISA</div>
                   <span style={{ color:C.gray800, fontSize:14 }}>•••• •••• •••• 4291</span>
                 </div>
                 <div style={{ color:C.gray600, fontSize:13, marginBottom:14 }}>
