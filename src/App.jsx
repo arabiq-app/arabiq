@@ -10,8 +10,6 @@ function useIsMobile() {
   },[]);
   return isMobile;
 }
-import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange } from "./lib/supabase.js";
-
 /* ─────────────────────────────────────────────────────────────────
    DESIGN TOKENS
 ───────────────────────────────────────────────────────────────── */
