@@ -228,3 +228,32 @@ export const getAllIssues = async () => {
   if (error) throw error;
   return data || [];
 };
+
+export const incrementTeacherStats = async (teacherId, studentEmail) => {
+  // Get current teacher data
+  const { data: teacher, error } = await supabase
+    .from('teachers')
+    .select('total_sessions, student_count, students_list')
+    .eq('id', teacherId)
+    .single();
+  if (error) throw error;
+
+  const studentsList = teacher.students_list || [];
+  const isNewStudent = !studentsList.includes(studentEmail);
+
+  const { data, error: updateError } = await supabase
+    .from('teachers')
+    .update({
+      total_sessions: (teacher.total_sessions || 0) + 1,
+      student_count: isNewStudent ? (teacher.student_count || 0) + 1 : (teacher.student_count || 0),
+      students_list: isNewStudent ? [...studentsList, studentEmail] : studentsList,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', teacherId)
+    .select()
+    .single();
+  if (updateError) throw updateError;
+  return mapTeacher(data);
+};
+
+
