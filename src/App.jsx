@@ -1,6 +1,5 @@
-import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats, createBooking } from "./lib/supabase.js";
+import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats, createBooking, getUserBookings } from "./lib/supabase.js";import { useState, useEffect, useRef, useCallback } from "react";
 import { useState, useEffect, useRef, useCallback } from "react";
-
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
   useEffect(()=>{
@@ -1651,10 +1650,14 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
   useEffect(()=>{ setTab(initTab); },[initTab]);
 
   // Derive bookings - match by email OR by id in user.bookings array
-  const myBookings = DB.bookings.filter(b =>
-    b.studentEmail === user.email ||
-    (user.bookings || []).some(ub => ub.id === b.id)
-  );
+ const [myBookings, setMyBookings] = useState([]);
+useEffect(()=>{
+  if (user?.email) {
+    getUserBookings(user.email)
+      .then(data => setMyBookings(data || []))
+      .catch(()=> setMyBookings(DB.bookings.filter(b => b.studentEmail === user.email)));
+  }
+},[user?.email]);
 
   // Derived stats
   const totalSessions = myBookings.length;
