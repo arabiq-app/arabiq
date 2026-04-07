@@ -2146,8 +2146,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
   const isMobile = useIsMobile();
   const [page, setPage]           = useState("dashboard");
   const [sCollapsed, setSCollapsed]= useState(false);
- const [adminUsers, setAdminUsers] = useState([]);
-  ]);
+ const [adminUsers, setAdminUsers] = useState([])
   const [adminTeachers, setAdminTeachers] = useState(ADMIN_TEACHERS);
   const [adminIssues,   setAdminIssues]   = useState(ADMIN_ISSUES);
   const [adminBookings, setAdminBookings] = useState([...DB.bookings]);
