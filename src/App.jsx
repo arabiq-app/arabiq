@@ -1,4 +1,4 @@
-import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats } from "./lib/supabase.js";
+import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats, createBooking } from "./lib/supabase.js";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 function useIsMobile() {
@@ -1092,6 +1092,22 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       whereby_host_url,
     };
     DB.bookings.push(b);
+createBooking({
+  id: bookingId,
+  teacher_id: teacher.id,
+  teacher_name: teacher.name,
+  student_name: name,
+  student_email: email,
+  slot,
+  session_type: sType,
+  price,
+  topic: note || `${sType === "Trial" ? "Intro Session" : "Regular Lesson"}`,
+  status: "confirmed",
+  whereby_room_url,
+  whereby_host_url,
+  booked_at: new Date().toISOString(),
+}).catch(e => console.error("Booking save failed:", e));
+    
     if (currentUser) {
       const u = DB.users.find(u=>u.id===currentUser.id);
       if (u) u.bookings = [...(u.bookings||[]), b];
