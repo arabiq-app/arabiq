@@ -2171,6 +2171,12 @@ function AdminPanel({ onExit, onTeachersChanged }) {
       .catch(()=>{}); // fall back to ADMIN_TEACHERS
   },[]);
 
+useEffect(()=>{
+    getAllUsers()
+      .then(data=>{ if(data && data.length > 0) setAdminUsers(data); })
+      .catch(()=>{});
+  },[]);
+  
   const refreshTeachers = () => {
     getAllTeachersAdmin()
       .then(data=>{ if(data && data.length > 0) {
