@@ -1,4 +1,4 @@
-
+import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats } from "./lib/supabase.js";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 function useIsMobile() {
