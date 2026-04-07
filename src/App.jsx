@@ -2732,6 +2732,9 @@ useEffect(()=>{
                               <button onClick={()=>{
                                   setAdminBookings(prev=>[...prev.filter(x=>x.id!==b.id),{...b,status:"completed"}]);
                                   DB.bookings.forEach(x=>{ if(x.id===b.id) x.status="completed"; });
+                                if (b.teacherId) {
+  incrementTeacherStats(b.teacherId, b.studentEmail).catch(()=>{});
+}
                                   fire(`✅ Booking ${b.id} marked as completed.`);
                                 }}
                                 style={{ fontSize:11, padding:"4px 10px", borderRadius:7,
