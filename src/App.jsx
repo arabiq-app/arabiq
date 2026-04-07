@@ -3366,7 +3366,7 @@ export default function Arabiq() {
             <p style={{ color:C.gray600, fontSize:13, marginBottom:26 }}>
               Restricted to authorised administrators only.
             </p>
-            {[["Email","email","hello@arabiq.app","email"],["Password","pw","••••","password"]].map(([label,key,ph,type])=>(
+          {[["Email","email","","email"],["Password","pw","","password"]].map(([label,key,ph,type])=>(
               <div key={key} style={{ marginBottom:14 }}>
                 <label style={{ display:"block", fontSize:10, fontWeight:700,
                   color:C.gray600, marginBottom:5, textTransform:"uppercase",
