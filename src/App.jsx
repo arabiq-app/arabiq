@@ -1654,7 +1654,23 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
 useEffect(()=>{
   if (user?.email) {
     getUserBookings(user.email)
-      .then(data => setMyBookings(data || []))
+      .then(data => setMyBookings((data || []).map(b => ({
+        id: b.id,
+        teacherId: b.teacher_id,
+        teacherName: b.teacher_name,
+        teacherAvatar: b.teacher_avatar || b.teacher_name?.split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase(),
+        teacherAccent: b.teacher_accent || "#0F2557",
+        student: b.student_name,
+        studentEmail: b.student_email,
+        slot: b.slot,
+        type: b.session_type,
+        price: b.price,
+        topic: b.topic,
+        status: b.status,
+        booked: b.booked_at ? new Date(b.booked_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) : "",
+        whereby_room_url: b.whereby_room_url,
+        whereby_host_url: b.whereby_host_url,
+      }))))
       .catch(()=> setMyBookings(DB.bookings.filter(b => b.studentEmail === user.email)));
   }
 },[user?.email]);
