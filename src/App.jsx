@@ -1105,6 +1105,12 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
     teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
     if (teacher.slots.length === 0) teacher.available = false;
 
+     // Remove slot from Supabase
+    if (teacher.id) {
+      const updatedSlots = (teacher.slots||[]).filter(s=>s!==slot);
+      updateTeacher(teacher.id, { ...teacher, slots: updatedSlots, available: updatedSlots.length > 0 }).catch(()=>{});
+    }
+
     // Step 3 — Send confirmation email to student
     try {
       await fetch("/api/send-email", {
