@@ -4331,7 +4331,7 @@ export default function Arabiq() {
                 <div style={{ marginBottom:16 }}>
                   <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
                     marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Full Name</label>
-                  <input type="text" placeholder="Your name"
+                  <input type="text" id="contact-name" placeholder="Your name"
                     style={{ width:"100%", padding:"12px 14px", borderRadius:10,
                       border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
                       outline:"none", color:C.navy, boxSizing:"border-box" }}
@@ -4343,7 +4343,7 @@ export default function Arabiq() {
                 <div style={{ marginBottom:16 }}>
                   <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
                     marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Email Address</label>
-                  <input type="email" placeholder="your@email.com"
+<input type="email" id="contact-email" placeholder="your@email.com"
                     style={{ width:"100%", padding:"12px 14px", borderRadius:10,
                       border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
                       outline:"none", color:C.navy, boxSizing:"border-box" }}
@@ -4355,7 +4355,7 @@ export default function Arabiq() {
                 <div style={{ marginBottom:16 }}>
                   <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
                     marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Subject</label>
-                  <select style={{ width:"100%", padding:"12px 14px", borderRadius:10,
+                  <select id="contact-subject" style={{width:"100%", padding:"12px 14px", borderRadius:10,
                     border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
                     outline:"none", color:C.navy, background:"#fff",
                     appearance:"none", boxSizing:"border-box" }}>
@@ -4370,9 +4370,7 @@ export default function Arabiq() {
                 <div style={{ marginBottom:24 }}>
                   <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
                     marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Message</label>
-                  <textarea placeholder="Tell us what's on your mind..." rows={5}
-                    style={{ width:"100%", padding:"12px 14px", borderRadius:10,
-                      border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
+<textarea id="contact-message" placeholder="Tell us what's on your mind..." rows={5} style={{ width:"100%", padding:"12px 14px", borderRadius:10, border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
                       outline:"none", color:C.navy, resize:"vertical",
                       boxSizing:"border-box", lineHeight:1.6 }}
                     onFocus={e=>e.target.style.borderColor=C.navy}
