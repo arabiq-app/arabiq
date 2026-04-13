@@ -103,10 +103,25 @@ export default async function handler(req, res) {
       case 'cancellation':
         emailContent = cancellationEmail(data);
         break;
-      case 'teacher_notification':
-        emailContent = teacherNotificationEmail(data);
-        break;
-      default:
+case 'teacher_notification':
+  emailContent = teacherNotificationEmail(data);
+  break;
+case 'contact':
+  emailContent = {
+    subject: `New Contact Form Message - ${data.subject || 'General Enquiry'}`,
+    html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+      <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">New Contact Form Message</h1>
+      <div style="background:#fff;border-radius:12px;border:1px solid #E8EDF8;overflow:hidden;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Name</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${data.name}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Email</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${data.email}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Subject</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${data.subject || 'General Enquiry'}</span></div>
+        <div style="padding:12px 20px;"><span style="color:#6B7280;font-size:13px;display:block;margin-bottom:8px;">Message</span><span style="color:#1A3470;font-size:14px;line-height:1.7;">${data.message}</span></div>
+      </div>
+      <p style="color:#9CA3AF;font-size:13px;text-align:center;">Reply directly to ${data.email}</p>
+    </div>${footerHtml}</div>`,
+  };
+  break;
+default:
         return res.status(400).json({ error: `Unknown type: ${type}` });
     }
 
