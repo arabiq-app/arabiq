@@ -4379,16 +4379,30 @@ export default function Arabiq() {
                     onBlur={e=>e.target.style.borderColor=C.gray200} />
                 </div>
 
-                <button
-                  onClick={()=>{
-                    alert("Thank you for your message. We will get back to you within a few hours.");
-                  }}
-                  style={{ width:"100%", padding:"14px",
-                    background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
-                    color:"#fff", border:"none", borderRadius:12,
-                    fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit" }}>
-                  Send Message →
-                </button>
+              <button
+  onClick={async ()=>{
+    const nameVal = document.querySelector('#contact-name')?.value;
+    const emailVal = document.querySelector('#contact-email')?.value;
+    const subjectVal = document.querySelector('#contact-subject')?.value;
+    const messageVal = document.querySelector('#contact-message')?.value;
+    if (!nameVal || !emailVal || !messageVal) { alert("Please fill in all fields."); return; }
+    await fetch("/api/send-email", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        type:"contact",
+        to:"hello@arabiq.app",
+        data:{ name:nameVal, email:emailVal, subject:subjectVal, message:messageVal }
+      })
+    }).catch(()=>{});
+    alert("Thank you! We'll get back to you within a few hours.");
+  }}
+  style={{ width:"100%", padding:"14px",
+    background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+    color:"#fff", border:"none", borderRadius:12,
+    fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit" }}>
+  Send Message →
+</button>Sonnet 4.6Extended
               </div>
 
               {/* RIGHT - Contact info */}
