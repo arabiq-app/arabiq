@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // convert to pence
+      amount: Math.round(amount * 100),
       currency,
       metadata: {
         teacherName,
