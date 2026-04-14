@@ -1037,42 +1037,46 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const [note,    setNote]    = useState("");
   const [done,    setDone]    = useState(false);
   const [booking, setBooking] = useState(null);
+  const [paying,  setPaying]  = useState(false);
+  const [stripeCard, setStripeCard] = useState(null);
 
   const trialPrice = 3;
   const price = sType === "Trial" ? trialPrice : teacher.price;
 
+  useEffect(()=>{
+    if (step === 3 && window.Stripe) {
+      const stripe = window.Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+      const elements = stripe.elements();
+      const card = elements.create('card', {
+        style: { base: { fontSize:'16px', color:'#0F2557', fontFamily:'DM Sans, sans-serif' } }
+      });
+      card.mount('#stripe-card-element');
+      card.on('change', e=>{
+        const el = document.getElementById('stripe-card-errors');
+        if (el) el.textContent = e.error ? e.error.message : '';
+      });
+      setStripeCard({ stripe, card });
+    }
+  },[step]);
+
   const doBook = async () => {
     const bookingId = `BK-${++DB.nextBookingId}`;
 
-    // Step 1 — Create Whereby room
     let whereby_room_url = null;
     let whereby_host_url = null;
     try {
       const roomRes = await fetch("/api/create-room", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          bookingId,
-          teacherName: teacher.name,
-          studentName: name,
-          sessionType: sType,
-          slot,
-        })
+        body: JSON.stringify({ bookingId, teacherName: teacher.name, studentName: name, sessionType: sType, slot })
       });
       const roomData = await roomRes.json();
-      console.log("Room creation response:", roomRes.status, roomData);
       if (roomRes.ok && roomData.roomUrl) {
         whereby_room_url = roomData.roomUrl;
         whereby_host_url = roomData.hostRoomUrl;
-        console.log("Room created:", whereby_room_url);
-      } else {
-        console.error("Room creation failed:", roomData);
       }
-    } catch(e) {
-      console.error("Room creation error:", e);
-    }
+    } catch(e) { console.error("Room creation error:", e); }
 
-    // Step 2 — Create booking record
     const b = {
       id: bookingId,
       teacherId: teacher.id,
@@ -1091,27 +1095,27 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       whereby_host_url,
     };
     DB.bookings.push(b);
-createBooking({
-  id: bookingId,
-  teacher_id: teacher.id,
-  teacher_name: teacher.name,
-  student_name: name,
-  student_email: email,
-  slot,
-  session_type: sType,
-  price,
-  topic: note || `${sType === "Trial" ? "Intro Session" : "Regular Lesson"}`,
-  status: "confirmed",
-  whereby_room_url,
-  whereby_host_url,
-  booked_at: new Date().toISOString(),
-}).catch(e => console.error("Booking save failed:", e));
-    
+    createBooking({
+      id: bookingId,
+      teacher_id: teacher.id,
+      teacher_name: teacher.name,
+      student_name: name,
+      student_email: email,
+      slot,
+      session_type: sType,
+      price,
+      topic: note || `${sType === "Trial" ? "Intro Session" : "Regular Lesson"}`,
+      status: "confirmed",
+      whereby_room_url,
+      whereby_host_url,
+      booked_at: new Date().toISOString(),
+    }).catch(e => console.error("Booking save failed:", e));
+
     if (currentUser) {
       const u = DB.users.find(u=>u.id===currentUser.id);
       if (u) u.bookings = [...(u.bookings||[]), b];
     }
-    // Remove the booked slot from the teacher's available slots
+
     const teacherRef = TEACHERS.find(t=>t.id===teacher.id);
     if (teacherRef) {
       teacherRef.slots = (teacherRef.slots||[]).filter(s=>s!==slot);
@@ -1120,13 +1124,11 @@ createBooking({
     teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
     if (teacher.slots.length === 0) teacher.available = false;
 
-     // Remove slot from Supabase
     if (teacher.id) {
       const updatedSlots = (teacher.slots||[]).filter(s=>s!==slot);
       updateTeacher(teacher.id, { ...teacher, slots: updatedSlots, available: updatedSlots.length > 0 }).catch(()=>{});
     }
 
-    // Step 3 — Send confirmation email to student
     try {
       await fetch("/api/send-email", {
         method: "POST",
@@ -1134,24 +1136,11 @@ createBooking({
         body: JSON.stringify({
           type: "booking_confirmation",
           to: email,
-          data: {
-            id: b.id,
-            studentName: name,
-            studentEmail: email,
-            teacherName: teacher.name,
-            slot: b.slot,
-            sessionType: sType,
-            topic: b.topic,
-            price: price,
-            whereby_room_url,
-          }
+          data: { id: b.id, studentName: name, studentEmail: email, teacherName: teacher.name, slot: b.slot, sessionType: sType, topic: b.topic, price, whereby_room_url }
         })
       });
-    } catch(e) {
-      console.error("Student email failed:", e);
-    }
+    } catch(e) { console.error("Student email failed:", e); }
 
-    // Step 4 — Send notification email to teacher
     if (teacher.email) {
       try {
         await fetch("/api/send-email", {
@@ -1160,26 +1149,47 @@ createBooking({
           body: JSON.stringify({
             type: "teacher_notification",
             to: teacher.email,
-            data: {
-              id: b.id,
-              studentName: name,
-              studentEmail: email,
-              teacherName: teacher.name,
-              slot: b.slot,
-              sessionType: sType,
-              topic: b.topic,
-              hostRoomUrl: whereby_host_url,
-            }
+            data: { id: b.id, studentName: name, studentEmail: email, teacherName: teacher.name, slot: b.slot, sessionType: sType, topic: b.topic, hostRoomUrl: whereby_host_url }
           })
         });
-      } catch(e) {
-        console.error("Teacher email failed:", e);
-      }
+      } catch(e) { console.error("Teacher email failed:", e); }
     }
 
     setBooking(b);
     setDone(true);
     onBooked && onBooked(b);
+  };
+
+  const doPayAndBook = async () => {
+    if (!stripeCard) return;
+    setPaying(true);
+    try {
+      const intentRes = await fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: price,
+          teacherName: teacher.name,
+          sessionType: sType,
+          studentEmail: email,
+          bookingId: `BK-${DB.nextBookingId + 1}`,
+        })
+      });
+      const { clientSecret, error: intentError } = await intentRes.json();
+      if (intentError) throw new Error(intentError);
+
+      const { paymentIntent, error } = await stripeCard.stripe.confirmCardPayment(clientSecret, {
+        payment_method: { card: stripeCard.card, billing_details: { name, email } }
+      });
+      if (error) throw new Error(error.message);
+      if (paymentIntent.status === 'succeeded') {
+        await doBook();
+      }
+    } catch(e) {
+      const el = document.getElementById('stripe-card-errors');
+      if (el) el.textContent = e.message;
+      setPaying(false);
+    }
   };
 
   if (done && booking) return (
@@ -1189,38 +1199,26 @@ createBooking({
           background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
           display:"flex", alignItems:"center", justifyContent:"center",
           margin:"0 auto 20px", fontSize:38 }}>🎉</div>
-        <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
-          fontSize:26, fontWeight:800, marginBottom:8 }}>You're all booked!</h2>
-        <p style={{ color:C.gray600, marginBottom:6 }}>
-          <strong>{sType}</strong> session with <strong>{teacher.name}</strong>
-        </p>
+        <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:26, fontWeight:800, marginBottom:8 }}>You're all booked!</h2>
+        <p style={{ color:C.gray600, marginBottom:6 }}><strong>{sType}</strong> session with <strong>{teacher.name}</strong></p>
         <p style={{ color:C.gold, fontWeight:700, fontSize:17, marginBottom:6 }}>{slot}</p>
         <Chip label={booking.id} bg={C.lb} color={C.navy} size={12} />
-        <div style={{ background:C.lb, borderRadius:14, padding:"16px 20px",
-          margin:"20px 0", textAlign:"left" }}>
-          {[["💰 Amount",`£${price.toFixed(2)}`],["📧 Confirmation",email || "Your email"],
-            ["🎓 Teacher",teacher.name],["📖 Topic",booking.topic]].map(([k,v])=>(
-            <div key={k} style={{ display:"flex", justifyContent:"space-between",
-              padding:"7px 0", borderBottom:`1px solid ${C.gray100}`, fontSize:13 }}>
+        <div style={{ background:C.lb, borderRadius:14, padding:"16px 20px", margin:"20px 0", textAlign:"left" }}>
+          {[["💰 Amount",`£${price.toFixed(2)}`],["📧 Confirmation",email || "Your email"],["🎓 Teacher",teacher.name],["📖 Topic",booking.topic]].map(([k,v])=>(
+            <div key={k} style={{ display:"flex", justifyContent:"space-between", padding:"7px 0", borderBottom:`1px solid ${C.gray100}`, fontSize:13 }}>
               <span style={{ color:C.gray600 }}>{k}</span>
               <span style={{ fontWeight:600, color:C.navy }}>{v}</span>
             </div>
           ))}
         </div>
-        <p style={{ color:C.gray600, fontSize:13, marginBottom:24, lineHeight:1.6 }}>
-          A confirmation has been sent to your email. Your video link will arrive 30 minutes before the session.
-        </p>
-        <Btn label="View My Bookings" variant="primary" onClick={()=>{
-          if(onGoBookings) { onGoBookings(); }
-          else { onClose(); window.scrollTo(0,0); }
-        }} full />
+        <p style={{ color:C.gray600, fontSize:13, marginBottom:24, lineHeight:1.6 }}>A confirmation has been sent to your email. Your video link will arrive 30 minutes before the session.</p>
+        <Btn label="View My Bookings" variant="primary" onClick={()=>{ if(onGoBookings) { onGoBookings(); } else { onClose(); window.scrollTo(0,0); } }} full />
       </div>
     </Modal>
   );
 
   return (
     <Modal title={`Book with ${teacher.name}`} onClose={onClose} maxW={500}>
-      {/* Progress indicator */}
       <div style={{ display:"flex", gap:8, marginBottom:24 }}>
         {[1,2,3].map(n=>(
           <div key={n} style={{ flex:1, height:4, borderRadius:99,
@@ -1229,13 +1227,11 @@ createBooking({
         ))}
       </div>
 
-      {/* Teacher mini-header */}
       <div style={{ display:"flex", gap:12, alignItems:"center", marginBottom:22,
         padding:"14px 16px", background:C.lb, borderRadius:12 }}>
         <Av init={teacher.avatar} size={44} bg={`linear-gradient(135deg,${teacher.accent},${C.gold})`} />
         <div>
-          <div style={{ fontWeight:700, color:C.navy, fontSize:15,
-            fontFamily:"'Playfair Display',serif" }}>{teacher.name}</div>
+          <div style={{ fontWeight:700, color:C.navy, fontSize:15, fontFamily:"'Playfair Display',serif" }}>{teacher.name}</div>
           <div style={{ color:C.gray600, fontSize:12 }}>{teacher.speciality} · {teacher.origin}</div>
         </div>
         <div style={{ marginLeft:"auto", textAlign:"right" }}>
@@ -1244,7 +1240,6 @@ createBooking({
         </div>
       </div>
 
-      {/* STEP 1 - Session type + slot */}
       {step === 1 && (
         <>
           <div style={{ fontSize:13, fontWeight:700, color:C.navy, marginBottom:10 }}>Session Type</div>
@@ -1253,8 +1248,7 @@ createBooking({
               <button key={type} onClick={()=>setSType(type)}
                 style={{ padding:"14px 16px", borderRadius:12, cursor:"pointer",
                   border:`2px solid ${sType===type?C.navy:C.gray200}`,
-                  background: sType===type?C.lb:"#fff",
-                  fontFamily:"inherit", transition:"all 0.2s" }}>
+                  background: sType===type?C.lb:"#fff", fontFamily:"inherit", transition:"all 0.2s" }}>
                 <div style={{ fontWeight:700, color:sType===type?C.navy:C.gray600, fontSize:14 }}>{type}</div>
                 <div style={{ fontSize:12, color:C.gray400, marginTop:2 }}>
                   {type==="Trial" ? `30 min · £${trialPrice}` : `60 min · £${teacher.price}`}
@@ -1262,14 +1256,9 @@ createBooking({
               </button>
             ))}
           </div>
-
-          <div style={{ fontSize:13, fontWeight:700, color:C.navy, marginBottom:10 }}>
-            Available Time Slots
-          </div>
+          <div style={{ fontSize:13, fontWeight:700, color:C.navy, marginBottom:10 }}>Available Time Slots</div>
           {teacher.slots.length === 0
-            ? <p style={{ color:C.gray400, fontSize:13, textAlign:"center", padding:"20px 0" }}>
-                No available slots at this time.
-              </p>
+            ? <p style={{ color:C.gray400, fontSize:13, textAlign:"center", padding:"20px 0" }}>No available slots at this time.</p>
             : <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:22 }}>
                 {teacher.slots.map(s=>(
                   <button key={s} onClick={()=>setSlot(s)}
@@ -1280,103 +1269,64 @@ createBooking({
                       fontWeight: slot===s?700:500, fontSize:13, transition:"all 0.2s",
                       textAlign:"left" }}>
                     📅 {getNextSlotDate(s)}
-
                   </button>
                 ))}
               </div>
           }
-          <Btn label="Continue →" variant="primary" full
-            disabled={!slot} onClick={()=>setStep(2)} />
+          <Btn label="Continue →" variant="primary" full disabled={!slot} onClick={()=>setStep(2)} />
         </>
       )}
 
-      {/* STEP 2 - Contact details */}
       {step === 2 && (
         <>
-          <p style={{ color:C.gray600, fontSize:13, marginBottom:18 }}>
-            Confirm your details for booking confirmation.
-          </p>
-          <Input label="Full Name" value={name} onChange={setName} placeholder="Your name"
-            error={!name.trim()&&name!==""?"Name required":""} />
-          <Input label="Email Address" type="email" value={email} onChange={setEmail}
-            placeholder="your@email.com"
-            error={email&&!email.includes("@")?"Enter valid email":""} />
+          <p style={{ color:C.gray600, fontSize:13, marginBottom:18 }}>Confirm your details for booking confirmation.</p>
+          <Input label="Full Name" value={name} onChange={setName} placeholder="Your name" error={!name.trim()&&name!==""?"Name required":""} />
+          <Input label="Email Address" type="email" value={email} onChange={setEmail} placeholder="your@email.com" error={email&&!email.includes("@")?"Enter valid email":""} />
           <div style={{ marginBottom:16 }}>
-            <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
-              marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>
-              Topic / Goal (optional)
-            </label>
-            <textarea value={note} onChange={e=>setNote(e.target.value)}
-              placeholder="e.g. I want to practise conversation…" rows={2}
-              style={{ width:"100%", padding:"11px 13px", borderRadius:10,
-                border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
-                outline:"none", resize:"none", boxSizing:"border-box" }} />
+            <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600, marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Topic / Goal (optional)</label>
+            <textarea value={note} onChange={e=>setNote(e.target.value)} placeholder="e.g. I want to practise conversation…" rows={2}
+              style={{ width:"100%", padding:"11px 13px", borderRadius:10, border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit", outline:"none", resize:"none", boxSizing:"border-box" }} />
           </div>
-
-          {/* Order summary */}
           <div style={{ background:C.lb, borderRadius:12, padding:"14px 16px", marginBottom:20 }}>
-            <div style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8,
-              textTransform:"uppercase", letterSpacing:0.5 }}>Order Summary</div>
-            {[["Session",`${sType} · ${sType==="Trial"?"30 min":"60 min"}`],
-              ["Time", slot], ["Teacher", teacher.name],
-              ["Total", `£${price.toFixed(2)}`]].map(([k,v])=>(
-              <div key={k} style={{ display:"flex", justifyContent:"space-between",
-                padding:"6px 0", borderBottom:`1px solid #fff`, fontSize:13 }}>
+            <div style={{ fontSize:12, fontWeight:700, color:C.navy, marginBottom:8, textTransform:"uppercase", letterSpacing:0.5 }}>Order Summary</div>
+            {[["Session",`${sType} · ${sType==="Trial"?"30 min":"60 min"}`],["Time", slot],["Teacher", teacher.name],["Total", `£${price.toFixed(2)}`]].map(([k,v])=>(
+              <div key={k} style={{ display:"flex", justifyContent:"space-between", padding:"6px 0", borderBottom:`1px solid #fff`, fontSize:13 }}>
                 <span style={{ color:C.gray600 }}>{k}</span>
-                <span style={{ fontWeight: k==="Total"?800:600, color:k==="Total"?C.navy:C.gray800,
-                  fontSize: k==="Total"?15:13 }}>{v}</span>
+                <span style={{ fontWeight: k==="Total"?800:600, color:k==="Total"?C.navy:C.gray800, fontSize: k==="Total"?15:13 }}>{v}</span>
               </div>
             ))}
           </div>
-
           <div style={{ display:"flex", gap:10 }}>
             <Btn label="← Back" variant="outline" onClick={()=>setStep(1)} />
             <div style={{ flex:1 }}>
-              <Btn label="Continue to Payment →" variant="primary" full
-                disabled={!name.trim()||!email.includes("@")}
-                onClick={()=>setStep(3)} />
+              <Btn label="Continue to Payment →" variant="primary" full disabled={!name.trim()||!email.includes("@")} onClick={()=>setStep(3)} />
             </div>
           </div>
         </>
       )}
 
-      {/* STEP 3 - Payment */}
       {step === 3 && (
         <>
-          <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>
-            Enter your payment details to confirm your booking.
-          </p>
-          <Input label="Cardholder Name" value={name} onChange={setName} placeholder="Name on card" />
-          <Input label="Card Number" value="4242 4242 4242 4242" onChange={()=>{}} placeholder="1234 5678 9012 3456" />
-          <div style={{ display:"flex", gap:14 }}>
-            <div style={{ flex:1 }}>
-              <Input label="Expiry" value="12/28" onChange={()=>{}} placeholder="MM/YY" />
-            </div>
-            <div style={{ flex:1 }}>
-              <Input label="CVC" value="123" onChange={()=>{}} placeholder="123" />
-            </div>
-          </div>
-
+          <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>Enter your payment details to confirm your booking.</p>
+          <div id="stripe-card-element" style={{ padding:"12px 14px", borderRadius:10,
+            border:`1.5px solid ${C.gray200}`, marginBottom:16, background:"#fff" }} />
+          <div id="stripe-card-errors" style={{ color:C.red, fontSize:12, marginBottom:12 }} />
           <div style={{ background:"#F0FDF4", border:`1px solid ${C.green}30`,
             borderRadius:10, padding:"10px 14px", marginBottom:20, display:"flex",
             gap:8, alignItems:"center" }}>
             <span style={{ fontSize:16 }}>🔒</span>
-            <span style={{ fontSize:12, color:C.green, fontWeight:600 }}>
-              Secured with 256-bit SSL encryption
-            </span>
+            <span style={{ fontSize:12, color:C.green, fontWeight:600 }}>Secured with 256-bit SSL encryption via Stripe</span>
           </div>
-
           <div style={{ background:C.lb, borderRadius:12, padding:"12px 16px",
-            marginBottom:20, display:"flex", justifyContent:"space-between",
-            alignItems:"center" }}>
+            marginBottom:20, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
             <span style={{ color:C.gray600, fontSize:14 }}>Total due today</span>
             <span style={{ fontSize:22, fontWeight:800, color:C.navy }}>£{price.toFixed(2)}</span>
           </div>
-
           <div style={{ display:"flex", gap:10 }}>
             <Btn label="← Back" variant="outline" onClick={()=>setStep(2)} />
             <div style={{ flex:1 }}>
-              <Btn label={`Pay £${price.toFixed(2)} & Confirm →`} variant="gold" full onClick={doBook} />
+              <Btn label={paying ? "Processing..." : `Pay £${price.toFixed(2)} & Confirm →`}
+                variant="gold" full disabled={paying} onClick={doPayAndBook} />
             </div>
           </div>
         </>
