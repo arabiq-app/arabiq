@@ -1,4 +1,4 @@
-import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats, createBooking, getUserBookings } from "./lib/supabase.js";
+import { getTeachers, getAllTeachersAdmin, createTeacher, updateTeacher, updateTeacherStatus, deleteTeacher, signUp, signIn, signOut, getCurrentUser, onAuthChange, getAllUsers, incrementTeacherStats, createBooking, getUserBookings, resetPassword, updateBookingStatus } from "./lib/supabase.js";
 import { useState, useEffect, useRef, useCallback } from "react";
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
