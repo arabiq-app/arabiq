@@ -1055,6 +1055,46 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
         const el = document.getElementById('stripe-card-errors');
         if (el) el.textContent = e.error ? e.error.message : '';
       });
+
+      // Payment Request Button (Apple Pay / Google Pay)
+      const paymentRequest = stripe.paymentRequest({
+        country: 'GB',
+        currency: 'gbp',
+        total: { label: `Arabiq ${sType} Session`, amount: Math.round(price * 100) },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+      const prButton = elements.create('paymentRequestButton', {
+        paymentRequest,
+        style: { paymentRequestButton: { type: 'buy', theme: 'dark', height: '48px' } }
+      });
+      paymentRequest.canMakePayment().then(result => {
+        const el = document.getElementById('payment-request-button');
+        if (result && el) {
+          prButton.mount('#payment-request-button');
+          el.style.display = 'block';
+          const divider = document.getElementById('payment-divider');
+          if (divider) divider.style.display = 'block';
+        }
+      });
+      paymentRequest.on('paymentmethod', async (ev) => {
+        const intentRes = await fetch("/api/create-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: price, teacherName: teacher.name, sessionType: sType, studentEmail: email, bookingId: `BK-${DB.nextBookingId + 1}` })
+        });
+        const { clientSecret } = await intentRes.json();
+        const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, { payment_method: ev.paymentMethod.id }, { handleActions: false });
+        if (error) { ev.complete('fail'); } 
+        else {
+          ev.complete('success');
+          if (paymentIntent.status === 'requires_action') {
+            await stripe.confirmCardPayment(clientSecret);
+          }
+          await doBook();
+        }
+      });
+
       setStripeCard({ stripe, card });
     }
   },[step]);
