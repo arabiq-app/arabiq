@@ -11,7 +11,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-// ── Auth helpers ──────────────────────────────────────────────
 export const signUp = async ({ email, password, name, level, dialect }) => {
   const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   const { data, error } = await supabase.auth.signUp({
@@ -48,9 +47,6 @@ export const getCurrentUser = async () => {
 
 export const onAuthChange = (callback) => supabase.auth.onAuthStateChange(callback);
 
-// ── Teacher helpers ───────────────────────────────────────────
-
-// Map Supabase row → app teacher object
 const mapTeacher = (row) => ({
   id: row.id,
   name: row.name,
@@ -173,7 +169,6 @@ export const deleteTeacher = async (id) => {
   if (error) throw error;
 };
 
-// ── Booking helpers ───────────────────────────────────────────
 export const createBooking = async (bookingData) => {
   const { data, error } = await supabase.from('bookings').insert(bookingData).select().single();
   if (error) throw error;
@@ -201,7 +196,6 @@ export const getAllBookings = async () => {
   return data || [];
 };
 
-// ── User helpers ──────────────────────────────────────────────
 export const updateUserProfile = async (userId, updates) => {
   const { data, error } = await supabase
     .from('users').update({ ...updates, updated_at: new Date().toISOString() })
@@ -216,7 +210,6 @@ export const getAllUsers = async () => {
   return data || [];
 };
 
-// ── Issues helpers ────────────────────────────────────────────
 export const createIssue = async (issueData) => {
   const { data, error } = await supabase.from('issues').insert(issueData).select().single();
   if (error) throw error;
@@ -230,7 +223,6 @@ export const getAllIssues = async () => {
 };
 
 export const incrementTeacherStats = async (teacherId, studentEmail) => {
-  // Get current teacher data
   const { data: teacher, error } = await supabase
     .from('teachers')
     .select('total_sessions, student_count, students_list')
@@ -256,4 +248,9 @@ export const incrementTeacherStats = async (teacherId, studentEmail) => {
   return mapTeacher(data);
 };
 
-
+export const resetPassword = async (email) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://arabiq.app/reset-password',
+  });
+  if (error) throw error;
+};
