@@ -4390,7 +4390,7 @@ export default function Arabiq() {
     color:"#fff", border:"none", borderRadius:12,
     fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit" }}>
   Send Message →
-</button>Sonnet 4.6Extended
+</button>
               </div>
 
               {/* RIGHT - Contact info */}
