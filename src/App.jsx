@@ -1960,15 +1960,37 @@ useEffect(()=>{
                     fontFamily:"inherit" }}>
                   Keep Booking
                 </button>
-                <button onClick={()=>{
-                    const idx = DB.bookings.findIndex(x=>x.id===cancelConfirm.id);
-                    if(idx>=0) DB.bookings[idx].status="cancelled";
-                    const u = DB.users.find(u=>u.id===user.id);
-                    if(u) u.bookings = (u.bookings||[]).map(x=>
-                      x.id===cancelConfirm.id ? {...x,status:"cancelled"} : x
-                    );
-                    setCancelConfirm(null);
-                  }}
+<button onClick={async ()=>{
+    const idx = DB.bookings.findIndex(x=>x.id===cancelConfirm.id);
+    if(idx>=0) DB.bookings[idx].status="cancelled";
+    const u = DB.users.find(u=>u.id===user.id);
+    if(u) u.bookings = (u.bookings||[]).map(x=>
+      x.id===cancelConfirm.id ? {...x,status:"cancelled"} : x
+    );
+    updateBookingStatus(cancelConfirm.id, "cancelled").catch(()=>{});
+    if (user?.email) {
+      getUserBookings(user.email)
+        .then(data => setMyBookings((data || []).map(b => ({
+          id: b.id,
+          teacherId: b.teacher_id,
+          teacherName: b.teacher_name,
+          teacherAvatar: b.teacher_avatar || b.teacher_name?.split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase(),
+          teacherAccent: b.teacher_accent || "#0F2557",
+          student: b.student_name,
+          studentEmail: b.student_email,
+          slot: b.slot,
+          type: b.session_type,
+          price: b.price,
+          topic: b.topic,
+          status: b.status,
+          booked: b.booked_at ? new Date(b.booked_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) : "",
+          whereby_room_url: b.whereby_room_url,
+          whereby_host_url: b.whereby_host_url,
+        }))))
+        .catch(()=>{});
+    }
+    setCancelConfirm(null);
+  }}
                   style={{ flex:1, padding:"12px",
                     background:C.red, color:"#fff",
                     border:"none", borderRadius:10, fontWeight:800,
