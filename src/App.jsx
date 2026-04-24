@@ -3086,19 +3086,7 @@ useEffect(() => {
       border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
       outline:"none", color:C.navy, boxSizing:"border-box" }} />
 </div>
-          
-              <div style={{ marginBottom:14 }}>
-                <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
-                  marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Available Slots (comma separated)</label>
-                <input type="text"
-                  value={(editingTeacher.slots||[]).join(", ")}
-                  onChange={e=>setEditingTeacher(t=>({...t,
-                    slots:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
-                  placeholder="Mon 9:00 AM, Tue 2:00 PM, Wed 11:00 AM"
-                  style={{ width:"100%", padding:"10px 12px", borderRadius:9,
-                    border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
-                    outline:"none", color:C.navy, boxSizing:"border-box" }} />
-              </div>
+              
               <div style={{ marginBottom:20 }}>
                 <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
                   marginBottom:8, textTransform:"uppercase", letterSpacing:0.5 }}>Availability</label>
