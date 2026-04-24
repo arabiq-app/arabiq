@@ -2980,24 +2980,113 @@ useEffect(() => {
             </div>
             <div style={{ padding:"24px 26px" }}>
               {[
-                ["Full Name *","name","text","e.g. Fatima Al-Rashid"],
-                ["Email *","email","email","teacher@example.com"],
-                ["Origin (City, Country) *","origin","text","e.g. Cairo, Egypt"],
-                ["Speciality *","speciality","text","e.g. Modern Standard Arabic"],
-                ["Price per lesson (£) *","price","number","e.g. 10"],
-                ["Short Bio (one sentence)","bio","text","Brief description for teacher card"],
-              ].map(([label,field,type,ph])=>(
-                <div key={field} style={{ marginBottom:14 }}>
-                  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
-                    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
-                  <input type={type} value={editingTeacher[field]||""}
-                    onChange={e=>setEditingTeacher(t=>({...t,[field]:e.target.value}))}
-                    placeholder={ph}
-                    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
-                      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
-                      outline:"none", color:C.navy, boxSizing:"border-box" }} />
-                </div>
-              ))}
+{[
+  ["Full Name *","name","text","e.g. Fatima Al-Rashid"],
+  ["Email *","email","email","teacher@example.com"],
+  ["Origin (City, Country) *","origin","text","e.g. Cairo, Egypt"],
+  ["Speciality *","speciality","text","e.g. Modern Standard Arabic"],
+  ["Price per lesson (£) *","price","number","e.g. 10"],
+  ["Experience","experience","text","e.g. 5 years teaching Arabic"],
+].map(([label,field,type,ph])=>(
+  <div key={field} style={{ marginBottom:14 }}>
+    <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+      marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
+    <input type={type} value={editingTeacher[field]||""}
+      onChange={e=>setEditingTeacher(t=>({...t,[field]:e.target.value}))}
+      placeholder={ph}
+      style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+        border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+        outline:"none", color:C.navy, boxSizing:"border-box" }} />
+  </div>
+))}
+{/* Short Bio */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Short Bio (teacher card)</label>
+  <input type="text" value={editingTeacher.bio||""}
+    onChange={e=>setEditingTeacher(t=>({...t,bio:e.target.value}))}
+    placeholder="One sentence shown on teacher card"
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box" }} />
+</div>
+{/* Full Bio */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Full Bio (profile page)</label>
+  <textarea value={editingTeacher.fullBio||""}
+    onChange={e=>setEditingTeacher(t=>({...t,fullBio:e.target.value}))}
+    placeholder="Detailed biography shown on teacher profile page"
+    rows={4}
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box", resize:"vertical" }} />
+</div>
+{/* Teaching Style */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Teaching Style</label>
+  <textarea value={editingTeacher.teachingStyle||""}
+    onChange={e=>setEditingTeacher(t=>({...t,teachingStyle:e.target.value}))}
+    placeholder="Describe their teaching approach and methodology"
+    rows={3}
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box", resize:"vertical" }} />
+</div>
+{/* Qualifications */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Qualifications (comma separated)</label>
+  <input type="text"
+    value={(editingTeacher.qualifications||[]).join(", ")}
+    onChange={e=>setEditingTeacher(t=>({...t,
+      qualifications:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
+    placeholder="BA Arabic Literature, CELTA, Al-Azhar Certificate"
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box" }} />
+</div>
+{/* Dialects */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Dialects (comma separated)</label>
+  <input type="text"
+    value={(editingTeacher.dialects||[]).join(", ")}
+    onChange={e=>setEditingTeacher(t=>({...t,
+      dialects:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
+    placeholder="Modern Standard Arabic, Egyptian, Levantine"
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box" }} />
+</div>
+{/* Languages */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Languages Spoken (comma separated)</label>
+  <input type="text"
+    value={(editingTeacher.languages||[]).join(", ")}
+    onChange={e=>setEditingTeacher(t=>({...t,
+      languages:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
+    placeholder="English, Arabic, French"
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box" }} />
+</div>
+{/* Available Slots */}
+<div style={{ marginBottom:14 }}>
+  <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
+    marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Available Slots (comma separated)</label>
+  <input type="text"
+    value={(editingTeacher.slots||[]).join(", ")}
+    onChange={e=>setEditingTeacher(t=>({...t,
+      slots:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
+    placeholder="Mon 9:00 AM, Tue 2:00 PM, Wed 11:00 AM"
+    style={{ width:"100%", padding:"10px 12px", borderRadius:9,
+      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+      outline:"none", color:C.navy, boxSizing:"border-box" }} />
+</div>
+          
               <div style={{ marginBottom:14 }}>
                 <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
                   marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Available Slots (comma separated)</label>
