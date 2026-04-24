@@ -2979,7 +2979,7 @@ useEffect(() => {
                   width:30, height:30, cursor:"pointer", fontSize:14, color:C.gray600 }}>✕</button>
             </div>
             <div style={{ padding:"24px 26px" }}>
-              {[
+              
 {[
   ["Full Name *","name","text","e.g. Fatima Al-Rashid"],
   ["Email *","email","email","teacher@example.com"],
