@@ -2236,6 +2236,11 @@ useEffect(()=>{
       .catch(()=>{});
   };
 
+useEffect(() => {
+  refreshTeachers();
+}, []);
+
+
   const fire = (msg)=>{ setToast(msg); setTimeout(()=>setToast(null),3000); };
 
   const W = isMobile ? 0 : (sCollapsed ? 64 : 224);
