@@ -2164,14 +2164,7 @@ useEffect(()=>{
 /* ─────────────────────────────────────────────────────────────────
    ADMIN PANEL (complete)
 ───────────────────────────────────────────────────────────────── */
-const ADMIN_TEACHERS = [
-  { id:1, name:"Fatima Al-Rashid", email:"fatima@arabiq.com", origin:"Cairo, Egypt",    speciality:"MSA",     rating:4.98, students:312, sessions:1240, status:"approved", avatar:"FA", joined:"Nov 2025", verified:true,  docs:true  },
-  { id:2, name:"Omar Khalil",      email:"omar@arabiq.com",   origin:"Beirut, Lebanon", speciality:"Levantine",rating:4.95, students:276, sessions:890,  status:"approved", avatar:"OK", joined:"Dec 2025", verified:true,  docs:true  },
-  { id:3, name:"Nour Hassan",      email:"nour@arabiq.com",   origin:"Tunis, Tunisia",  speciality:"Quranic", rating:4.97, students:198, sessions:620,  status:"approved", avatar:"NH", joined:"Jan 2026", verified:true,  docs:true  },
-  { id:4, name:"Yasmin Tariq",     email:"yasmin@arabiq.com", origin:"Dubai, UAE",      speciality:"Gulf",    rating:4.99, students:401, sessions:1580, status:"approved", avatar:"YT", joined:"Oct 2025", verified:true,  docs:true  },
-  { id:5, name:"Khalid Mansour",   email:"khalid@arabiq.com", origin:"Riyadh, KSA",     speciality:"MSA",     rating:0,    students:0,   sessions:0,    status:"pending",  avatar:"KM", joined:"10 Mar 2026", verified:false, docs:true  },
-  { id:6, name:"Layla Aziz",       email:"layla@arabiq.com",  origin:"Amman, Jordan",   speciality:"Levantine",rating:0,  students:0,   sessions:0,    status:"pending",  avatar:"LA", joined:"12 Mar 2026", verified:false, docs:false },
-];
+
 const ADMIN_ISSUES = [
   { id:"ISS-001", user:"Emma Wilson",    type:"Payment",   subject:"Charged twice for March plan",        priority:"high",   status:"open",        created:"14 Mar 2026", assigned:"Unassigned",   msgs:3 },
   { id:"ISS-002", user:"David Park",     type:"Technical", subject:"Video call dropped mid-session",      priority:"medium", status:"in-progress", created:"15 Mar 2026", assigned:"Tech Support", msgs:5 },
