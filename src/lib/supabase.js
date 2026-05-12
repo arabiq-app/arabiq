@@ -267,6 +267,18 @@ export const restoreTeacherSlot = async (teacherId, slot) => {
   if (updateError) throw updateError;
   return mapTeacher(data);
 };
+export const updateTeacherStripeAccount = async (teacherId, stripeAccountId) => {
+  const { data, error } = await supabase
+    .from('teachers')
+    .update({ stripe_account_id: stripeAccountId, stripe_onboarded: true, updated_at: new Date().toISOString() })
+    .eq('id', teacherId)
+    .select()
+    .single();
+  if (error) throw error;
+  return mapTeacher(data);
+};
+
+
 
 export const resetPassword = async (email) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
