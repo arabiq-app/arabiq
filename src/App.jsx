@@ -1162,6 +1162,8 @@ const doBook = async (paymentIntentId = null) => {
       whereby_room_url,
       whereby_host_url,
       booked_at: new Date().toISOString(),
+      session_date: getSessionDate(slot),
+      payment_intent_id: paymentIntentId,
     }).catch(e => console.error("Booking save failed:", e));
 
     if (currentUser) {
