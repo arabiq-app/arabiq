@@ -1223,7 +1223,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       });
       if (error) throw new Error(error.message);
       if (paymentIntent.status === 'succeeded') {
-        await doBook();
+        await doBook(paymentIntent.id);
       }
     } catch(e) {
       const el = document.getElementById('stripe-card-errors');
