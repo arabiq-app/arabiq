@@ -1091,7 +1091,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
           if (paymentIntent.status === 'requires_action') {
             await stripe.confirmCardPayment(clientSecret);
           }
-          await doBook();
+          await doBook(paymentIntent.id);
         }
       });
 
