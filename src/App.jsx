@@ -2715,6 +2715,29 @@ useEffect(() => {
                               cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>
                             Edit
                           </button>
+                          <button onClick={async () => {
+                            if (t.stripeOnboarded) { fire(`✅ ${t.name} is already connected to Stripe.`); return; }
+                            fire(`⏳ Setting up Stripe for ${t.name}...`);
+                            try {
+                              const res = await fetch("/api/create-connect-account", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ teacherEmail: t.email, teacherName: t.name }),
+                              });
+                              const { accountId, onboardingUrl } = await res.json();
+                              await updateTeacherStripeAccount(t.id, accountId);
+                              refreshTeachers();
+                              window.open(onboardingUrl, "_blank");
+                              fire(`✅ Stripe onboarding link opened for ${t.name}`);
+                            } catch(e) { fire(`❌ Stripe setup failed: ${e.message}`); }
+                          }}
+                          style={{ fontSize:11, padding:"4px 10px", borderRadius:7, border:"none",
+                            cursor:"pointer", fontFamily:"inherit", fontWeight:600,
+                            background: t.stripeOnboarded ? "#ECFDF5" : "#FEF9EC",
+                            color: t.stripeOnboarded ? "#166534" : "#92400E" }}>
+                            {t.stripeOnboarded ? "✓ Stripe" : "Connect Stripe"}
+                          </button>
+                          
                           {t.status==="pending" && <>
                             <button onClick={async ()=>{
                                 try {
