@@ -1098,9 +1098,22 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
       setStripeCard({ stripe, card });
     }
   },[step]);
-
-  const doBook = async () => {
+  
+const doBook = async (paymentIntentId = null) => {
     const bookingId = `BK-${++DB.nextBookingId}`;
+
+  const getSessionDate = (slot) => {
+      const days = { Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:0 };
+      const dayStr = slot.split(' ')[0];
+      const today = new Date();
+      const targetDay = days[dayStr];
+      let daysUntil = targetDay - today.getDay();
+      if (daysUntil <= 0) daysUntil += 7;
+      const sessionDate = new Date(today);
+      sessionDate.setDate(today.getDate() + daysUntil);
+      return sessionDate.toISOString().split('T')[0];
+    };
+  
 
     let whereby_room_url = null;
     let whereby_host_url = null;
