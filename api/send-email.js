@@ -146,6 +146,9 @@ export default async function handler(req, res) {
       case 'cancellation':
         emailContent = cancellationEmail(data);
         break;
+        case 'teacher_cancellation':
+        emailContent = teacherCancellationEmail(data);
+        break;
 case 'teacher_notification':
   emailContent = teacherNotificationEmail(data);
   break;
