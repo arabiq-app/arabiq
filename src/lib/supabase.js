@@ -248,6 +248,26 @@ export const incrementTeacherStats = async (teacherId, studentEmail) => {
   return mapTeacher(data);
 };
 
+export const restoreTeacherSlot = async (teacherId, slot) => {
+  const { data: teacher, error } = await supabase
+    .from('teachers')
+    .select('slots')
+    .eq('id', teacherId)
+    .single();
+  if (error) throw error;
+  const currentSlots = teacher.slots || [];
+  if (currentSlots.includes(slot)) return;
+  const updatedSlots = [...currentSlots, slot];
+  const { data, error: updateError } = await supabase
+    .from('teachers')
+    .update({ slots: updatedSlots, available: true, updated_at: new Date().toISOString() })
+    .eq('id', teacherId)
+    .select()
+    .single();
+  if (updateError) throw updateError;
+  return mapTeacher(data);
+};
+
 export const resetPassword = async (email) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: 'https://arabiq.app/reset-password',
