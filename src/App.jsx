@@ -1152,6 +1152,7 @@ const doBook = async (paymentIntentId = null) => {
       id: bookingId,
       teacher_id: teacher.id,
       teacher_name: teacher.name,
+      teacher_email: teacher.email,
       student_name: name,
       student_email: email,
       slot,
