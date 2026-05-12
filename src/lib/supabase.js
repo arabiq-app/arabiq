@@ -77,6 +77,8 @@ const mapTeacher = (row) => ({
   students: row.student_count || 0,
   sessions: row.total_sessions || 0,
   joined: row.created_at ? new Date(row.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '',
+  stripeAccountId: row.stripe_account_id || null,
+  stripeOnboarded: row.stripe_onboarded || false,
 });
 
 export const getTeachers = async () => {
