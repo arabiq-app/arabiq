@@ -36,9 +36,52 @@ const bookingConfirmationEmail = (booking) => ({
 `}<div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;"><h3 style="color:#1A3470;font-size:14px;font-weight:700;margin:0 0 10px;">Before your session:</h3><p style="color:#374151;font-size:13px;margin:5px 0;">✓ Test your camera and microphone</p><p style="color:#374151;font-size:13px;margin:5px 0;">✓ Find a quiet space with good internet</p><p style="color:#374151;font-size:13px;margin:5px 0;">✓ Have a notebook ready for vocabulary</p><p style="color:#374151;font-size:13px;margin:5px 0;">✓ Join a few minutes early</p></div><div style="text-align:center;margin:28px 0;">${navyBtn(APP_URL + '?bookings=1', 'View My Bookings →')}</div><p style="color:#9CA3AF;font-size:13px;text-align:center;">Need to cancel? Email support@arabiq.app at least 24 hours before for a full refund.</p></div>${footerHtml}</div>`,
 });
 
-const cancellationEmail = (booking) => ({
-  subject: `Booking Cancelled - ${booking.id}`,
-  html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;"><h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Booking Cancelled</h1><p style="color:#6B7280;font-size:15px;margin:0 0 24px;">Your booking ${booking.id} with ${booking.teacherName} has been cancelled.</p><p style="color:#374151;font-size:14px;margin:0 0 24px;">A full refund of <strong>£${Number(booking.price).toFixed(2)}</strong> will appear on your card within 3-5 business days.</p><div style="text-align:center;margin:28px 0;">${goldBtn(APP_URL, 'Book Another Session →')}</div><p style="color:#9CA3AF;font-size:13px;text-align:center;">Questions? Contact support@arabiq.app</p></div>${footerHtml}</div>`,
+const cancellationEmail = (booking) => {
+  const refundMessage = booking.refundStatus === 'refunded'
+    ? `A full refund of <strong>£${Number(booking.price).toFixed(2)}</strong> will appear on your card within 5-10 business days depending on your bank or card provider.`
+    : booking.refundStatus === 'trial'
+    ? `Trial sessions (£3) are non-refundable as per our cancellation policy.`
+    : `As this cancellation was made within 24 hours of the session, no refund will be issued as per our cancellation policy.`;
+
+  return {
+    subject: `Booking Cancelled - ${booking.id}`,
+    html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+      <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Booking Cancelled</h1>
+      <p style="color:#6B7280;font-size:15px;margin:0 0 24px;">Your booking ${booking.id} with ${booking.teacherName} for <strong>${booking.slot}</strong> has been cancelled.</p>
+      <div style="background:#fff;border-radius:12px;border:1px solid #E8EDF8;overflow:hidden;margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Booking Reference</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.id}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Teacher</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.teacherName}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Session</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.slot}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:12px 20px;"><span style="color:#6B7280;font-size:13px;">Amount Paid</span><span style="color:#1A3470;font-size:13px;font-weight:600;">£${Number(booking.price).toFixed(2)}</span></div>
+      </div>
+      <div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;">
+        <p style="color:#374151;font-size:14px;margin:0;">${refundMessage}</p>
+      </div>
+      <div style="text-align:center;margin:28px 0;">${goldBtn(APP_URL, 'Book Another Session →')}</div>
+      <p style="color:#9CA3AF;font-size:13px;text-align:center;">Questions? Contact support@arabiq.app</p>
+    </div>${footerHtml}</div>`,
+  };
+};
+
+const teacherCancellationEmail = (booking) => ({
+  subject: `Session Cancelled - ${booking.studentName} (${booking.slot})`,
+  html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+    <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Session Cancelled</h1>
+    <p style="color:#6B7280;font-size:15px;margin:0 0 24px;">A student has cancelled their upcoming session with you.</p>
+    <div style="background:#fff;border-radius:12px;border:1px solid #E8EDF8;overflow:hidden;margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Student</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.studentName}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Session</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.slot}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #F3F4F6;"><span style="color:#6B7280;font-size:13px;">Session Type</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.sessionType}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:12px 20px;"><span style="color:#6B7280;font-size:13px;">Booking Reference</span><span style="color:#1A3470;font-size:13px;font-weight:600;">${booking.id}</span></div>
+    </div>
+    <div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;">
+      <p style="color:#374151;font-size:14px;margin:0;">This time slot has been freed up and is now available for other students to book.</p>
+    </div>
+    <p style="color:#9CA3AF;font-size:13px;text-align:center;">Questions? Contact hello@arabiq.app</p>
+  </div>${footerHtml}</div>`,
+});
+
+
 });
 
 const teacherNotificationEmail = (booking) => ({
