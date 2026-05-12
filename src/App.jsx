@@ -1081,7 +1081,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
         const intentRes = await fetch("/api/create-payment-intent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: price, teacherName: teacher.name, sessionType: sType, studentEmail: email, bookingId: `BK-${DB.nextBookingId + 1}` })
+          body: JSON.stringify({ amount: price, teacherName: teacher.name, sessionType: sType, studentEmail: email, bookingId: `BK-${DB.nextBookingId + 1}`, teacherStripeAccountId: teacher.stripeAccountId || null })
         });
         const { clientSecret } = await intentRes.json();
         const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, { payment_method: ev.paymentMethod.id }, { handleActions: false });
