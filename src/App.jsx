@@ -1678,6 +1678,7 @@ useEffect(()=>{
         whereby_host_url: b.whereby_host_url,
         sessionDate: b.session_date,
           paymentIntentId: b.payment_intent_id,
+        teacherEmail: b.teacher_email,
       }))))
       .catch(()=> setMyBookings(DB.bookings.filter(b => b.studentEmail === user.email)));
   }
