@@ -1985,6 +1985,26 @@ useEffect(()=>{
       x.id===cancelConfirm.id ? {...x,status:"cancelled"} : x
     );
     updateBookingStatus(cancelConfirm.id, "cancelled").catch(()=>{});
+  const isTrial = cancelConfirm.type === "Trial";
+const sessionDate = cancelConfirm.sessionDate ? new Date(cancelConfirm.sessionDate) : null;
+const hoursUntilSession = sessionDate ? (sessionDate - new Date()) / (1000 * 60 * 60) : 0;
+const isEligibleForRefund = !isTrial && sessionDate && hoursUntilSession >= 24;
+
+if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
+  fetch("/api/refund", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentIntentId: cancelConfirm.paymentIntentId }),
+  })
+  .then(r => r.json())
+  .then(() => fire("✅ Booking cancelled and refund issued."))
+  .catch(() => fire("⚠️ Booking cancelled but refund failed — please contact us."));
+} else if (isTrial) {
+  fire("✅ Trial booking cancelled. Trial sessions are non-refundable.");
+} else {
+  fire("✅ Booking cancelled. Cancellations within 24hrs of the session are non-refundable.");
+}
+  
     if (user?.email) {
       getUserBookings(user.email)
         .then(data => setMyBookings((data || []).map(b => ({
