@@ -1675,6 +1675,8 @@ useEffect(()=>{
         booked: b.booked_at ? new Date(b.booked_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) : "",
         whereby_room_url: b.whereby_room_url,
         whereby_host_url: b.whereby_host_url,
+        sessionDate: b.session_date,
+          paymentIntentId: b.payment_intent_id,
       }))))
       .catch(()=> setMyBookings(DB.bookings.filter(b => b.studentEmail === user.email)));
   }
