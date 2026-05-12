@@ -1990,6 +1990,45 @@ const sessionDate = cancelConfirm.sessionDate ? new Date(cancelConfirm.sessionDa
 const hoursUntilSession = sessionDate ? (sessionDate - new Date()) / (1000 * 60 * 60) : 0;
 const isEligibleForRefund = !isTrial && sessionDate && hoursUntilSession >= 24;
 
+const refundStatus = isTrial ? "trial" : isEligibleForRefund ? "refunded" : "no_refund";
+
+// Send cancellation email to student
+fetch("/api/send-email", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    type: "cancellation",
+    to: cancelConfirm.studentEmail,
+    data: {
+      id: cancelConfirm.id,
+      teacherName: cancelConfirm.teacherName,
+      slot: cancelConfirm.slot,
+      price: cancelConfirm.price,
+      refundStatus,
+    }
+  })
+}).catch(() => {});
+
+// Send cancellation notification to teacher
+if (cancelConfirm.teacherEmail) {
+  fetch("/api/send-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      type: "teacher_cancellation",
+      to: cancelConfirm.teacherEmail,
+      data: {
+        id: cancelConfirm.id,
+        studentName: cancelConfirm.student,
+        teacherName: cancelConfirm.teacherName,
+        slot: cancelConfirm.slot,
+        sessionType: cancelConfirm.type,
+      }
+    })
+  }).catch(() => {});
+}
+
+// Process refund if eligible
 if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
   fetch("/api/refund", {
     method: "POST",
