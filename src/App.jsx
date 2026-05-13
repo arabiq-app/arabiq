@@ -871,8 +871,8 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
               {[
                 [teacher.studentCount,"Students taught"],
                 [teacher.totalSessions,"Lessons given"],
-                [teacher.rating ? `${teacher.rating} ★` : "-","Rating"],
-                [teacher.reviews,"Reviews"],
+                [liveRating ? `${liveRating} ★` : "-","Rating"],
+                [liveReviews.length,"Reviews"],
               ].map(([val,label])=>(
                 <div key={label} style={{ background:"#fff", borderRadius:14, padding:"14px 12px",
                   textAlign:"center", border:`1px solid ${C.gray200}`,
