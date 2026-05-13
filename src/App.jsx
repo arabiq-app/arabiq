@@ -800,9 +800,9 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
 
                       {/* Individual reviews */}
                       <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
-                        {(teacher.reviews||[]).map((review,i)=>(
+                       {liveReviews.map((review,i)=>(
                           <div key={i} style={{ paddingBottom:18,
-                            borderBottom: i < teacher.reviews.length-1 ? `1px solid ${C.gray100}` : "none" }}>
+                            borderBottom: i < liveReviews.length-1 ? `1px solid ${C.gray100}` : "none" }}>
                             <div style={{ display:"flex", alignItems:"center",
                               justifyContent:"space-between", marginBottom:8 }}>
                               <div style={{ display:"flex", alignItems:"center", gap:10 }}>
