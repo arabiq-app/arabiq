@@ -1703,6 +1703,11 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState(initTab);
   const [cancelConfirm, setCancelConfirm] = useState(null);
+  const [reviewTarget, setReviewTarget] = useState(null);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewedIds, setReviewedIds] = useState(new Set());
 
   useEffect(()=>{ setTab(initTab); },[initTab]);
 
