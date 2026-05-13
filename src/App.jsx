@@ -5681,10 +5681,21 @@ export default function Arabiq() {
       )}
 
       {/* ───── MODALS & OVERLAYS ───── */}
-      {authModal && (
+    {authModal && (
         <AuthModal initMode={authModal} onClose={()=>setAuthModal(null)}
-          onAuth={u=>{ setCurrentUser(u); setProfileTab("overview");
-            setPage("profile"); fire(`Welcome, ${u.name.split(" ")[0]}! 👋`); }} />
+          onAuth={async u=>{
+            const teacherProfile = await getTeacherByEmail(u.email).catch(()=>null);
+            if (teacherProfile) {
+              setCurrentTeacher(teacherProfile);
+              setAuthModal(null);
+              fire(`Welcome back, ${teacherProfile.name.split(" ")[0]}! 👋`);
+              return;
+            }
+            setCurrentUser(u);
+            setProfileTab("overview");
+            setPage("profile");
+            fire(`Welcome, ${u.name.split(" ")[0]}! 👋`);
+          }} />
       )}
 
       {bookingTeacher && (
