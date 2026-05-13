@@ -378,7 +378,8 @@ function TeacherCard({ t, onBook, onView }) {
           <div style={{ color:C.gray600, fontSize:13, marginTop:2 }}>📍 {t.origin}</div>
           <div style={{ display:"flex", alignItems:"center", gap:6, marginTop:4 }}>
             {t.rating
-              ? <><Stars r={t.rating} /><span style={{ fontSize:12, color:C.gray600 }}>{t.rating} ({(t.reviews||[]).length} reviews)</span></>
+              {t.rating
+              ? <><Stars r={t.rating} /><span style={{ fontSize:12, color:C.gray600 }}>{t.rating} ({t.reviewCount||0} reviews)</span></>
               : <span style={{ fontSize:12, color:C.gray400 }}>No reviews yet</span>}
           </div>
         </div>
