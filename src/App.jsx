@@ -427,7 +427,14 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
   const trialPrice = 3;
   const [activeTab, setActiveTab] = useState("about");
   const tabs = [["about","About"],["qualifications","Qualifications"],["teaching","Teaching Style"],["dialects","Dialects"],["reviews","Reviews"]];
+  const [liveReviews, setLiveReviews] = useState(teacher.reviews || []);
+  const liveRating = liveReviews.length > 0 ? Math.round((liveReviews.reduce((s,r)=>s+r.rating,0)/liveReviews.length)*10)/10 : teacher.rating;
 
+  useEffect(()=>{
+    if (teacher.id) {
+      getTeacherReviews(teacher.id).then(setLiveReviews).catch(()=>{});
+    }
+  },[teacher.id]);
   return (
     <div style={{ minHeight:"100vh", background:"#F8F9FB", animation:"fadeIn 0.3s ease" }}>
 
