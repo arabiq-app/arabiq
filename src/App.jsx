@@ -4103,8 +4103,34 @@ export default function Arabiq() {
   const [adminLogin,    setAdminLogin]   = useState({ open:false, email:"", pw:"", err:"" });
   const [currentTeacher, setCurrentTeacher] = useState(null);
 
-  const fire = (msg,type="ok")=>{ setToast({msg,type}); };
+const fire = (msg,type="ok")=>{ setToast({msg,type}); };
 
+  // Sync URL with page state
+  useEffect(()=>{
+    const pathMap = { home:'/', teachers:'/teachers', how:'/how',
+      pricing:'/pricing', about:'/about', contact:'/contact',
+      teach:'/teach', privacy:'/privacy', terms:'/terms',
+      profile:'/profile', admin:'/admin' };
+    const path = pathMap[page] || '/';
+    if (window.location.pathname !== path) {
+      window.history.pushState({ page }, '', path);
+    }
+  },[page]);
+
+  // Handle browser back/forward buttons
+  useEffect(()=>{
+    const handlePop = () => {
+      const pathMap = { '/':'home', '/teachers':'teachers', '/how':'how',
+        '/pricing':'pricing', '/about':'about', '/contact':'contact',
+        '/teach':'teach', '/privacy':'privacy', '/terms':'terms',
+        '/profile':'profile', '/admin':'admin' };
+      const newPage = pathMap[window.location.pathname] || 'home';
+      setPage(newPage);
+      setViewingTeacher(null);
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  },[]);
   // Restore Supabase session on page load
   useEffect(()=>{
     getCurrentUser().then(async profile => {
