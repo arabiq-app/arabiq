@@ -167,7 +167,32 @@ case 'contact':
     </div>${footerHtml}</div>`,
   };
   break;
-default:
+
+      case 'reminder':
+        emailContent = {
+          subject: `Your Arabic lesson is tomorrow — ${data.slot}`,
+          html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+            <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Your lesson is tomorrow 📅</h1>
+            <p style="color:#6B7280;font-size:15px;margin:0 0 16px;">Hi ${data.studentName}, just a reminder that your <strong>${data.sessionType}</strong> Arabic lesson with <strong>${data.teacherName}</strong> is tomorrow at <strong>${data.slot}</strong>.</p>
+            <div style="text-align:center;margin:28px 0;">${goldBtn(data.roomUrl, 'Join My Arabic Lesson →')}</div>
+            <p style="color:#9CA3AF;font-size:13px;text-align:center;">Your private video room will be ready when you click the link above.</p>
+          </div>${footerHtml}</div>`,
+        };
+        break;
+
+      case 'teacher_reminder':
+        emailContent = {
+          subject: `Lesson reminder — ${data.studentName} tomorrow at ${data.slot}`,
+          html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+            <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Upcoming lesson tomorrow 📅</h1>
+            <p style="color:#6B7280;font-size:15px;margin:0 0 16px;">Hi ${data.teacherName}, you have a <strong>${data.sessionType}</strong> session with <strong>${data.studentName}</strong> tomorrow at <strong>${data.slot}</strong>.</p>
+            <div style="text-align:center;margin:28px 0;">${goldBtn(data.hostRoomUrl, 'Start Lesson →')}</div>
+            <p style="color:#9CA3AF;font-size:13px;text-align:center;">This is your host link — it gives you full control of the classroom.</p>
+          </div>${footerHtml}</div>`,
+        };
+        break;
+
+      default:
         return res.status(400).json({ error: `Unknown type: ${type}` });
     }
 
