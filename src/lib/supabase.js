@@ -64,6 +64,7 @@ const mapTeacher = (row) => ({
   rating: row.rating || null,
   reviews: row.reviews || [],
   studentCount: row.student_count || 0,
+  reviewCount: row.review_count || 0,
   totalSessions: row.total_sessions || 0,
   price: row.price || 10,
   languages: row.languages || ['English'],
