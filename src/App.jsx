@@ -1966,8 +1966,20 @@ useEffect(()=>{
                       textAlign:"right" }}>
                       £{(b.price||0).toFixed(2)}
                     </div>
+                    {b.status==="completed" && !reviewedIds.has(b.id) && (
+                      <div style={{ display:"flex", gap:8 }}>
+                        <button onClick={()=>{ setReviewTarget(b); setReviewRating(0); setReviewComment(""); }}
+                          style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
+                            color:C.navy, border:"none", borderRadius:8,
+                            padding:"8px 16px", fontWeight:800, fontSize:12,
+                            cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+                          ⭐ Leave Review
+                        </button>
+                      </div>
+                    )}
                     {b.status==="confirmed" && (
                       <div style={{ display:"flex", gap:8 }}>
+
                         <button
                           onClick={()=>{ if(b.whereby_room_url) window.open(b.whereby_room_url, "_blank"); }}
                           style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
