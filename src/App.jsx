@@ -4068,8 +4068,14 @@ export default function Arabiq() {
 
   // Restore Supabase session on page load
   useEffect(()=>{
-    getCurrentUser().then(profile => {
+    getCurrentUser().then(async profile => {
       if (profile) {
+        // Check if this user is a teacher
+        const teacherProfile = await getTeacherByEmail(profile.email).catch(() => null);
+        if (teacherProfile) {
+          setCurrentTeacher(teacherProfile);
+          return;
+        }
         const u = {
           id: profile.id,
           name: profile.name || profile.email?.split("@")[0],
