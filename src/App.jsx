@@ -3125,7 +3125,8 @@ useEffect(() => {
                       </span>
                       {issue.status!=="resolved" && (
                         <button onClick={()=>{
-                            setAdminIssues(arr=>arr.map(x=>x.id===issue.id?{...x,status:"resolved"}:x));
+                           setAdminIssues(arr=>arr.map(x=>x.id===issue.id?{...x,status:"resolved"}:x));
+                            updateIssue(issue.id,{status:'resolved'}).catch(()=>{});
                             fire(`Issue ${issue.id} resolved.`);
                           }}
                           style={{ fontSize:11, padding:"6px 12px", borderRadius:8,
