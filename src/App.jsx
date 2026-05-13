@@ -1570,11 +1570,46 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
             </div>
           </>}
 
-          {mode==="login" && (
+          {mode==="login" && !forgotPw && (
             <div style={{ textAlign:"right", marginBottom:18, marginTop:-8 }}>
-              <span style={{ color:C.gold, fontSize:13, cursor:"pointer", fontWeight:600 }}>
+              <span onClick={()=>{ setForgotPw(true); setErrors({}); }}
+                style={{ color:C.gold, fontSize:13, cursor:"pointer", fontWeight:600 }}>
                 Forgot password?
               </span>
+            </div>
+          )}
+
+          {mode==="login" && forgotPw && (
+            <div style={{ background:C.lb, borderRadius:12, padding:"18px 16px", marginBottom:18 }}>
+              <div style={{ fontWeight:700, color:C.navy, fontSize:14, marginBottom:6 }}>
+                Reset your password
+              </div>
+              <p style={{ color:C.gray600, fontSize:13, marginBottom:14, lineHeight:1.6 }}>
+                Enter your email and we'll send you a link to reset your password.
+              </p>
+              <Input label="Email Address" type="email" value={email} onChange={setEmail}
+                placeholder="your@email.com" error={errors.email} />
+              <div style={{ display:"flex", gap:8 }}>
+                <Btn label="← Back" variant="outline" size="sm"
+                  onClick={()=>{ setForgotPw(false); setErrors({}); }} />
+                <div style={{ flex:1 }}>
+                  <Btn label={loading ? "Sending…" : "Send Reset Link →"}
+                    variant="primary" full size="sm" disabled={loading}
+                    onClick={async ()=>{
+                      if (!email.includes("@")) { setErrors({email:"Enter a valid email"}); return; }
+                      setLoading(true);
+                      try {
+                        await resetPassword(email);
+                        setLoading(false);
+                        setForgotPw(false);
+                        setErrors({email:"✅ Reset link sent — check your inbox."});
+                      } catch(e) {
+                        setErrors({email: e.message || "Failed to send reset email."});
+                        setLoading(false);
+                      }
+                    }} />
+                </div>
+              </div>
             </div>
           )}
 
