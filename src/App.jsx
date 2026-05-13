@@ -776,9 +776,9 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                         </div>
                         {/* Star breakdown */}
                         <div style={{ flex:1 }}>
-                          {[5,4,3,2,1].map(star => {
-                            const count = (teacher.reviews||[]).filter(r=>r.rating===star).length;
-                            const pct = teacher.reviews.length > 0 ? (count/teacher.reviews.length)*100 : 0;
+                         {[5,4,3,2,1].map(star => {
+                            const count = liveReviews.filter(r=>r.rating===star).length;
+                            const pct = liveReviews.length > 0 ? (count/liveReviews.length)*100 : 0;
                             return (
                               <div key={star} style={{ display:"flex", alignItems:"center",
                                 gap:10, marginBottom:5 }}>
