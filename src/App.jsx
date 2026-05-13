@@ -2152,6 +2152,78 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
           </div>
         )}
 
+        {/* ── REVIEW MODAL ── */}
+        {reviewTarget && (
+          <div style={{ position:"fixed", inset:0, background:"rgba(10,20,60,0.55)",
+            backdropFilter:"blur(6px)", display:"flex", alignItems:"center",
+            justifyContent:"center", zIndex:800, padding:16 }}
+            onClick={()=>setReviewTarget(null)}>
+            <div style={{ background:"#fff", borderRadius:22, padding:36,
+              maxWidth:440, width:"100%",
+              boxShadow:"0 30px 80px rgba(0,0,0,0.2)", textAlign:"center" }}
+              onClick={e=>e.stopPropagation()}>
+              <div style={{ fontSize:36, marginBottom:12 }}>⭐</div>
+              <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                fontSize:20, fontWeight:800, marginBottom:6 }}>
+                Rate your lesson
+              </h3>
+              <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>
+                with <strong>{reviewTarget.teacherName}</strong>
+              </p>
+              <div style={{ display:"flex", justifyContent:"center", gap:8, marginBottom:20 }}>
+                {[1,2,3,4,5].map(s=>(
+                  <span key={s} onClick={()=>setReviewRating(s)}
+                    style={{ fontSize:36, cursor:"pointer", color: s<=reviewRating ? C.gold : C.gray200,
+                      transition:"color 0.15s" }}>★</span>
+                ))}
+              </div>
+              <textarea value={reviewComment} onChange={e=>setReviewComment(e.target.value)}
+                placeholder="Tell others about your experience (optional)..."
+                rows={3}
+                style={{ width:"100%", padding:"12px 14px", borderRadius:10,
+                  border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
+                  outline:"none", color:C.navy, resize:"none",
+                  boxSizing:"border-box", marginBottom:20, lineHeight:1.6 }} />
+              <div style={{ display:"flex", gap:10 }}>
+                <button onClick={()=>setReviewTarget(null)}
+                  style={{ flex:1, padding:"12px", background:C.gray100, color:C.navy,
+                    border:"none", borderRadius:10, fontWeight:700, fontSize:14,
+                    cursor:"pointer", fontFamily:"inherit" }}>
+                  Cancel
+                </button>
+                <button disabled={reviewRating === 0 || reviewSubmitting}
+                  onClick={async ()=>{
+                    if (reviewRating === 0) return;
+                    setReviewSubmitting(true);
+                    try {
+                      await createReview({
+                        teacherId: reviewTarget.teacherId,
+                        bookingId: reviewTarget.id,
+                        studentName: reviewTarget.student || user.name,
+                        studentEmail: user.email,
+                        rating: reviewRating,
+                        comment: reviewComment,
+                      });
+                      setReviewedIds(prev => new Set([...prev, reviewTarget.id]));
+                      setReviewTarget(null);
+                      setReviewRating(0);
+                      setReviewComment("");
+                    } catch(e) { console.error("Review failed:", e); }
+                    setReviewSubmitting(false);
+                  }}
+                  style={{ flex:2, padding:"12px",
+                    background: reviewRating > 0 ? `linear-gradient(135deg,${C.gold},${C.goldLt})` : C.gray100,
+                    color: reviewRating > 0 ? C.navy : C.gray400,
+                    border:"none", borderRadius:10, fontWeight:800,
+                    fontSize:14, cursor: reviewRating > 0 ? "pointer" : "default",
+                    fontFamily:"inherit", opacity: reviewSubmitting ? 0.6 : 1 }}>
+                  {reviewSubmitting ? "Submitting…" : "Submit Review →"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ── PROGRESS ── */}
         {tab==="progress" && (
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
