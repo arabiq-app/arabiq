@@ -4,8 +4,9 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
-    "crons": [{
+  ],
+  "crons": [{
     "path": "/api/send-reminders",
     "schedule": "0 8 * * *"
-       }]
+  }]
 }
