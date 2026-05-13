@@ -2414,7 +2414,23 @@ function AdminPanel({ onExit, onTeachersChanged }) {
   const [sCollapsed, setSCollapsed]= useState(false);
  const [adminUsers, setAdminUsers] = useState([])
  const [adminTeachers, setAdminTeachers] = useState([]);
-  const [adminIssues,   setAdminIssues]   = useState(ADMIN_ISSUES);
+  const [adminIssues, setAdminIssues] = useState(ADMIN_ISSUES);
+
+  useEffect(()=>{
+    getAllIssues()
+      .then(data=>{ if(data && data.length > 0) setAdminIssues(data.map(i=>({
+        id: i.id,
+        user: i.user_name,
+        type: i.type,
+        subject: i.subject,
+        priority: i.priority,
+        status: i.status,
+        created: i.created_at ? new Date(i.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '',
+        assigned: i.assigned || 'Unassigned',
+        msgs: i.msgs || 1,
+      }))); })
+      .catch(()=>{});
+  },[]);
   const [adminBookings, setAdminBookings] = useState([...DB.bookings]);
   const [toast, setToast] = useState(null);
   const [confirm, setConfirm] = useState(null);
