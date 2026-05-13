@@ -360,5 +360,18 @@ export const updateIssue = async (issueId, updates) => {
     .from('issues').update(updates).eq('id', issueId).select().single();
   if (error) throw error;
   return data;
-};
   
+};
+
+export const getTeacherBookedSlots = async (teacherId) => {
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('slot, session_date')
+    .eq('teacher_id', String(teacherId))
+    .eq('status', 'confirmed');
+  if (error) return [];
+  return data || [];
+};
+
+
+
