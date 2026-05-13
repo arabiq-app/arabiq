@@ -4082,7 +4082,14 @@ export default function Arabiq() {
   
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [page,          setPage]         = useState("home");  // home|teachers|how|pricing|profile|admin|teacher|contact
+  const getInitialPage = () => {
+    const pathMap = { '/':'home', '/teachers':'teachers', '/how':'how',
+      '/pricing':'pricing', '/about':'about', '/contact':'contact',
+      '/teach':'teach', '/privacy':'privacy', '/terms':'terms',
+      '/profile':'profile', '/admin':'admin' };
+    return pathMap[window.location.pathname] || 'home';
+  };
+  const [page, setPage] = useState(getInitialPage);
   const [liveTeachers,  setLiveTeachers]  = useState(TEACHERS); // loaded from Supabase, falls back to hardcoded
   const [currentUser,   setCurrentUser]  = useState(null);
   const [authModal,     setAuthModal]    = useState(null);    // null|"login"|"register"
