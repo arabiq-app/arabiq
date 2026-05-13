@@ -280,11 +280,38 @@ export const updateTeacherStripeAccount = async (teacherId, stripeAccountId) => 
   return mapTeacher(data);
 };
 
-
-
 export const resetPassword = async (email) => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: 'https://arabiq.app/reset-password',
   });
   if (error) throw error;
-};
+
+export async function createReview({ teacherId, bookingId, studentName, studentEmail, rating, comment }) {
+  const { data, error } = await supabase
+    .from('reviews')
+    .insert([{ teacher_id: String(teacherId), booking_id: bookingId, student_name: studentName, student_email: studentEmail, rating, comment }])
+    .select().single();
+  if (error) throw error;
+  // Recalculate teacher avg rating
+  const { data: allReviews } = await supabase.from('reviews').select('rating').eq('teacher_id', String(teacherId));
+  if (allReviews && allReviews.length > 0) {
+    const avg = allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length;
+    await supabase.from('teachers').update({ rating: Math.round(avg * 10) / 10, review_count: allReviews.length }).eq('id', teacherId);
+  }
+  return data;
+}
+
+export async function getTeacherReviews(teacherId) {
+  const { data, error } = await supabase.from('reviews').select('*').eq('teacher_id', String(teacherId)).order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data || []).map(r => ({
+    name: r.student_name,
+    rating: r.rating,
+    comment: r.comment,
+    date: new Date(r.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }),
+    bookingId: r.booking_id,
+  }));
+}
+
+  
+  
