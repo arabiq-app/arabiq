@@ -313,6 +313,6 @@ export async function getTeacherReviews(teacherId) {
     bookingId: r.booking_id,
   }));
 }
-
+export const getTeacherByEmail
   
   
