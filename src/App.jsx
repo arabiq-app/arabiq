@@ -767,11 +767,11 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                         <div style={{ textAlign:"center" }}>
                           <div style={{ fontFamily:"'Playfair Display',serif", fontSize:52,
                             fontWeight:800, color:C.navy, lineHeight:1 }}>
-                            {teacher.rating}
+                            {liveRating}
                           </div>
-                          <Stars r={teacher.rating} />
+                          <Stars r={liveRating} />
                           <div style={{ color:C.gray400, fontSize:12, marginTop:4 }}>
-                            {(teacher.reviews||[]).length} review{(teacher.reviews||[]).length !== 1 ? "s" : ""}
+                            {liveReviews.length} review{liveReviews.length !== 1 ? "s" : ""}
                           </div>
                         </div>
                         {/* Star breakdown */}
