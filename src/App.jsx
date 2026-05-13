@@ -1412,6 +1412,7 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
   const [errors,  setErrors]  = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [forgotPw, setForgotPw] = useState(false);
 
   const dialects = ["Modern Standard Arabic (Fusha)","Egyptian Arabic","Levantine Arabic","Gulf Arabic","Maghrebi Arabic"];
 
