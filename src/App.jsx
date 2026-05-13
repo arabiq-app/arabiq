@@ -3140,7 +3140,8 @@ useEffect(() => {
                           const teams = ["Admin Team","Tech Support","Billing"];
                           const next = teams[(teams.indexOf(issue.assigned)+1)%teams.length];
                           setAdminIssues(arr=>arr.map(x=>x.id===issue.id?{...x,assigned:next,status:x.status==="open"?"in-progress":x.status}:x));
-                          fire(`Assigned to ${next}.`);
+                        updateIssue(issue.id,{assigned:next,status:issue.status==="open"?"in-progress":issue.status}).catch(()=>{});
+                        fire(`Assigned to ${next}.`);
                         }}
                         style={{ fontSize:11, padding:"6px 12px", borderRadius:8,
                           border:`1px solid ${C.amber}30`,
