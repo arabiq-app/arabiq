@@ -1342,10 +1342,10 @@ const doBook = async (paymentIntentId = null) => {
             ))}
           </div>
           <div style={{ fontSize:13, fontWeight:700, color:C.navy, marginBottom:10 }}>Available Time Slots</div>
-          {teacher.slots.length === 0
+          {availableSlots.length === 0
             ? <p style={{ color:C.gray400, fontSize:13, textAlign:"center", padding:"20px 0" }}>No available slots at this time.</p>
             : <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:22 }}>
-                {teacher.slots.map(s=>(
+                {availableSlots.map(s=>(
                   <button key={s} onClick={()=>setSlot(s)}
                     style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
                       border:`2px solid ${slot===s?C.gold:C.gray200}`,
