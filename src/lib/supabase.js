@@ -352,6 +352,13 @@ export const updateTeacherProfile = async (teacherId, updates) => {
     .eq('id', teacherId).select().single();
   if (error) throw error;
   return mapTeacher(data);
+
 };
-  
+
+export const updateIssue = async (issueId, updates) => {
+  const { data, error } = await supabase
+    .from('issues').update(updates).eq('id', issueId).select().single();
+  if (error) throw error;
+  return data;
+};
   
