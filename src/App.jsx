@@ -1047,6 +1047,33 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const [booking, setBooking] = useState(null);
   const [paying,  setPaying]  = useState(false);
   const [stripeCard, setStripeCard] = useState(null);
+  const [bookedSlots, setBookedSlots] = useState([]);
+
+  // Helper — get next calendar date for a slot string
+  const getSlotDate = (slotStr) => {
+    const days = { Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:0 };
+    const dayStr = slotStr.split(' ')[0];
+    const today = new Date();
+    const targetDay = days[dayStr];
+    let daysUntil = targetDay - today.getDay();
+    if (daysUntil <= 0) daysUntil += 7;
+    const next = new Date(today);
+    next.setDate(today.getDate() + daysUntil);
+    return next.toISOString().split('T')[0];
+  };
+
+  // Load already-booked slots for this teacher
+  useEffect(()=>{
+    if (teacher.id) {
+      getTeacherBookedSlots(teacher.id).then(setBookedSlots).catch(()=>{});
+    }
+  },[teacher.id]);
+
+  // Slots available this week = template minus already booked
+  const availableSlots = (teacher.slots||[]).filter(s => {
+    const nextDate = getSlotDate(s);
+    return !bookedSlots.some(b => b.slot === s && b.session_date === nextDate);
+  });
 
   const trialPrice = 3;
   const price = sType === "Trial" ? trialPrice : teacher.price;
