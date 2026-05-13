@@ -734,7 +734,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                       fontSize:22, fontWeight:800, margin:0 }}>Student Reviews</h2>
                   </div>
 
-                  {(!teacher.reviews || teacher.reviews.length === 0) ? (
+                 {(!liveReviews || liveReviews.length === 0) ? (
                     /* Empty state */
                     <div style={{ textAlign:"center", padding:"48px 20px" }}>
                       <div style={{ fontSize:52, marginBottom:16 }}>⭐</div>
