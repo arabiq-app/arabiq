@@ -286,7 +286,7 @@ export const resetPassword = async (email) => {
     redirectTo: 'https://arabiq.app/reset-password',
   });
   if (error) throw error;
-
+};
 export async function createReview({ teacherId, bookingId, studentName, studentEmail, rating, comment }) {
   const { data, error } = await supabase
     .from('reviews')
