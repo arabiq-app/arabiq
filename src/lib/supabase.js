@@ -313,6 +313,45 @@ export async function getTeacherReviews(teacherId) {
     bookingId: r.booking_id,
   }));
 }
-export const getTeacherByEmail
+export const getTeacherByEmail = async (email) => {
+  const { data, error } = await supabase
+    .from('teachers').select('*').eq('email', email).eq('status', 'approved').single();
+  if (error) return null;
+  return mapTeacher(data);
+};
+
+export const getTeacherBookings = async (teacherEmail) => {
+  const { data, error } = await supabase
+    .from('bookings').select('*').eq('teacher_email', teacherEmail)
+    .order('booked_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+};
+
+export const updateTeacherSlots = async (teacherId, slots) => {
+  const { data, error } = await supabase
+    .from('teachers')
+    .update({ slots, available: slots.length > 0, updated_at: new Date().toISOString() })
+    .eq('id', teacherId).select().single();
+  if (error) throw error;
+  return mapTeacher(data);
+};
+
+export const updateTeacherProfile = async (teacherId, updates) => {
+  const { data, error } = await supabase
+    .from('teachers')
+    .update({
+      bio: updates.bio,
+      full_bio: updates.fullBio || updates.bio,
+      teaching_style: updates.teachingStyle,
+      experience: updates.experience,
+      languages: updates.languages || ['English'],
+      price: Number(updates.price) || 10,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', teacherId).select().single();
+  if (error) throw error;
+  return mapTeacher(data);
+};
   
   
