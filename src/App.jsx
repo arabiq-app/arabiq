@@ -4143,8 +4143,23 @@ export default function Arabiq() {
     }
   };
 
+// ── Teacher dashboard ──
+  if (currentTeacher) {
+    return (
+      <TeacherDashboard
+        teacher={currentTeacher}
+        setTeacher={setCurrentTeacher}
+        onLogout={async ()=>{
+          await signOut().catch(()=>{});
+          setCurrentTeacher(null);
+        }}
+      />
+    );
+  }
+
   // ── Admin login screen ──
   if (page === "admin") {
+  
     if (!adminLogin.authed) {
       return (
         <div style={{ minHeight:"100vh", background:`linear-gradient(160deg,${C.navy},${C.navy2})`,
