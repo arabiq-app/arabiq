@@ -3631,6 +3631,421 @@ useEffect(() => {
 /* ─────────────────────────────────────────────────────────────────
    MAIN APP
 ───────────────────────────────────────────────────────────────── */
+function TeacherDashboard({ teacher, setTeacher, onLogout }) {
+  const isMobile = useIsMobile();
+  const [tab, setTab] = useState("overview");
+  const [bookings, setBookings] = useState([]);
+  const [slots, setSlots] = useState(teacher.slots || []);
+  const [savingSlots, setSavingSlots] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [profileForm, setProfileForm] = useState({
+    bio: teacher.bio || "",
+    fullBio: teacher.fullBio || "",
+    teachingStyle: teacher.teachingStyle || "",
+    experience: teacher.experience || "",
+    price: teacher.price || 10,
+    languages: (teacher.languages || ["English"]).join(", "),
+  });
+
+  const fire = (msg) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
+
+  useEffect(() => {
+    getTeacherBookings(teacher.email).then(setBookings).catch(() => {});
+  }, [teacher.email]);
+
+  const DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat"];
+  const TIMES = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM","7:00 PM","8:00 PM"];
+  const DAY_NAMES = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday" };
+
+  const toggleSlot = (day, time) => {
+    const slot = `${day} ${time}`;
+    setSlots(prev => prev.includes(slot) ? prev.filter(s => s !== slot) : [...prev, slot]);
+  };
+
+  const confirmed = bookings.filter(b => b.status === "confirmed");
+  const completed = bookings.filter(b => b.status === "completed");
+  const earned = completed.reduce((sum, b) => sum + ((b.price || 0) * 0.7), 0);
+
+  const subTabs = [["overview","Overview"],["bookings","My Bookings"],["availability","Availability"],["profile","My Profile"]];
+
+  return (
+    <div style={{ minHeight:"100vh", background:C.cream, fontFamily:"'DM Sans',sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+      {/* Teacher Navbar */}
+      <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
+        padding:"0 28px", background:"rgba(255,255,255,0.97)",
+        boxShadow:"0 1px 24px rgba(26,52,112,0.09)", backdropFilter:"blur(12px)",
+        display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        <Logo height={24} />
+        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+          <span style={{ background:C.lb, color:C.navy, fontSize:12, fontWeight:700,
+            padding:"4px 12px", borderRadius:20 }}>Teacher Portal</span>
+          <Av init={teacher.avatar} size={36}
+            bg={`linear-gradient(135deg,${C.gold},${C.goldLt})`} />
+          <button onClick={onLogout}
+            style={{ background:"transparent", border:`1.5px solid ${C.gray200}`,
+              borderRadius:8, padding:"7px 13px", cursor:"pointer",
+              fontFamily:"inherit", fontSize:13, fontWeight:600, color:C.gray600 }}>
+            Log Out
+          </button>
+        </div>
+      </nav>
+
+      {/* Banner */}
+      <div style={{ paddingTop:72, background:`linear-gradient(135deg,${C.navy},${C.navy2})`,
+        padding:"calc(72px + 40px) 40px 70px" }}>
+        <div style={{ maxWidth:1100, margin:"0 auto" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:22, flexWrap:"wrap" }}>
+            <div style={{ width:82, height:82, borderRadius:20, flexShrink:0,
+              background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
+              display:"flex", alignItems:"center", justifyContent:"center",
+              color:C.navyDk, fontWeight:800, fontSize:28,
+              fontFamily:"'Playfair Display',serif" }}>
+              {teacher.avatar}
+            </div>
+            <div style={{ flex:1 }}>
+              <div style={{ color:"rgba(255,255,255,0.55)", fontSize:12, marginBottom:4 }}>Teacher Dashboard</div>
+              <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
+                fontSize:26, fontWeight:800, margin:"0 0 6px" }}>{teacher.name}</h1>
+              <div style={{ color:"rgba(255,255,255,0.55)", fontSize:13 }}>
+                {teacher.speciality} · {teacher.origin}
+              </div>
+            </div>
+            <div style={{ display:"flex", gap:isMobile?12:28, flexWrap:"wrap" }}>
+              {[["📅", confirmed.length, "Upcoming"],
+                ["✅", completed.length, "Completed"],
+                ["💰", `£${earned.toFixed(0)}`, "Earned"]].map(([ic,val,label])=>(
+                <div key={label} style={{ textAlign:"center" }}>
+                  <div style={{ fontSize:18 }}>{ic}</div>
+                  <div style={{ color:"#fff", fontWeight:800, fontSize:22,
+                    fontFamily:"'Playfair Display',serif" }}>{val}</div>
+                  <div style={{ color:"rgba(255,255,255,0.5)", fontSize:11 }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-nav */}
+      <div style={{ background:"#fff", borderBottom:`1px solid ${C.gray200}`,
+        position:"sticky", top:72, zIndex:50 }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", padding:"0 40px",
+          display:"flex", overflowX:"auto" }}>
+          {subTabs.map(([id,label])=>(
+            <button key={id} onClick={()=>setTab(id)}
+              style={{ padding:"15px 18px", background:"none", border:"none",
+                borderBottom:`3px solid ${tab===id?C.gold:"transparent"}`,
+                color: tab===id?C.navy:C.gray600,
+                fontWeight: tab===id?700:500, fontSize:14, fontFamily:"inherit",
+                cursor:"pointer", transition:"all 0.2s", whiteSpace:"nowrap" }}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth:1100, margin:"0 auto", padding:isMobile?"16px":"36px 24px" }}>
+
+        {/* ── OVERVIEW ── */}
+        {tab==="overview" && (
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(220px,1fr))", gap:20 }}>
+            {confirmed.length > 0 ? (
+              <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                borderRadius:20, padding:26, gridColumn:"1 / -1" }}>
+                <div style={{ color:C.goldLt, fontSize:11, fontWeight:700,
+                  letterSpacing:1, marginBottom:8 }}>NEXT BOOKING</div>
+                <div style={{ color:"#fff", fontSize:20, fontWeight:800,
+                  fontFamily:"'Playfair Display',serif", marginBottom:4 }}>
+                  {confirmed[0].slot}
+                </div>
+                <div style={{ color:"rgba(255,255,255,0.65)", fontSize:14, marginBottom:16 }}>
+                  with {confirmed[0].student_name} · {confirmed[0].session_type} session
+                </div>
+                {confirmed[0].whereby_host_url && (
+                  <button onClick={()=>window.open(confirmed[0].whereby_host_url,"_blank")}
+                    style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
+                      color:C.navy, border:"none", borderRadius:10,
+                      padding:"11px 22px", fontWeight:800, fontSize:14,
+                      cursor:"pointer", fontFamily:"inherit" }}>
+                    Start Lesson →
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div style={{ background:C.lb, borderRadius:20, padding:26,
+                gridColumn:"1 / -1", textAlign:"center" }}>
+                <div style={{ fontSize:48, marginBottom:12 }}>📅</div>
+                <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:20, marginBottom:8 }}>
+                  No upcoming bookings
+                </h3>
+                <p style={{ color:C.gray600, fontSize:14, marginBottom:18 }}>
+                  Keep your availability up to date so students can find and book you.
+                </p>
+                <Btn label="Manage Availability →" variant="primary" onClick={()=>setTab("availability")} />
+              </div>
+            )}
+            {[["🎓", teacher.studentCount || 0, "Total Students"],
+              ["📚", teacher.totalSessions || 0, "Total Sessions"],
+              ["⭐", teacher.rating ? `${teacher.rating} ★` : "—", "Rating"],
+              ["💰", `£${earned.toFixed(0)}`, "Total Earned"],
+            ].map(([ic,val,label])=>(
+              <div key={label} style={{ background:"#fff", borderRadius:20, padding:26,
+                border:`1.5px solid ${C.gray200}`, textAlign:"center" }}>
+                <div style={{ fontSize:32, marginBottom:8 }}>{ic}</div>
+                <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
+                  color:C.navy, fontSize:28 }}>{val}</div>
+                <div style={{ color:C.gray600, fontSize:13, marginTop:4 }}>{label}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── BOOKINGS ── */}
+        {tab==="bookings" && (
+          <div>
+            <h2 style={{ fontSize:20, fontWeight:800, color:C.navy, margin:"0 0 8px" }}>My Bookings</h2>
+            <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>
+              {bookings.length} total · {confirmed.length} upcoming · {completed.length} completed
+            </p>
+            {bookings.length === 0 ? (
+              <div style={{ background:"#fff", borderRadius:20, padding:"60px 40px",
+                textAlign:"center", border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ fontSize:48, marginBottom:16 }}>📅</div>
+                <p style={{ color:C.gray600 }}>No bookings yet. They will appear here once students book with you.</p>
+              </div>
+            ) : (
+              <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+                {bookings.map(b=>(
+                  <div key={b.id} style={{ background:"#fff", borderRadius:16,
+                    padding:"18px 22px", border:`1.5px solid ${C.gray200}`,
+                    display:"flex", gap:16, alignItems:"center", flexWrap:"wrap" }}>
+                    <Av init={(b.student_name||"S").split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase()}
+                      size={48} bg={`linear-gradient(135deg,${C.navy},${C.gold})`} />
+                    <div style={{ flex:1, minWidth:160 }}>
+                      <div style={{ fontWeight:700, color:C.navy, fontSize:15 }}>{b.student_name}</div>
+                      <div style={{ color:C.gray600, fontSize:13 }}>{b.topic}</div>
+                    </div>
+                    <div style={{ minWidth:140 }}>
+                      <div style={{ fontWeight:600, color:C.navy, fontSize:13 }}>{b.slot}</div>
+                      <div style={{ color:C.gray400, fontSize:11 }}>
+                        {b.booked_at ? new Date(b.booked_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) : ""}
+                      </div>
+                    </div>
+                    <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+                      <span style={{ background:b.session_type==="Trial"?"#FEF9EC":C.lb,
+                        color:b.session_type==="Trial"?C.amber:C.navy,
+                        fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:20 }}>
+                        {b.session_type}
+                      </span>
+                      <span style={{ background:b.status==="confirmed"?"#EFF6FF":b.status==="completed"?"#ECFDF5":"#FEF2F2",
+                        color:b.status==="confirmed"?C.blue:b.status==="completed"?C.green:C.red,
+                        fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:20 }}>
+                        {b.status}
+                      </span>
+                    </div>
+                    <div style={{ fontWeight:800, color:C.navy, fontSize:16, minWidth:60, textAlign:"right" }}>
+                      £{((b.price||0)*0.7).toFixed(2)}
+                    </div>
+                    {b.status==="confirmed" && b.whereby_host_url && (
+                      <button onClick={()=>window.open(b.whereby_host_url,"_blank")}
+                        style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
+                          color:C.navy, border:"none", borderRadius:8,
+                          padding:"8px 16px", fontWeight:800, fontSize:12,
+                          cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+                        Start Lesson →
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── AVAILABILITY ── */}
+        {tab==="availability" && (
+          <div>
+            <div style={{ display:"flex", justifyContent:"space-between",
+              alignItems:"center", marginBottom:20, flexWrap:"wrap", gap:12 }}>
+              <div>
+                <h2 style={{ fontSize:20, fontWeight:800, color:C.navy, margin:"0 0 4px" }}>Manage Availability</h2>
+                <p style={{ color:C.gray600, fontSize:13 }}>
+                  Click slots to toggle them. Students can only book active slots.
+                </p>
+              </div>
+              <Btn label={savingSlots?"Saving…":"Save Changes"} variant="gold"
+                disabled={savingSlots}
+                onClick={async ()=>{
+                  setSavingSlots(true);
+                  try {
+                    const updated = await updateTeacherSlots(teacher.id, slots);
+                    setTeacher(updated);
+                    fire("✅ Availability saved!");
+                  } catch(e) { fire("❌ Failed to save. Please try again."); }
+                  setSavingSlots(false);
+                }} />
+            </div>
+
+            <div style={{ background:"#fff", borderRadius:20, padding:"28px 32px",
+              border:`1.5px solid ${C.gray200}` }}>
+              {DAYS.map(day=>(
+                <div key={day} style={{ marginBottom:24 }}>
+                  <div style={{ fontSize:12, fontWeight:700, color:C.gold,
+                    letterSpacing:1, textTransform:"uppercase", marginBottom:10 }}>
+                    {DAY_NAMES[day]}
+                  </div>
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+                    {TIMES.map(time=>{
+                      const slot = `${day} ${time}`;
+                      const active = slots.includes(slot);
+                      return (
+                        <button key={time} onClick={()=>toggleSlot(day,time)}
+                          style={{ padding:"9px 16px", borderRadius:10, cursor:"pointer",
+                            fontFamily:"inherit", fontSize:13, fontWeight:600,
+                            border:`2px solid ${active?C.gold:C.gray200}`,
+                            background:active?"#FEF9EC":"#fff",
+                            color:active?"#92400E":C.gray600,
+                            transition:"all 0.15s" }}>
+                          {time}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ background:C.lb, borderRadius:14, padding:"14px 18px",
+              marginTop:16, display:"flex", alignItems:"center", gap:10 }}>
+              <span style={{ fontSize:18 }}>ℹ️</span>
+              <span style={{ color:C.navy, fontSize:13 }}>
+                <strong>{slots.length}</strong> slots active. When a student books a slot, it is automatically removed until you re-add it.
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* ── PROFILE ── */}
+        {tab==="profile" && (
+          <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:20 }}>
+            <div style={{ background:"#fff", borderRadius:20, padding:28,
+              border:`1.5px solid ${C.gray200}` }}>
+              <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                fontSize:18, fontWeight:800, margin:"0 0 20px" }}>Edit Profile</h3>
+
+              <div style={{ marginBottom:14 }}>
+                <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
+                  marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Price per lesson (£)</label>
+                <input type="number" value={profileForm.price}
+                  onChange={e=>setProfileForm(f=>({...f,price:e.target.value}))}
+                  style={{ width:"100%", padding:"11px 13px", borderRadius:10,
+                    border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
+                    outline:"none", color:C.navy, boxSizing:"border-box" }} />
+              </div>
+
+              <div style={{ marginBottom:14 }}>
+                <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
+                  marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Short Bio (teacher card)</label>
+                <input value={profileForm.bio}
+                  onChange={e=>setProfileForm(f=>({...f,bio:e.target.value}))}
+                  style={{ width:"100%", padding:"11px 13px", borderRadius:10,
+                    border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
+                    outline:"none", color:C.navy, boxSizing:"border-box" }} />
+              </div>
+
+              {[["Full Bio (profile page)","fullBio",4],
+                ["Teaching Style","teachingStyle",3],
+                ["Experience","experience",3]].map(([label,field,rows])=>(
+                <div key={field} style={{ marginBottom:14 }}>
+                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
+                    marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>{label}</label>
+                  <textarea value={profileForm[field]}
+                    onChange={e=>setProfileForm(f=>({...f,[field]:e.target.value}))}
+                    rows={rows}
+                    style={{ width:"100%", padding:"11px 13px", borderRadius:10,
+                      border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
+                      outline:"none", color:C.navy, resize:"vertical", boxSizing:"border-box" }} />
+                </div>
+              ))}
+
+              <div style={{ marginBottom:20 }}>
+                <label style={{ display:"block", fontSize:11, fontWeight:700, color:C.gray600,
+                  marginBottom:5, textTransform:"uppercase", letterSpacing:0.5 }}>Languages (comma separated)</label>
+                <input value={profileForm.languages}
+                  onChange={e=>setProfileForm(f=>({...f,languages:e.target.value}))}
+                  placeholder="English, Arabic, French"
+                  style={{ width:"100%", padding:"11px 13px", borderRadius:10,
+                    border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
+                    outline:"none", color:C.navy, boxSizing:"border-box" }} />
+              </div>
+
+              <Btn label={savingProfile?"Saving…":"Save Profile →"} variant="primary" full
+                disabled={savingProfile}
+                onClick={async ()=>{
+                  setSavingProfile(true);
+                  try {
+                    const updated = await updateTeacherProfile(teacher.id, {
+                      ...profileForm,
+                      languages: profileForm.languages.split(',').map(s=>s.trim()).filter(Boolean),
+                    });
+                    setTeacher(updated);
+                    fire("✅ Profile updated!");
+                  } catch(e) { fire("❌ Failed to save. Try again."); }
+                  setSavingProfile(false);
+                }} />
+            </div>
+
+            <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
+              <div style={{ background:"#fff", borderRadius:20, padding:28,
+                border:`1.5px solid ${C.gray200}` }}>
+                <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                  fontSize:18, fontWeight:800, margin:"0 0 16px" }}>Account Info</h3>
+                {[["Email", teacher.email],["Speciality", teacher.speciality],["Origin", teacher.origin]].map(([l,v])=>(
+                  <div key={l} style={{ marginBottom:14 }}>
+                    <div style={{ fontSize:11, fontWeight:700, color:C.gray600,
+                      textTransform:"uppercase", letterSpacing:0.5, marginBottom:4 }}>{l}</div>
+                    <div style={{ fontSize:14, color:C.navy, fontWeight:600 }}>{v || "—"}</div>
+                  </div>
+                ))}
+                <div style={{ background:C.lb, borderRadius:10, padding:"11px 14px", fontSize:12, color:C.gray600 }}>
+                  To update your speciality, dialects or qualifications, email <strong>hello@arabiq.app</strong>
+                </div>
+              </div>
+
+              <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                borderRadius:20, padding:28 }}>
+                <div style={{ color:C.goldLt, fontSize:11, fontWeight:700,
+                  letterSpacing:1, marginBottom:12 }}>PAYMENT SETUP</div>
+                {teacher.stripeOnboarded ? (
+                  <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                    <span style={{ fontSize:22 }}>✅</span>
+                    <span style={{ color:"#fff", fontSize:14, fontWeight:600 }}>
+                      Stripe connected. Payments go directly to your account.
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <p style={{ color:"rgba(255,255,255,0.7)", fontSize:13, lineHeight:1.7, marginBottom:16 }}>
+                      Connect your Stripe account to receive payments directly when students book.
+                    </p>
+                    <Btn label="Contact Arabiq to Connect →" variant="gold"
+                      onClick={()=>window.location.href="mailto:hello@arabiq.app?subject=Stripe Connect Request"} />
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {toast && <Toast msg={toast} onDone={()=>setToast(null)} />}
+    </div>
+  );
+}
+
 export default function Arabiq() {
   
   const isMobile = useIsMobile();
