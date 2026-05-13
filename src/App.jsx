@@ -1532,7 +1532,7 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
           <div style={{ display:"flex", marginTop:20, background:"rgba(255,255,255,0.1)",
             borderRadius:10, padding:3 }}>
             {[["login","Log In"],["register","Sign Up"]].map(([m,label])=>(
-              <button key={m} onClick={()=>{setMode(m);setErrors({});}}
+             <button key={m} onClick={()=>{setMode(m);setErrors({});setForgotPw(false);}}
                 style={{ flex:1, padding:"9px", borderRadius:8, border:"none",
                   cursor:"pointer", fontFamily:"inherit", transition:"all 0.2s",
                   background: mode===m?"#fff":"transparent",
