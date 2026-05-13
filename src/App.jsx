@@ -5180,6 +5180,15 @@ export default function Arabiq() {
         data:{ name:nameVal, email:emailVal, subject:subjectVal, message:messageVal }
       })
     }).catch(()=>{});
+    createIssue({
+      id: `ISS-${Date.now()}`,
+      user_name: nameVal,
+      type: subjectVal || 'General',
+      subject: messageVal.slice(0,80),
+      priority: 'medium',
+      status: 'open',
+      assigned: 'Unassigned',
+    }).catch(()=>{});
     alert("Thank you! We'll get back to you within a few hours.");
   }}
   style={{ width:"100%", padding:"14px",
