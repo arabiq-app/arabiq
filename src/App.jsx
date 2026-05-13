@@ -4062,6 +4062,7 @@ export default function Arabiq() {
   const [toast,         setToast]        = useState(null);
   const [profileTab,    setProfileTab]   = useState("overview");
   const [adminLogin,    setAdminLogin]   = useState({ open:false, email:"", pw:"", err:"" });
+  const [currentTeacher, setCurrentTeacher] = useState(null);
 
   const fire = (msg,type="ok")=>{ setToast({msg,type}); };
 
