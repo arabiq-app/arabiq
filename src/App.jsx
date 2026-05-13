@@ -1187,19 +1187,6 @@ const doBook = async (paymentIntentId = null) => {
       if (u) u.bookings = [...(u.bookings||[]), b];
     }
 
-    const teacherRef = TEACHERS.find(t=>t.id===teacher.id);
-    if (teacherRef) {
-      teacherRef.slots = (teacherRef.slots||[]).filter(s=>s!==slot);
-      if (teacherRef.slots.length === 0) teacherRef.available = false;
-    }
-    teacher.slots = (teacher.slots||[]).filter(s=>s!==slot);
-    if (teacher.slots.length === 0) teacher.available = false;
-
-    if (teacher.id) {
-      const updatedSlots = (teacher.slots||[]).filter(s=>s!==slot);
-      updateTeacher(teacher.id, { ...teacher, slots: updatedSlots, available: updatedSlots.length > 0 }).catch(()=>{});
-    }
-
     try {
       await fetch("/api/send-email", {
         method: "POST",
