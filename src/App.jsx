@@ -2331,7 +2331,8 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
 
 {/* Session Milestones */}
 <div style={{ fontSize:12, fontWeight:700, color:C.gray600,
-  textTransform:"uppercase", letterSpacing:0.5, marginBottom:14 }}>🎓 Sessions</div>
+  textTransform:"uppercase", letterSpacing:0.5, marginBottom:14 }}>🎓 Lessons</div>
+  
 <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:28 }}>
   {[
     { label:"First Lesson", icon:"🌱", target:1,   desc:"Getting started",                    done:totalSessions>=1 },
