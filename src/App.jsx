@@ -2426,7 +2426,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                 letterSpacing:1, marginBottom:18 }}>STATS</div>
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
                 {[
-                  ["🎓","Sessions",totalSessions],
+                  ["🎓","Lessons",totalSessions],
                   ["⏱️","Hours",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1)],
                   ["✅","Completed",completedSessions],
                   ["📅","Upcoming",myBookings.filter(b=>b.status==="confirmed").length],
