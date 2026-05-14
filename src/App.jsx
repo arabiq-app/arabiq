@@ -2488,7 +2488,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
       </div>
     </div>
   );
-}
+
 
 /* ─────────────────────────────────────────────────────────────────
    ADMIN PANEL (complete)
