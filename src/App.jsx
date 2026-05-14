@@ -2411,7 +2411,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                 height:"100%", background:C.gold, borderRadius:99 }} />
             </div>
             <div style={{ color:C.gray400, fontSize:11, marginTop:4 }}>
-              {typeof totalHours === 'number' ? totalHours.toFixed(1) : 0}/{m.target} hrs
+              {`${typeof totalHours === 'number' ? totalHours.toFixed(1) : 0}/${m.target} hrs`}
             </div>
           </div>
         )}
