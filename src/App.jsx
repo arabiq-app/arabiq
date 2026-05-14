@@ -4474,6 +4474,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
           level: profile.level || "Beginner",
           dialect: profile.dialect || "Modern Standard Arabic (Fusha)",
           bookings: [],
+          learningGoal: profile.learning_goal || "",
           totalSessions: profile.total_sessions || 0,
           sessionsLeft: profile.sessions_left || 0,
           progress: profile.progress || 0,
