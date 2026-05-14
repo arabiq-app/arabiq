@@ -2419,7 +2419,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
     ))}
   </div>
 </div>
-            
+            )}
            
 
         {/* ── VOCABULARY ── */}
