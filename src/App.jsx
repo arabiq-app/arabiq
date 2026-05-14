@@ -2468,23 +2468,13 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                 <div style={{ color:C.gold, fontWeight:700, fontSize:11,
   letterSpacing:1, marginBottom:14 }}>BILLING</div>
 <div style={{ color:C.gray600, fontSize:13, lineHeight:1.7 }}>
-  Arabiq is pay-as-you-go. You are only charged when you book a session.
+  Arabiq is pay-as-you-go. You are only charged when you book a lesson.
   No subscriptions or hidden fees.
 </div>
-                <div style={{ display:"flex", gap:10, alignItems:"center",
-                  marginBottom:10 }}>
-                  <div style={{ color:C.gray600, fontSize:13, lineHeight:1.7 }}>
-                  Arabiq is pay-as-you-go. You are only charged when you book a lesson.
-                  No subscriptions or hidden fees.
-                </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </div>
   );
-
 
 /* ─────────────────────────────────────────────────────────────────
    ADMIN PANEL (complete)
