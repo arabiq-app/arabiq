@@ -2040,58 +2040,101 @@ useEffect(()=>{
               </div>
             </div>
 
-            {/* Learning Goal */}
+           {/* Learning Goal */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
-              border:`1.5px solid ${C.gray200}` }}>
+              border:`1.5px solid ${C.gray200}`, position:"relative" }}>
+              
+              {/* Pencil edit icon - top right corner */}
+              {user.learningGoal && !user.editingGoal && (
+                <button onClick={()=>setCurrentUser(u=>({...u, editingGoal:true}))}
+                  style={{ position:"absolute", top:16, right:16,
+                    background:C.cream, border:`1.5px solid ${C.gray200}`,
+                    borderRadius:8, width:30, height:30, cursor:"pointer",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                    fontSize:13 }}>
+                  ✏️
+                </button>
+              )}
+
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
                 letterSpacing:1, marginBottom:6 }}>🎯 MY LEARNING GOAL</div>
-              <div style={{ color:C.gray600, fontSize:12, marginBottom:14 }}>
-                What do you want to achieve with Arabic?
-              </div>
+
               {user.learningGoal && !user.editingGoal ? (
+                /* Goal display — motivational style */
                 <div>
-                  <div style={{ background:C.lb, borderRadius:12, padding:"14px 16px",
-                    marginBottom:12 }}>
-                    <div style={{ fontSize:14, color:C.navy, fontWeight:600,
-                      lineHeight:1.6 }}>"{user.learningGoal}"</div>
+                  <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                    borderRadius:14, padding:"20px 18px", marginTop:10,
+                    position:"relative", overflow:"hidden" }}>
+                    {/* Decorative quote mark */}
+                    <div style={{ position:"absolute", top:-10, left:10,
+                      fontSize:80, color:"rgba(255,255,255,0.06)",
+                      fontFamily:"'Playfair Display',serif", lineHeight:1,
+                      userSelect:"none" }}>"</div>
+                    <div style={{ fontSize:14, color:"#fff", fontWeight:600,
+                      lineHeight:1.7, position:"relative", zIndex:1 }}>
+                      {user.learningGoal}
+                    </div>
+                    <div style={{ marginTop:12, display:"flex",
+                      alignItems:"center", gap:6 }}>
+                      <div style={{ width:6, height:6, borderRadius:"50%",
+                        background:C.gold }} />
+                      <span style={{ fontSize:11, color:C.goldLt, fontWeight:600 }}>
+                        Your goal — stay focused 💪
+                      </span>
+                    </div>
                   </div>
-                  <button onClick={()=>setCurrentUser(u=>({...u, editingGoal:true}))}
-                    style={{ background:"transparent", border:`1.5px solid ${C.gray200}`,
-                      borderRadius:8, padding:"7px 14px", fontSize:12, fontWeight:600,
-                      color:C.gray600, cursor:"pointer", fontFamily:"inherit" }}>
-                    ✏️ Edit Goal
-                  </button>
+                  <div style={{ marginTop:12, color:C.gray400, fontSize:11,
+                    textAlign:"center" }}>
+                    Tap ✏️ to update your goal anytime
+                  </div>
                 </div>
               ) : (
-                <div>
+                /* Goal input */
+                <div style={{ marginTop:10 }}>
+                  <div style={{ color:C.gray600, fontSize:12, marginBottom:10 }}>
+                    What do you want to achieve with Arabic?
+                  </div>
                   <textarea
                     defaultValue={user.learningGoal || ""}
                     id="learning-goal-input"
-                    placeholder="e.g. I want to have fluent conversations in Egyptian Arabic by the end of 2025..."
+                    placeholder="e.g. I want to have fluent conversations in Egyptian Arabic by end of 2026..."
                     rows={4}
                     style={{ width:"100%", padding:"11px 13px", borderRadius:10,
                       border:`1.5px solid ${C.gray200}`, fontSize:13,
                       fontFamily:"inherit", outline:"none", color:C.navy,
                       resize:"none", boxSizing:"border-box", lineHeight:1.6,
                       marginBottom:12 }} />
-                  <button onClick={async ()=>{
-                      const goal = document.getElementById("learning-goal-input").value.trim();
-                      if (!goal) return;
-                      try {
-                        await supabase.from("users")
-                          .update({ learning_goal: goal })
-                          .eq("id", user.id);
-                        setCurrentUser(u=>({...u, learningGoal: goal, editingGoal: false}));
-                      } catch(e) { console.error("Goal save failed:", e); }
-                    }}
-                    style={{ width:"100%", padding:"11px",
-                      background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
-                      color:"#fff", border:"none", borderRadius:10,
-                      fontWeight:700, fontSize:13, cursor:"pointer",
-                      fontFamily:"inherit" }}>
-                    Save Goal →
-                  </button>
+                  <div style={{ display:"flex", gap:8 }}>
+                    {user.learningGoal && (
+                      <button onClick={()=>setCurrentUser(u=>({...u, editingGoal:false}))}
+                        style={{ flex:1, padding:"11px",
+                          background:C.gray100, color:C.gray600,
+                          border:"none", borderRadius:10, fontWeight:600,
+                          fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
+                        Cancel
+                      </button>
+                    )}
+                    <button onClick={async ()=>{
+                        const goal = document.getElementById("learning-goal-input").value.trim();
+                        if (!goal) return;
+                        try {
+                          await supabase.from("users")
+                            .update({ learning_goal: goal })
+                            .eq("id", user.id);
+                          setCurrentUser(u=>({...u, learningGoal: goal, editingGoal: false}));
+                        } catch(e) { console.error("Goal save failed:", e); }
+                      }}
+                      style={{ flex:2, padding:"11px",
+                        background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                        color:"#fff", border:"none", borderRadius:10,
+                        fontWeight:700, fontSize:13, cursor:"pointer",
+                        fontFamily:"inherit" }}>
+                      Save Goal →
+                    </button>
+                  </div>
                 </div>
+              )}
+            </div>
               )}
               {user.learningGoal && (
                 <div style={{ marginTop:12, display:"flex", alignItems:"center", gap:6 }}>
