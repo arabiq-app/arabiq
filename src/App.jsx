@@ -994,7 +994,8 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                               transition:"all 0.15s" }}
                             onMouseEnter={e=>{ if(teacher.available) e.currentTarget.style.background=C.lb; }}
                             onMouseLeave={e=>e.currentTarget.style.background=C.cream}>
-                            <span>🕐 {time}</span>
+                            <span>🕐 {convertSlotToUserTz(full).display}</span>
+<span style={{ fontSize:10, color:C.gray400 }}>{convertSlotToUserTz(full).tzLabel} time</span>
                             {teacher.available && <span style={{ color:C.gold, fontSize:12, fontWeight:700 }}>Book →</span>}
                           </div>
                         ))}
