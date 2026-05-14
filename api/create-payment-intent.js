@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     };
 
     // Auto-split if teacher has a connected Stripe account
-    if (teacherStripeAccountId) {
+    if (teacherStripeAccountId && sessionType !== "Trial") {
       intentParams.application_fee_amount = Math.round(amount * 100 * 0.30);
       intentParams.transfer_data = { destination: teacherStripeAccountId };
     }
