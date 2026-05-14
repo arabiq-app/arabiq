@@ -1054,6 +1054,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
     const dayStr = slotStr.split(' ')[0];
     const today = new Date();
     const targetDay = days[dayStr];
+    if (targetDay === undefined) return new Date().toISOString().split('T')[0];
     let daysUntil = targetDay - today.getDay();
     if (daysUntil <= 0) daysUntil += 7;
     const next = new Date(today);
