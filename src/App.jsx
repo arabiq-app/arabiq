@@ -3329,9 +3329,8 @@ onChange={e=>setEditingTeacher(t=>({...t, qualifications: e.target.value}))}
   <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
     marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Dialects (comma separated)</label>
   <input type="text"
-    value={(editingTeacher.dialects||[]).join(", ")}
-    onChange={e=>setEditingTeacher(t=>({...t,
-      dialects:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
+    value={Array.isArray(editingTeacher.dialects) ? editingTeacher.dialects.join(", ") : (editingTeacher.dialects||"")}
+onChange={e=>setEditingTeacher(t=>({...t, dialects: e.target.value}))}
     placeholder="Modern Standard Arabic, Egyptian, Levantine"
     style={{ width:"100%", padding:"10px 12px", borderRadius:9,
       border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
