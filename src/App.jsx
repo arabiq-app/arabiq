@@ -3317,9 +3317,8 @@ useEffect(() => {
   <label style={{ display:"block", fontSize:10, fontWeight:700, color:C.gray600,
     marginBottom:4, textTransform:"uppercase", letterSpacing:0.5 }}>Qualifications (comma separated)</label>
   <input type="text"
-    value={(editingTeacher.qualifications||[]).join(", ")}
-    onChange={e=>setEditingTeacher(t=>({...t,
-      qualifications:e.target.value.split(",").map(s=>s.trim()).filter(Boolean)}))}
+    value={Array.isArray(editingTeacher.qualifications) ? editingTeacher.qualifications.join(", ") : (editingTeacher.qualifications||"")}
+onChange={e=>setEditingTeacher(t=>({...t, qualifications: e.target.value}))}
     placeholder="BA Arabic Literature, CELTA, Al-Azhar Certificate"
     style={{ width:"100%", padding:"10px 12px", borderRadius:9,
       border:`1.5px solid ${C.gray200}`, fontSize:13, fontFamily:"inherit",
