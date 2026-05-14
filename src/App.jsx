@@ -3385,11 +3385,15 @@ onChange={e=>setEditingTeacher(t=>({...t, slots: e.target.value}))}
                 <button onClick={async ()=>{
                     setTeacherLoading(true);
                     try {
-                      const toSave = {
+                      const parseField = (val) => typeof val === "string"
+  ? val.split(",").map(s=>s.trim()).filter(Boolean)
+  : (val||[]);
+const toSave = {
   ...editingTeacher,
-  slots: typeof editingTeacher.slots === "string"
-    ? editingTeacher.slots.split(",").map(s=>s.trim()).filter(Boolean)
-    : editingTeacher.slots
+  slots:           parseField(editingTeacher.slots),
+  qualifications:  parseField(editingTeacher.qualifications),
+  dialects:        parseField(editingTeacher.dialects),
+  languages:       parseField(editingTeacher.languages),
 };
 await updateTeacher(editingTeacher.id, toSave);
                       refreshTeachers();
