@@ -2321,37 +2321,83 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
             </div>
 
             {/* Milestones */}
-            <div style={{ background:"#fff", borderRadius:20, padding:26,
-              border:`1.5px solid ${C.gray200}` }}>
-              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                letterSpacing:1, marginBottom:18 }}>MILESTONES</div>
-              {[
-                { label:"First Lesson",        done:totalSessions >= 1, date:firstBookingDate || "-" },
-                { label:"5 Sessions",          done:totalSessions >= 5, date:totalSessions >= 5 ? "✓ Complete" : `${totalSessions}/5 sessions` },
-                { label:"10 Sessions",         done:totalSessions >= 10, date:totalSessions >= 10 ? "✓ Complete" : `${totalSessions}/10 sessions` },
-                { label:"25 Sessions",         done:totalSessions >= 25, date:totalSessions >= 25 ? "✓ Complete" : `${totalSessions}/25 sessions` },
-              ].map((m,i,arr)=>(
-                <div key={i} style={{ display:"flex", gap:14, position:"relative",
-                  paddingBottom: i<arr.length-1?18:0 }}>
-                  {i<arr.length-1 && <div style={{ position:"absolute", left:14, top:30,
-                    width:2, height:"calc(100% - 10px)",
-                    background: m.done?C.navy:C.gray200 }} />}
-                  <div style={{ width:30, height:30, borderRadius:"50%",
-                    background: m.done?C.navy:C.gray100,
-                    border:`2px solid ${m.done?C.navy:C.gray200}`,
-                    display:"flex", alignItems:"center", justifyContent:"center",
-                    flexShrink:0, zIndex:1, fontSize:12 }}>
-                    <span style={{ color:m.done?"#fff":C.gray400 }}>{m.done?"✓":"○"}</span>
-                  </div>
-                  <div style={{ paddingTop:4 }}>
-                    <div style={{ fontWeight:600, color:m.done?C.navy:C.gray400,
-                      fontSize:14 }}>{m.label}</div>
-                    <div style={{ color:m.done?C.gold:C.gray400, fontSize:12 }}>{m.date}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+<div style={{ background:"#fff", borderRadius:20, padding:26,
+  border:`1.5px solid ${C.gray200}`, gridColumn:"1 / -1" }}>
+  <div style={{ color:C.gold, fontWeight:700, fontSize:11,
+    letterSpacing:1, marginBottom:18 }}>MILESTONES</div>
 
+  {/* Session Milestones */}
+  <div style={{ fontSize:12, fontWeight:700, color:C.gray600,
+    textTransform:"uppercase", letterSpacing:0.5, marginBottom:14 }}>🎓 Sessions</div>
+  <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))", gap:12, marginBottom:28 }}>
+    {[
+      { label:"First Lesson",   icon:"🌱", target:1,   done:totalSessions>=1 },
+      { label:"5 Sessions",     icon:"📚", target:5,   done:totalSessions>=5 },
+      { label:"10 Sessions",    icon:"🔥", target:10,  done:totalSessions>=10 },
+      { label:"25 Sessions",    icon:"⭐", target:25,  done:totalSessions>=25 },
+      { label:"50 Sessions",    icon:"🏅", target:50,  done:totalSessions>=50 },
+      { label:"100 Sessions",   icon:"🏆", target:100, done:totalSessions>=100 },
+      { label:"200 Sessions",   icon:"👑", target:200, done:totalSessions>=200 },
+    ].map((m,i)=>(
+      <div key={i} style={{ background: m.done ? C.navy : C.cream,
+        borderRadius:14, padding:"16px 14px", textAlign:"center",
+        border:`2px solid ${m.done ? C.navy : C.gray200}`,
+        transition:"all 0.2s" }}>
+        <div style={{ fontSize:24, marginBottom:6 }}>{m.icon}</div>
+        <div style={{ fontWeight:700, fontSize:13,
+          color: m.done ? "#fff" : C.gray400 }}>{m.label}</div>
+        {m.done ? (
+          <div style={{ color:C.gold, fontSize:11, fontWeight:700, marginTop:4 }}>✓ Complete</div>
+        ) : (
+          <div style={{ marginTop:8 }}>
+            <div style={{ height:4, background:"rgba(0,0,0,0.08)", borderRadius:99, overflow:"hidden" }}>
+              <div style={{ width:`${Math.min((totalSessions/m.target)*100,100)}%`,
+                height:"100%", background:C.gold, borderRadius:99 }} />
+            </div>
+            <div style={{ color:C.gray400, fontSize:11, marginTop:4 }}>
+              {totalSessions}/{m.target}
+            </div>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  {/* Hours Milestones */}
+  <div style={{ fontSize:12, fontWeight:700, color:C.gray600,
+    textTransform:"uppercase", letterSpacing:0.5, marginBottom:14 }}>⏱️ Hours of Arabic</div>
+  <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))", gap:12 }}>
+    {[
+      { label:"5 Hours",    icon:"⏱️", target:5,   done:totalHours>=5 },
+      { label:"25 Hours",   icon:"📖", target:25,  done:totalHours>=25 },
+      { label:"50 Hours",   icon:"🎯", target:50,  done:totalHours>=50 },
+      { label:"100 Hours",  icon:"🌟", target:100, done:totalHours>=100 },
+    ].map((m,i)=>(
+      <div key={i} style={{ background: m.done ? C.navy : C.cream,
+        borderRadius:14, padding:"16px 14px", textAlign:"center",
+        border:`2px solid ${m.done ? C.navy : C.gray200}`,
+        transition:"all 0.2s" }}>
+        <div style={{ fontSize:24, marginBottom:6 }}>{m.icon}</div>
+        <div style={{ fontWeight:700, fontSize:13,
+          color: m.done ? "#fff" : C.gray400 }}>{m.label}</div>
+        {m.done ? (
+          <div style={{ color:C.gold, fontSize:11, fontWeight:700, marginTop:4 }}>✓ Complete</div>
+        ) : (
+          <div style={{ marginTop:8 }}>
+            <div style={{ height:4, background:"rgba(0,0,0,0.08)", borderRadius:99, overflow:"hidden" }}>
+              <div style={{ width:`${Math.min((totalHours/m.target)*100,100)}%`,
+                height:"100%", background:C.gold, borderRadius:99 }} />
+            </div>
+            <div style={{ color:C.gray400, fontSize:11, marginTop:4 }}>
+              {typeof totalHours === 'number' ? totalHours.toFixed(1) : 0}/{m.target} hrs
+            </div>
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+            
             {/* Stats */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
               border:`1.5px solid ${C.gray200}` }}>
