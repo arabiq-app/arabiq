@@ -1149,6 +1149,7 @@ const doBook = async (paymentIntentId = null) => {
       const dayStr = slot.split(' ')[0];
       const today = new Date();
       const targetDay = days[dayStr];
+      if (targetDay === undefined) return new Date().toISOString().split('T')[0]; // ← ADD THIS
       let daysUntil = targetDay - today.getDay();
       if (daysUntil <= 0) daysUntil += 7;
       const sessionDate = new Date(today);
