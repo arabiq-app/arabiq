@@ -1930,22 +1930,115 @@ useEffect(()=>{
               </div>
             )}
 
-            {/* Plan card */}
+            {/* Next Milestone */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
               border:`1.5px solid ${C.gray200}` }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                letterSpacing:1, marginBottom:14 }}>CURRENT PLAN</div>
-              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-                <div style={{ flex:1, height:8, background:C.lb, borderRadius:99 }}>
-                  <div style={{ width:`${Math.max(5,(user.sessionsLeft/8)*100)}%`,
-                    height:"100%", background:`linear-gradient(90deg,${C.navy},#2A4A9A)`,
-                    borderRadius:99 }} />
+                letterSpacing:1, marginBottom:14 }}>🎯 NEXT MILESTONE</div>
+              {(() => {
+                const milestones = [
+                  { label:"First Lesson",  target:1,   desc:"Getting started" },
+                  { label:"5 Lessons",     target:5,   desc:"Building the habit" },
+                  { label:"25 Lessons",    target:25,  desc:"Committed learner" },
+                  { label:"50 Lessons",    target:50,  desc:"Serious student" },
+                  { label:"100 Lessons",   target:100, desc:"Dedicated to Arabic" },
+                  { label:"150 Lessons",   target:150, desc:"Advanced journey" },
+                  { label:"200 Lessons",   target:200, desc:"Elite learner" },
+                  { label:"250 Lessons",   target:250, desc:"Arabic master" },
+                  { label:"300 Lessons",   target:300, desc:"Among the very best" },
+                  { label:"500 Lessons",   target:500, desc:"Legendary" },
+                ];
+                const next = milestones.find(m => totalSessions < m.target);
+                if (!next) return (
+                  <div style={{ textAlign:"center", color:C.navy, fontWeight:700 }}>
+                    🌟 You've reached the top! Legendary status achieved.
+                  </div>
+                );
+                const pct = Math.min(Math.round((totalSessions/next.target)*100), 100);
+                return (
+                  <>
+                    <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
+                      color:C.navy, fontSize:18, marginBottom:4 }}>{next.label}</div>
+                    <div style={{ color:C.gray600, fontSize:12, marginBottom:14 }}>
+                      {next.desc} · {totalSessions}/{next.target} lessons
+                    </div>
+                    <div style={{ height:8, background:C.lb, borderRadius:99,
+                      overflow:"hidden", marginBottom:8 }}>
+                      <div style={{ width:`${pct}%`, height:"100%",
+                        background:`linear-gradient(90deg,${C.navy},${C.gold})`,
+                        borderRadius:99, transition:"width 0.8s" }} />
+                    </div>
+                    <div style={{ color:C.gray400, fontSize:12, textAlign:"right" }}>
+                      {pct}% there
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* My Teachers */}
+            <div style={{ background:"#fff", borderRadius:20, padding:26,
+              border:`1.5px solid ${C.gray200}` }}>
+              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
+                letterSpacing:1, marginBottom:14 }}>👨‍🏫 MY TEACHERS</div>
+              {[...new Map(myBookings.map(b=>[b.teacherId,b])).values()]
+                .slice(0,3).length === 0 ? (
+                <div style={{ color:C.gray400, fontSize:13, textAlign:"center",
+                  padding:"12px 0" }}>
+                  Book your first lesson to see your teachers here.
                 </div>
-                <span style={{ color:C.gray600, fontSize:12, whiteSpace:"nowrap" }}>
-                  {user.sessionsLeft}/8 left
-                </span>
+              ) : (
+                <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                  {[...new Map(myBookings.map(b=>[b.teacherId,b])).values()]
+                    .slice(0,3).map(b=>(
+                    <div key={b.teacherId} style={{ display:"flex", alignItems:"center",
+                      gap:12, padding:"10px 12px", background:C.cream,
+                      borderRadius:12 }}>
+                      <Av init={b.teacherAvatar} size={36}
+                        bg={`linear-gradient(135deg,${C.navy},${C.gold})`} />
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontWeight:700, color:C.navy, fontSize:13 }}>
+                          {b.teacherName}
+                        </div>
+                        <div style={{ color:C.gray400, fontSize:11 }}>
+                          {myBookings.filter(x=>x.teacherId===b.teacherId).length} lesson{myBookings.filter(x=>x.teacherId===b.teacherId).length!==1?"s":""}
+                        </div>
+                      </div>
+                      <button onClick={onBrowseTeachers}
+                        style={{ background:C.navy, color:"#fff", border:"none",
+                          borderRadius:8, padding:"6px 12px", fontSize:11,
+                          fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
+                        Book Again
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Quick Actions */}
+            <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+              borderRadius:20, padding:26, gridColumn:"1 / -1" }}>
+              <div style={{ color:C.goldLt, fontWeight:700, fontSize:11,
+                letterSpacing:1, marginBottom:16 }}>QUICK ACTIONS</div>
+              <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
+                {[
+                  { label:"📚 Book a Lesson", action: onBrowseTeachers },
+                  { label:"📊 View Progress", action: ()=>setTab("progress") },
+                  { label:"📅 My Bookings",   action: ()=>setTab("sessions") },
+                ].map(({label, action})=>(
+                  <button key={label} onClick={action}
+                    style={{ background:"rgba(255,255,255,0.1)",
+                      border:"1.5px solid rgba(255,255,255,0.2)",
+                      color:"#fff", borderRadius:10, padding:"11px 20px",
+                      fontWeight:700, fontSize:13, cursor:"pointer",
+                      fontFamily:"inherit", transition:"all 0.15s" }}
+                    onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,0.2)"}
+                    onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,0.1)"}>
+                    {label}
+                  </button>
+                ))}
               </div>
-              <Btn label="Upgrade Plan →" variant="ghost" full onClick={()=>{}} />
             </div>
 
             {/* Quick stats */}
