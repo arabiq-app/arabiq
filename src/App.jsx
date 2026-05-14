@@ -2314,7 +2314,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
               </div>
               {totalSessions === 0 ? (
                 <div style={{ color:C.gray600, fontSize:13 }}>
-                  Book your first session to start tracking your progress.
+                  Book your first lesson to start tracking your progress.
                 </div>
               ) : (
                 <div style={{ color:C.gray600, fontSize:13 }}>
