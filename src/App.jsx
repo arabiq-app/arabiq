@@ -2938,8 +2938,8 @@ useEffect(() => {
                               const { accountId, onboardingUrl } = await res.json();
                               await updateTeacherStripeAccount(t.id, accountId);
                               refreshTeachers();
-                              window.open(onboardingUrl, "_blank");
-                              fire(`✅ Stripe onboarding link opened for ${t.name}`);
+                              await navigator.clipboard.writeText(onboardingUrl);
+fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                             } catch(e) { fire(`❌ Stripe setup failed: ${e.message}`); }
                           }}
                           style={{ fontSize:11, padding:"4px 10px", borderRadius:7, border:"none",
