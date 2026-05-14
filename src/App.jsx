@@ -1016,6 +1016,48 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
     </div>
   );
 }
+// Convert a teacher slot (Cairo time, UTC+2) to the student's local timezone
+const convertSlotToUserTz = (slotStr) => {
+  try {
+    const dayMap = { Sun:0,Sunday:0, Mon:1,Monday:1, Tue:2,Tuesday:2,
+                     Wed:3,Wednesday:3, Thu:4,Thursday:4, Fri:5,Friday:5, Sat:6,Saturday:6 };
+    const parts = slotStr.trim().split(/\s+/);
+    const dayStr = parts[0];
+    const timeStr = parts.slice(1).join(' ');
+    const targetDay = dayMap[dayStr];
+    if (targetDay === undefined) return slotStr;
+
+    const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)?/i);
+    if (!match) return slotStr;
+    let h = parseInt(match[1]), m = parseInt(match[2]);
+    const p = match[3]?.toUpperCase();
+    if (p === 'PM' && h !== 12) h += 12;
+    if (p === 'AM' && h === 12) h = 0;
+
+    // Find next occurrence of this day in Cairo
+    const now = new Date();
+    const cairoNow = new Date(now.toLocaleString('en-US', { timeZone: 'Africa/Cairo' }));
+    let diff = (targetDay - cairoNow.getDay() + 7) % 7 || 7;
+    const cairoDate = new Date(cairoNow);
+    cairoDate.setDate(cairoNow.getDate() + diff);
+
+    // Build ISO string in Cairo time (UTC+2) and parse to UTC
+    const yyyy = cairoDate.getFullYear();
+    const mm = String(cairoDate.getMonth()+1).padStart(2,'0');
+    const dd = String(cairoDate.getDate()).padStart(2,'0');
+    const hh = String(h).padStart(2,'0');
+    const mn = String(m).padStart(2,'0');
+    const utcDate = new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00+02:00`);
+
+    const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const localDay  = utcDate.toLocaleDateString('en-GB',  { weekday:'short', timeZone: userTz });
+    const localTime = utcDate.toLocaleTimeString('en-GB',  { hour:'2-digit', minute:'2-digit', hour12:true, timeZone: userTz });
+    const tzLabel   = userTz.split('/').pop().replace(/_/g,' ');
+
+    return { display: `${localDay} ${localTime}`, tzLabel, original: timeStr };
+  } catch(e) { return { display: slotStr, tzLabel: '', original: slotStr }; }
+};
+
 
 /* ─────────────────────────────────────────────────────────────────
    BOOKING FLOW (3 steps + success)
