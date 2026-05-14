@@ -2376,7 +2376,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
               borderRadius:99 }} />
           </div>
           <div style={{ color:C.gray400, fontSize:11, textAlign:"right" }}>
-            {totalSessions}/{m.target}
+            {totalSessions}/{m.target} lessons
           </div>
         </div>
       )}
