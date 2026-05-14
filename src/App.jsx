@@ -2471,10 +2471,14 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
   Arabiq is pay-as-you-go. You are only charged when you book a lesson.
   No subscriptions or hidden fees.
 </div>
-              </div>
+        </div>
             </div>
           </div>
+        )}
+      </div>
+    </div>
   );
+}      
 
 /* ─────────────────────────────────────────────────────────────────
    ADMIN PANEL (complete)
