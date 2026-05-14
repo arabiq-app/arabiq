@@ -2420,30 +2420,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
   </div>
 </div>
             
-            {/* Stats */}
-            <div style={{ background:"#fff", borderRadius:20, padding:26,
-              border:`1.5px solid ${C.gray200}` }}>
-              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                letterSpacing:1, marginBottom:18 }}>STATS</div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
-                {[
-                  ["🎓","Lessons",totalSessions],
-                  ["⏱️","Hours",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1)],
-                 ["✅","Completed",completedSessions+" lessons"],
-                  ["📅","Upcoming",myBookings.filter(b=>b.status==="confirmed").length],
-                ].map(([ic,label,val])=>(
-                  <div key={label} style={{ background:C.cream, borderRadius:12,
-                    padding:"14px", textAlign:"center" }}>
-                    <div style={{ fontSize:22, marginBottom:4 }}>{ic}</div>
-                    <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
-                      color:C.navy, fontSize:22 }}>{val}</div>
-                    <div style={{ color:C.gray600, fontSize:12 }}>{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+           
 
         {/* ── VOCABULARY ── */}
         {/* ── SETTINGS ── */}
