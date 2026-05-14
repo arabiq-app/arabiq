@@ -2428,7 +2428,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                 {[
                   ["🎓","Lessons",totalSessions],
                   ["⏱️","Hours",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1)],
-                  ["✅","Completed",completedSessions],
+                 ["✅","Completed",completedSessions+" lessons"],
                   ["📅","Upcoming",myBookings.filter(b=>b.status==="confirmed").length],
                 ].map(([ic,label,val])=>(
                   <div key={label} style={{ background:C.cream, borderRadius:12,
