@@ -2417,10 +2417,10 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
         )}
       </div>
     ))}
-  </div>
 </div>
-            )}
-           
+</div>
+          </div>
+        )}           
 
         {/* ── VOCABULARY ── */}
         {/* ── SETTINGS ── */}
