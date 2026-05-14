@@ -4165,6 +4165,16 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
         setCurrentUser(u);
       }
     }).catch(()=>{});
+    
+    // Keep session alive across refreshes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        setCurrentUser(null);
+        setCurrentTeacher(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   },[]);
 
   // Load teachers from Supabase on mount
