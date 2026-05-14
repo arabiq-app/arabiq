@@ -2299,7 +2299,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                 {user.level || "Beginner"} · {user.dialect || "Modern Standard Arabic"}
               </div>
               <div style={{ color:C.gray600, fontSize:13, marginBottom:16 }}>
-                Based on {totalSessions} session{totalSessions !== 1 ? "s" : ""} completed
+                Based on {totalSessions} lesson {totalSessions !== 1 ? "s" : ""} completed
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:12 }}>
                 <div style={{ flex:1, height:14, background:C.lb, borderRadius:99,
