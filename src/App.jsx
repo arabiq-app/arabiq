@@ -1389,8 +1389,8 @@ const doBook = async (paymentIntentId = null) => {
           {availableSlots.length === 0
             ? <p style={{ color:C.gray400, fontSize:13, textAlign:"center", padding:"20px 0" }}>No available slots at this time.</p>
             : <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:22 }}>
-                {availableSlots.map(s=>(
-                  <button key={s} onClick={()=>setSlot(s)}
+                {convertSlotToUserTz(s).display}
+<div style={{ fontSize:11, color:C.gray400 }}>{convertSlotToUserTz(s).tzLabel} time</div>
                     style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
                       border:`2px solid ${slot===s?C.gold:C.gray200}`,
                       background: slot===s?"#FEF9EC":"#fff",
