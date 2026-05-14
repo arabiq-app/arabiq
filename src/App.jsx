@@ -2135,17 +2135,6 @@ useEffect(()=>{
                 </div>
               )}
             </div>
-              )}
-              {user.learningGoal && (
-                <div style={{ marginTop:12, display:"flex", alignItems:"center", gap:6 }}>
-                  <div style={{ width:8, height:8, borderRadius:"50%",
-                    background:C.green }} />
-                  <span style={{ fontSize:11, color:C.green, fontWeight:600 }}>
-                    Goal set — keep going!
-                  </span>
-                </div>
-              )}
-            </div>
 
             {/* Quick Actions - full width at bottom */}
             <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
