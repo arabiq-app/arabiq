@@ -39,9 +39,9 @@ export const signOut = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-  const { data: profile } = await supabase.from('users').select('*').eq('auth_id', user.id).single();
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) return null;
+  const { data: profile } = await supabase.from('users').select('*').eq('auth_id', session.user.id).single();
   return profile;
 };
 
