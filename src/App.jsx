@@ -1930,9 +1930,9 @@ useEffect(()=>{
               </div>
             )}
 
-            {/* Next Milestone */}
+{/* Next Milestone - full width */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
-              border:`1.5px solid ${C.gray200}` }}>
+              border:`1.5px solid ${C.gray200}`, gridColumn:"1 / -1" }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
                 letterSpacing:1, marginBottom:14 }}>🎯 NEXT MILESTONE</div>
               {(() => {
@@ -1976,7 +1976,7 @@ useEffect(()=>{
               })()}
             </div>
 
-            {/* My Teachers */}
+            {/* My Teachers - left */}
             <div style={{ background:"#fff", borderRadius:20, padding:26,
               border:`1.5px solid ${C.gray200}` }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
@@ -2016,7 +2016,31 @@ useEffect(()=>{
               )}
             </div>
 
-            {/* Quick Actions */}
+            {/* Learning Stats - right, same shape as My Teachers */}
+            <div style={{ background:"#fff", borderRadius:20, padding:26,
+              border:`1.5px solid ${C.gray200}` }}>
+              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
+                letterSpacing:1, marginBottom:14 }}>📊 LEARNING STATS</div>
+              <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                {[
+                  ["🎓", totalSessions, "Lessons completed"],
+                  ["📅", myBookings.filter(b=>b.status==="confirmed").length, "Upcoming lessons"],
+                  ["✅", myBookings.filter(b=>b.status==="completed").length, "Lessons completed"],
+                  ["⏱️", totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1), "Hours of Arabic"],
+                ].map(([ic, val, label])=>(
+                  <div key={label} style={{ display:"flex", alignItems:"center",
+                    gap:12, padding:"10px 12px", background:C.cream,
+                    borderRadius:12 }}>
+                    <span style={{ fontSize:20 }}>{ic}</span>
+                    <div style={{ flex:1, color:C.gray600, fontSize:13 }}>{label}</div>
+                    <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
+                      color:C.navy, fontSize:20 }}>{val}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Actions - full width at bottom */}
             <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
               borderRadius:20, padding:26, gridColumn:"1 / -1" }}>
               <div style={{ color:C.goldLt, fontWeight:700, fontSize:11,
@@ -2041,25 +2065,8 @@ useEffect(()=>{
               </div>
             </div>
 
-            {/* Quick stats */}
-            <div style={{ background:"#fff", borderRadius:20, padding:26,
-              border:`1.5px solid ${C.gray200}` }}>
-              <div style={{ color:C.gold, fontWeight:700, fontSize:11,
-                letterSpacing:1, marginBottom:14 }}>LEARNING STATS</div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
-                {[["🎓",totalSessions,"Sessions"],["⏱️",totalHours % 1 === 0 ? totalHours : totalHours.toFixed(1),"Hours"],
-                  ["📅",myBookings.filter(b=>b.status==="confirmed").length,"Upcoming"],["✅",myBookings.filter(b=>b.status==="completed").length,"Completed"]].map(([ic,val,label])=>(
-                  <div key={label} style={{ background:C.cream, borderRadius:12,
-                    padding:"14px 12px", textAlign:"center" }}>
-                    <div style={{ fontSize:22, marginBottom:4 }}>{ic}</div>
-                    <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
-                      color:C.navy, fontSize:22 }}>{val}</div>
-                    <div style={{ color:C.gray600, fontSize:11 }}>{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+
+            
         )}
 
         {/* ── SESSIONS ── */}
