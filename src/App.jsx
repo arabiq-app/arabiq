@@ -2085,7 +2085,6 @@ useEffect(()=>{
                   </div>
                   <div style={{ marginTop:12, color:C.gray400, fontSize:11,
                     textAlign:"center" }}>
-                    Tap ✏️ to update your goal anytime
                   </div>
                 </div>
               ) : (
