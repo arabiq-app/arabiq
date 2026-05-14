@@ -2473,14 +2473,10 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
 </div>
                 <div style={{ display:"flex", gap:10, alignItems:"center",
                   marginBottom:10 }}>
-                  <div style={{ background:C.navy, borderRadius:6, padding:"3px 10px",
-                    color:"#fff", fontSize:11, fontWeight:700 }}>VISA</div>
-                  <span style={{ color:C.gray800, fontSize:14 }}>•••• •••• •••• 4291</span>
+                  <div style={{ color:C.gray600, fontSize:13, lineHeight:1.7 }}>
+                  Arabiq is pay-as-you-go. You are only charged when you book a lesson.
+                  No subscriptions or hidden fees.
                 </div>
-                <div style={{ color:C.gray600, fontSize:13, marginBottom:14 }}>
-                  Next billing: <strong style={{ color:C.navy }}>1 Apr 2026 · £60</strong>
-                </div>
-                <Btn label="Cancel Plan" variant="danger" size="sm" />
               </div>
             </div>
           </div>
