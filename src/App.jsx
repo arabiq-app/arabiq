@@ -3388,7 +3388,13 @@ onChange={e=>setEditingTeacher(t=>({...t, slots: e.target.value}))}
                 <button onClick={async ()=>{
                     setTeacherLoading(true);
                     try {
-                      await updateTeacher(editingTeacher.id, editingTeacher);
+                      const toSave = {
+  ...editingTeacher,
+  slots: typeof editingTeacher.slots === "string"
+    ? editingTeacher.slots.split(",").map(s=>s.trim()).filter(Boolean)
+    : editingTeacher.slots
+};
+await updateTeacher(editingTeacher.id, toSave);
                       refreshTeachers();
                       fire(`✅ ${editingTeacher.name} updated successfully.`);
                     } catch(e) {
