@@ -1050,7 +1050,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
 
   // Helper — get next calendar date for a slot string
   const getSlotDate = (slotStr) => {
-    const days = { Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6, Sun:0 };
+    const days = { Mon:1,Monday:1, Tue:2,Tuesday:2, Wed:3,Wednesday:3, Thu:4,Thursday:4, Fri:5,Friday:5, Sat:6,Saturday:6, Sun:0,Sunday:0 };
     const dayStr = slotStr.split(' ')[0];
     const today = new Date();
     const targetDay = days[dayStr];
