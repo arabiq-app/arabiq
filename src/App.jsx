@@ -2096,7 +2096,7 @@ useEffect(()=>{
                     What do you want to achieve with Arabic?
                   </div>
                   <textarea
-                    defaultValue={user.learningGoal || ""}
+                    defaultValue={savedGoal}
                     id="learning-goal-input"
                     placeholder="e.g. I want to have fluent conversations in Egyptian Arabic by end of 2026..."
                     rows={4}
