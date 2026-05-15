@@ -2105,8 +2105,8 @@ useEffect(()=>{
                     rows={4}
                     style={{ width:"100%", padding:"11px 13px", borderRadius:10,
                       border:`1.5px solid ${C.gray200}`, fontSize:13,
-                      fontFamily:"inherit", outline:"none", color:C.navy,
-                      resize:"none", boxSizing:"border-box", lineHeight:1.6,
+                            fontFamily:"'DM Sans',sans-serif", outline:"none", color:C.navy,
+                     resize:"none", boxSizing:"border-box", lineHeight:1.6,
                       marginBottom:12 }} />
                   <div style={{ display:"flex", gap:8 }}>
                     {savedGoal && (
