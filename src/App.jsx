@@ -2133,9 +2133,10 @@ useEffect(()=>{
                         const goal = document.getElementById("learning-goal-input").value.trim();
                         if (!goal) return;
                         try {
+                          const { data: { session } } = await supabase.auth.getSession();
                           await supabase.from("users")
                             .update({ learning_goal: goal })
-                            .eq("id", user.id);
+                            .eq("auth_id", session.user.id);
                           setSavedGoal(goal);
 setEditingGoal(false);
 setUser(u=>({...u, learningGoal: goal}));
