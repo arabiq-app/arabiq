@@ -2093,8 +2093,8 @@ useEffect(()=>{
                 </div>
               ) : (
                 /* Goal input */
-                <div style={{ marginTop:10 }}>
-                  <div style={{ color:C.gray600, fontSize:12, marginBottom:10 }}>
+               <div style={{ color:C.gray600, fontSize:12, marginBottom:10,
+                    fontFamily:"'DM Sans',sans-serif" }}>
                     What do you want to achieve with Arabic?
                   </div>
                   <textarea
