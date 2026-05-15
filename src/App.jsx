@@ -2122,7 +2122,9 @@ useEffect(()=>{
                           await supabase.from("users")
                             .update({ learning_goal: goal })
                             .eq("id", user.id);
-                          setCurrentUser(u=>({...u, learningGoal: goal, editingGoal: false}));
+                          setSavedGoal(goal);
+setEditingGoal(false);
+setUser(u=>({...u, learningGoal: goal}));
                         } catch(e) { console.error("Goal save failed:", e); }
                       }}
                       style={{ flex:2, padding:"11px",
