@@ -2140,28 +2140,32 @@ setUser(u=>({...u, learningGoal: goal}));
               )}
             </div>
 
-            {/* Quick Actions - full width at bottom */}
+           {/* Umar Ibn al-Khattab Quote */}
             <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
-              borderRadius:20, padding:26, gridColumn:"1 / -1" }}>
-              <div style={{ color:C.goldLt, fontWeight:700, fontSize:11,
-                letterSpacing:1, marginBottom:16 }}>QUICK ACTIONS</div>
-              <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-                {[
-                  { label:"📚 Book a Lesson", action: onBrowseTeachers },
-                  { label:"📊 View Progress", action: ()=>setTab("progress") },
-                  { label:"📅 My Bookings",   action: ()=>setTab("sessions") },
-                ].map(({label, action})=>(
-                  <button key={label} onClick={action}
-                    style={{ background:"rgba(255,255,255,0.1)",
-                      border:"1.5px solid rgba(255,255,255,0.2)",
-                      color:"#fff", borderRadius:10, padding:"11px 20px",
-                      fontWeight:700, fontSize:13, cursor:"pointer",
-                      fontFamily:"inherit", transition:"all 0.15s" }}
-                    onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,0.2)"}
-                    onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,0.1)"}>
-                    {label}
-                  </button>
-                ))}
+              borderRadius:20, padding:"36px 40px", gridColumn:"1 / -1",
+              textAlign:"center", position:"relative", overflow:"hidden" }}>
+              {/* Decorative quote mark */}
+              <div style={{ position:"absolute", top:-20, left:20, fontSize:120,
+                color:"rgba(255,255,255,0.04)", fontFamily:"'Playfair Display',serif",
+                lineHeight:1, userSelect:"none", pointerEvents:"none" }}>"</div>
+              <div style={{ position:"absolute", bottom:-20, right:20, fontSize:120,
+                color:"rgba(255,255,255,0.04)", fontFamily:"'Playfair Display',serif",
+                lineHeight:1, userSelect:"none", pointerEvents:"none" }}>"</div>
+              {/* Name */}
+              <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
+                fontSize:18, color:C.gold, marginBottom:16, letterSpacing:0.5 }}>
+                Umar Ibn al-Khattab
+              </div>
+              {/* Quote */}
+              <div style={{ color:"#fff", fontSize:16, fontWeight:500,
+                lineHeight:1.8, maxWidth:680, margin:"0 auto 16px",
+                fontFamily:"'Playfair Display',serif", fontStyle:"italic" }}>
+                "Learn Arabic, for it strengthens the intelligence and increases one's noble conduct."
+              </div>
+              {/* Reference */}
+              <div style={{ color:"rgba(255,255,255,0.4)", fontSize:11,
+                fontWeight:500, letterSpacing:0.3 }}>
+                Al-Bayhaqī, Shu'ab Al-Īmān Vol.4 p187
               </div>
             </div>
                       </div>
