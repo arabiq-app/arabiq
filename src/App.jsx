@@ -1504,7 +1504,21 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
         try {
           const data = await signIn({ email, password: pw });
           const profile = await getCurrentUser();
-          const u = profile || {
+          const u = profile ? {
+            id: profile.id,
+            name: profile.name || email.split("@")[0],
+            email: profile.email || email,
+            avatar: profile.avatar || (profile.name || email).split(" ").map(n=>n[0]).join("").toUpperCase().slice(0,2),
+            plan: profile.plan || "None",
+            level: profile.level || "Beginner",
+            dialect: profile.dialect || "Modern Standard Arabic (Fusha)",
+            bookings: [],
+            learningGoal: profile.learning_goal || "",
+            totalSessions: profile.total_sessions || 0,
+            sessionsLeft: profile.sessions_left || 0,
+            progress: profile.progress || 0,
+            joined: profile.created_at ? new Date(profile.created_at).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}) : "",
+          } : {
             id: data.user.id,
             name: data.user.user_metadata?.name || email.split("@")[0],
             email,
@@ -1513,6 +1527,7 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
             level: data.user.user_metadata?.level || "Beginner",
             dialect: data.user.user_metadata?.dialect || "Modern Standard Arabic (Fusha)",
             bookings: [],
+            learningGoal: "",
             totalSessions: 0,
             sessionsLeft: 0,
             progress: 0,
