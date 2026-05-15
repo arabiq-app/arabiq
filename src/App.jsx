@@ -2701,13 +2701,14 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                 onClick={async ()=>{
                   setSavingSettings(true);
                   try {
+                  const { data: { session } } = await supabase.auth.getSession();
                     await supabase.from("users")
                       .update({
                         name: settingsForm.name,
                         level: settingsForm.level,
                         dialect: settingsForm.dialect,
                       })
-                      .eq("id", user.id);
+                      .eq("auth_id", session.user.id);
                     setUser(u=>({...u, ...settingsForm}));
                   } catch(e) { console.error("Settings save failed:", e); }
                   setSavingSettings(false);
