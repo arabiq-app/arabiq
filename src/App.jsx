@@ -4036,7 +4036,7 @@ function TeacherDashboard({ teacher, setTeacher, onLogout }) {
 
   return (
     <div style={{ minHeight:"100vh", background:C.cream, fontFamily:"'DM Sans',sans-serif" }}>
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      <link href=:"https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap&subset=latin-ext" />
 
       {/* Teacher Navbar */}
       <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, height:72,
