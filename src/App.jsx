@@ -2141,7 +2141,7 @@ setUser(u=>({...u, learningGoal: goal}));
             </div>
 
            {/* Umar Ibn al-Khattab Quote */}
-            <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+            background:`linear-gradient(135deg,${C.navy} 0%,${C.navy2} 100%)`,
               borderRadius:20, padding:"36px 40px", gridColumn:"1 / -1",
               textAlign:"center", position:"relative", overflow:"hidden" }}>
               {/* Decorative quote mark */}
@@ -2157,9 +2157,9 @@ setUser(u=>({...u, learningGoal: goal}));
                 Umar Ibn al-Khattab
               </div>
               {/* Quote */}
-              <div style={{ color:"#fff", fontSize:16, fontWeight:500,
+            color:"#fff", fontSize:16, fontWeight:500,
                 lineHeight:1.8, maxWidth:680, margin:"0 auto 16px",
-                fontFamily:"'Playfair Display',serif", fontStyle:"italic" }}>
+                fontFamily:"'DM Sans',sans-serif", fontStyle:"italic" }}>
                 "Learn Arabic, for it strengthens the intelligence and increases one's noble conduct."
               </div>
               {/* Reference */}
