@@ -2073,7 +2073,9 @@ useEffect(()=>{
                       fontFamily:"'Playfair Display',serif", lineHeight:1,
                       userSelect:"none" }}>"</div>
                     <div style={{ fontSize:14, color:"#fff", fontWeight:600,
-                      lineHeight:1.7, position:"relative", zIndex:1 }}>
+                      lineHeight:1.7, position:"relative", zIndex:1,
+                      fontFamily:"'DM Sans',sans-serif" }}>
+                   
                       {savedGoal}
                </div>
                     <div style={{ marginTop:12, display:"flex",
