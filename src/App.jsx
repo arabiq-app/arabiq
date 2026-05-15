@@ -1844,9 +1844,6 @@ useEffect(()=>{
                 <span style={{ color:"rgba(255,255,255,0.55)", fontSize:13 }}>
                   📧 {user.email}
                 </span>
-                <span style={{ color:"rgba(255,255,255,0.55)", fontSize:13 }}>
-                  📅 Joined {user.joined}
-                </span>
               </div>
             </div>
             <div style={{ display:"flex", gap:isMobile?12:24, flexWrap:"wrap" }}>
