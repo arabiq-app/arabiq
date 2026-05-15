@@ -4574,7 +4574,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
         <div style={{ minHeight:"100vh", background:`linear-gradient(160deg,${C.navy},${C.navy2})`,
           display:"flex", alignItems:"center", justifyContent:"center",
           fontFamily:"'DM Sans',sans-serif", padding:20 }}>
-          <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap&subset=latin-ext" />
           <div style={{ background:"#fff", borderRadius:28, padding:"44px 40px",
             width:"100%", maxWidth:420, boxShadow:"0 40px 120px rgba(0,0,0,0.35)" }}>
             <div style={{ marginBottom:24 }}><Logo height={26} /></div>
