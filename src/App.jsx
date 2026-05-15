@@ -2149,13 +2149,7 @@ setUser(u=>({...u, learningGoal: goal}));
             <div style={{ background:`linear-gradient(135deg,${C.navy} 0%,${C.navy2} 100%)`,
               borderRadius:20, padding:"36px 40px", gridColumn:"1 / -1",
               textAlign:"center", position:"relative", overflow:"hidden" }}>
-              {/* Decorative quote mark */}
-              <div style={{ position:"absolute", top:-20, left:20, fontSize:120,
-                color:"rgba(255,255,255,0.04)", fontFamily:"'Playfair Display',serif",
-                lineHeight:1, userSelect:"none", pointerEvents:"none" }}>"</div>
-              <div style={{ position:"absolute", bottom:-20, right:20, fontSize:120,
-                color:"rgba(255,255,255,0.04)", fontFamily:"'Playfair Display',serif",
-                lineHeight:1, userSelect:"none", pointerEvents:"none" }}>"</div>
+             
               {/* Name */}
               <div style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:800,
                 fontSize:18, color:C.gold, marginBottom:16, letterSpacing:0.5 }}>
