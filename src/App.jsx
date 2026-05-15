@@ -1770,7 +1770,7 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewedIds, setReviewedIds] = useState(new Set());
   const [editingGoal, setEditingGoal] = useState(false);
-const [savedGoal, setSavedGoal] = useState(user.learningGoal || "");
+  const [savedGoal, setSavedGoal] = useState(user.learningGoal || "");
 const [settingsForm, setSettingsForm] = useState({
   name: user.name || "",
   email: user.email || "",
