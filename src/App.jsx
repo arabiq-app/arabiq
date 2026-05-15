@@ -2092,13 +2092,16 @@ useEffect(()=>{
                     textAlign:"center" }}>
                   </div>
                 </div>
-              ) : (
+  ) : (
                 /* Goal input */
-               <div style={{ color:C.gray600, fontSize:12, marginBottom:10,
+                <div style={{ marginTop:10 }}>
+                  <div style={{ color:C.gray600, fontSize:12, marginBottom:10,
                     fontFamily:"'DM Sans',sans-serif" }}>
                     What do you want to achieve with Arabic?
                   </div>
                   <textarea
+  
+              
                     defaultValue={savedGoal}
                     id="learning-goal-input"
                     placeholder="e.g. I want to have fluent conversations in Egyptian Arabic by end of 2026..."
