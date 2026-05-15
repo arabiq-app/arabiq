@@ -2683,19 +2683,35 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
               border:`1.5px solid ${C.gray200}` }}>
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
                 letterSpacing:1, marginBottom:18 }}>ACCOUNT DETAILS</div>
-              {[["Full Name",user.name],["Email Address",user.email],
-                ["Learning Level",user.level],["Dialect Focus",user.dialect]].map(([label,val])=>(
-                <div key={label} style={{ marginBottom:14 }}>
+             {[["Full Name","name"],["Email Address","email"],
+                ["Learning Level","level"],["Dialect Focus","dialect"]].map(([label,field])=>(
+                <div key={field} style={{ marginBottom:14 }}>
                   <label style={{ display:"block", fontSize:11, fontWeight:700,
                     color:C.gray600, marginBottom:5, textTransform:"uppercase",
                     letterSpacing:0.5 }}>{label}</label>
-                  <input defaultValue={val}
+                  <input
+                    value={settingsForm[field]}
+                    onChange={e=>setSettingsForm(f=>({...f,[field]:e.target.value}))}
                     style={{ width:"100%", padding:"11px 13px", borderRadius:10,
                       border:`1.5px solid ${C.gray200}`, fontSize:14, fontFamily:"inherit",
                       outline:"none", color:C.navy, boxSizing:"border-box" }} />
                 </div>
               ))}
-              <Btn label="Save Changes" variant="primary" />
+              <Btn label={savingSettings?"Saving...":"Save Changes"} variant="primary"
+                onClick={async ()=>{
+                  setSavingSettings(true);
+                  try {
+                    await supabase.from("users")
+                      .update({
+                        name: settingsForm.name,
+                        level: settingsForm.level,
+                        dialect: settingsForm.dialect,
+                      })
+                      .eq("id", user.id);
+                    setUser(u=>({...u, ...settingsForm}));
+                  } catch(e) { console.error("Settings save failed:", e); }
+                  setSavingSettings(false);
+                }} />
             </div>
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
               <div style={{ background:"#fff", borderRadius:20, padding:26,
