@@ -2061,7 +2061,7 @@ useEffect(()=>{
               <div style={{ color:C.gold, fontWeight:700, fontSize:11,
                 letterSpacing:1, marginBottom:6 }}>🎯 MY LEARNING GOAL</div>
 
-              {user.learningGoal && !user.editingGoal ? (
+             {savedGoal && !editingGoal ? (
                 /* Goal display — motivational style */
                 <div>
                   <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
