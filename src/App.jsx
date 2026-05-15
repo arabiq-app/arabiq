@@ -1769,6 +1769,8 @@ function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
   const [reviewComment, setReviewComment] = useState("");
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewedIds, setReviewedIds] = useState(new Set());
+const [editingGoal, setEditingGoal] = useState(false);
+const [savedGoal, setSavedGoal] = useState(user.learningGoal || "");
 
   useEffect(()=>{ setTab(initTab); },[initTab]);
 
