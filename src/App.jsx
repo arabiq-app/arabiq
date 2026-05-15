@@ -2160,7 +2160,8 @@ setUser(u=>({...u, learningGoal: goal}));
             color:"#fff", fontSize:16, fontWeight:500,
                 lineHeight:1.8, maxWidth:680, margin:"0 auto 16px",
                 fontFamily:"'DM Sans',sans-serif", fontStyle:"italic" }}>
-                "Learn Arabic, for it strengthens the intelligence and increases one's noble conduct."
+            {"Learn Arabic, for it strengthens the intelligence and increases one\u2019s noble conduct."}
+            
               </div>
               {/* Reference */}
               <div style={{ color:"rgba(255,255,255,0.4)", fontSize:11,
