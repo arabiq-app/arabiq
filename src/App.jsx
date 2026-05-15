@@ -2082,7 +2082,8 @@ useEffect(()=>{
                       alignItems:"center", gap:6 }}>
                       <div style={{ width:6, height:6, borderRadius:"50%",
                         background:C.gold }} />
-                      <span style={{ fontSize:11, color:C.goldLt, fontWeight:600 }}>
+                      <span style={{ fontSize:11, color:C.goldLt, fontWeight:600,
+                        fontFamily:"'DM Sans',sans-serif" }}>
                         Your goal — stay focused 💪
                       </span>
                     </div>
