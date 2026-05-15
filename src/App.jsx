@@ -2166,7 +2166,7 @@ setUser(u=>({...u, learningGoal: goal}));
               {/* Reference */}
               <div style={{ color:"rgba(255,255,255,0.4)", fontSize:11,
                 fontWeight:500, letterSpacing:0.3 }}>
-                Al-Bayhaqī, Shu'ab Al-Īmān Vol.4 p187
+                {"Al-Bayhaqi, Shu'ab Al-Iman Vol.4 p187"}
               </div>
             </div>
                       </div>
