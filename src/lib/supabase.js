@@ -315,8 +315,8 @@ export async function getTeacherReviews(teacherId) {
 }
 export const getTeacherByEmail = async (email) => {
   const { data, error } = await supabase
-    .from('teachers').select('*').eq('email', email).eq('status', 'approved').single();
-  if (error) return null;
+    .from('teachers').select('*').eq('email', email).eq('status', 'approved').maybeSingle();
+  if (error || !data) return null;
   return mapTeacher(data);
 };
 
