@@ -2106,7 +2106,7 @@ useEffect(()=>{
                       resize:"none", boxSizing:"border-box", lineHeight:1.6,
                       marginBottom:12 }} />
                   <div style={{ display:"flex", gap:8 }}>
-                    {user.learningGoal && (
+                    {savedGoal && (
                       <button onClick={()=>setCurrentUser(u=>({...u, editingGoal:false}))}
                         style={{ flex:1, padding:"11px",
                           background:C.gray100, color:C.gray600,
