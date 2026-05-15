@@ -1113,7 +1113,7 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   },[teacher.id]);
 
   // Slots available this week = template minus already booked
-  const availableSlots = (teacher.slots||[]).filter(s => {
+  const availableSlots = (teacher.slots||[]).filter(s => s && s.trim() !== "").filter(s => {
     const nextDate = getSlotDate(s);
     return !bookedSlots.some(b => b.slot === s && b.session_date === nextDate);
   });
