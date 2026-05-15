@@ -2157,7 +2157,7 @@ setUser(u=>({...u, learningGoal: goal}));
                 color:"rgba(255,255,255,0.04)", fontFamily:"'Playfair Display',serif",
                 lineHeight:1, userSelect:"none", pointerEvents:"none" }}>"</div>
               {/* Name */}
-              <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:800,
+              <div style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:800,
                 fontSize:18, color:C.gold, marginBottom:16, letterSpacing:0.5 }}>
                 Umar Ibn al-Khattab
               </div>
