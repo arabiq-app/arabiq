@@ -2107,10 +2107,11 @@ useEffect(()=>{
                       marginBottom:12 }} />
                   <div style={{ display:"flex", gap:8 }}>
                     {savedGoal && (
-                  onClick={()=>setEditingGoal(false)}
-                        style={{ flex:1, padding:"11px",
-                          background:C.gray100, color:C.gray600,
-                          border:"none", borderRadius:10, fontWeight:600,
+                      <button onClick={()=>setEditingGoal(false)}
+                          style={{ flex:1, padding:"11px",
+                            background:C.gray100, color:C.gray600,
+
+                         border:"none", borderRadius:10, fontWeight:600,
                           fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
                         Cancel
                       </button>
