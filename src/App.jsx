@@ -1397,7 +1397,7 @@ const doBook = async (paymentIntentId = null) => {
           color: slot===s?"#92400E":C.gray800,
           fontWeight: slot===s?700:500, fontSize:13, transition:"all 0.2s",
           textAlign:"left" }}>
-        📅 {convertSlotToUserTz(s).display}
+        🕐 {convertSlotToUserTz(s).display}
         <div style={{ fontSize:11, color: slot===s?"#92400E":C.gray400, marginTop:2 }}>
           {convertSlotToUserTz(s).tzLabel} time
         </div>
