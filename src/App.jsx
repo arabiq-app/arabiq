@@ -2048,7 +2048,7 @@ useEffect(()=>{
               
               {/* Pencil edit icon - top right corner */}
               {savedGoal && !editingGoal && (
-                <button onClick={()=>setCurrentUser(u=>({...u, editingGoal:true}))}
+                <button onClick={()=>setEditingGoal(true)}
                   style={{ position:"absolute", top:16, right:16,
                     background:C.cream, border:`1.5px solid ${C.gray200}`,
                     borderRadius:8, width:30, height:30, cursor:"pointer",
