@@ -2074,8 +2074,8 @@ useEffect(()=>{
                       userSelect:"none" }}>"</div>
                     <div style={{ fontSize:14, color:"#fff", fontWeight:600,
                       lineHeight:1.7, position:"relative", zIndex:1 }}>
-                      {user.learningGoal}
-                    </div>
+                      {savedGoal}
+               </div>
                     <div style={{ marginTop:12, display:"flex",
                       alignItems:"center", gap:6 }}>
                       <div style={{ width:6, height:6, borderRadius:"50%",
