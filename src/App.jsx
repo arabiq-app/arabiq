@@ -5353,7 +5353,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
                   fontSize:18, fontWeight:800, margin:"0 0 4px" }}>Teacher rates</h3>
                 <p style={{ color:C.gray600, fontSize:13, margin:0 }}>
-                  Each teacher sets their own rate. Trial sessions are always 50% off.
+                  Trial sessions are a flat £3 for every teacher, regardless of their regular rate.
                 </p>
               </div>
               <table style={{ width:"100%", borderCollapse:"collapse" }}>
