@@ -372,6 +372,8 @@ function TeacherCard({ t, onBook, onView }) {
           ? <Chip label="● Available" bg="#ECFDF5" color={C.green} />
           : <Chip label="Fully Booked" bg={C.gray100} color={C.gray400} />}
       </div>
+              </div>
+
 
       {/* Header */}
       <div style={{ display:"flex", gap:14, alignItems:"flex-start", marginBottom:14 }}>
