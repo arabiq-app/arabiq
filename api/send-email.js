@@ -192,6 +192,60 @@ case 'contact':
         };
         break;
 
+        case 'reminder_1hr':
+        emailContent = {
+          subject: `Your Arabic lesson starts in 1 hour — ${data.slot}`,
+          html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+            <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Your lesson starts in 1 hour ⏰</h1>
+            <p style="color:#6B7280;font-size:15px;margin:0 0 16px;">Hi ${data.studentName}, your <strong>${data.sessionType}</strong> Arabic lesson with <strong>${data.teacherName}</strong> starts in just 1 hour at <strong>${data.slot}</strong>.</p>
+            <div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;">
+              <p style="color:#374151;font-size:13px;margin:5px 0;">✓ Make sure your camera and microphone are working</p>
+              <p style="color:#374151;font-size:13px;margin:5px 0;">✓ Find a quiet space with good internet</p>
+              <p style="color:#374151;font-size:13px;margin:5px 0;">✓ Have a notebook ready</p>
+            </div>
+            <div style="text-align:center;margin:28px 0;">${goldBtn(data.roomUrl, 'Join My Arabic Lesson →')}</div>
+            <p style="color:#9CA3AF;font-size:13px;text-align:center;">Click the button above when your session starts.</p>
+          </div>${footerHtml}</div>`,
+        };
+        break;
+
+      case 'teacher_reminder_1hr':
+        emailContent = {
+          subject: `Lesson starts in 1 hour — ${data.studentName} at ${data.slot}`,
+          html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+            <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">Your lesson starts in 1 hour ⏰</h1>
+            <p style="color:#6B7280;font-size:15px;margin:0 0 16px;">Hi ${data.teacherName}, your <strong>${data.sessionType}</strong> session with <strong>${data.studentName}</strong> starts in 1 hour at <strong>${data.slot}</strong>.</p>
+            <div style="text-align:center;margin:28px 0;">${goldBtn(data.hostRoomUrl, 'Start Lesson →')}</div>
+            <p style="color:#9CA3AF;font-size:13px;text-align:center;">This is your host link — it gives you full control of the classroom.</p>
+          </div>${footerHtml}</div>`,
+        };
+        break;
+
+      case 'session_followup':
+        emailContent = {
+          subject: `How was your lesson with ${data.teacherName}?`,
+          html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
+            <div style="text-align:center;margin-bottom:28px;">
+              <div style="font-size:52px;margin-bottom:12px;">⭐</div>
+              <h1 style="color:#1A3470;font-size:26px;font-weight:800;margin:0 0 8px;">How was your Arabic lesson?</h1>
+              <p style="color:#6B7280;font-size:15px;margin:0;">We hope your session with <strong>${data.teacherName}</strong> went well!</p>
+            </div>
+            <div style="background:#fff;border-radius:14px;padding:24px;margin-bottom:24px;border:2px solid #1A3470;">
+              <div style="font-size:11px;font-weight:700;color:#C9961A;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;">Session Summary</div>
+              <div style="font-size:18px;font-weight:800;margin-bottom:4px;color:#1A3470;">${data.teacherName}</div>
+              <div style="font-size:14px;color:#6B7280;">${data.sessionType} · ${data.slot}</div>
+            </div>
+            <p style="color:#374151;font-size:15px;line-height:1.7;margin:0 0 24px;">Your review helps other students find the right teacher and helps ${data.teacherName.split(' ')[0]} grow. It only takes 30 seconds!</p>
+            <div style="text-align:center;margin:28px 0;">${goldBtn(APP_URL + '/profile', 'Leave a Review →')}</div>
+            <div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;text-align:center;">
+              <p style="color:#374151;font-size:14px;margin:0 0 16px;font-weight:600;">Ready to book your next lesson?</p>
+              ${navyBtn(APP_URL + '/teachers', 'Book Another Lesson →')}
+            </div>
+            <p style="color:#9CA3AF;font-size:13px;text-align:center;">Questions about your session? Contact support@arabiq.app</p>
+          </div>${footerHtml}</div>`,
+        };
+        break;
+
       default:
         return res.status(400).json({ error: `Unknown type: ${type}` });
     }
