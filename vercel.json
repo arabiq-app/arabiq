@@ -5,7 +5,10 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-  "crons": [{
-    "path": "/api/send-reminders",
-    "schedule": "0 * * * *"
-  }]
+  "crons": [
+    {
+      "path": "/api/send-reminders",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
