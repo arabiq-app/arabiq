@@ -364,6 +364,10 @@ function TeacherCard({ t, onBook, onView }) {
 
       {/* Status badge */}
       <div style={{ position:"absolute", top:16, right:16 }}>
+      <div style={{ display:"flex", gap:6, flexDirection:"column", alignItems:"flex-end" }}>
+        {t.rating >= 4.8 && t.reviewCount >= 5 && (
+          <Chip label="⭐ Top Rated" bg="#FEF9EC" color="#92400E" />
+        )}
         {t.available
           ? <Chip label="● Available" bg="#ECFDF5" color={C.green} />
           : <Chip label="Fully Booked" bg={C.gray100} color={C.gray400} />}
