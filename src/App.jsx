@@ -5059,7 +5059,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
 
               <p style={{ color:"rgba(255,255,255,0.7)", fontSize:15, lineHeight:1.75,
                 maxWidth:540, margin:"0 auto 32px", padding:"0 8px" }}>
-                The only tutoring marketplace built exclusively for Arabic. Learn 1-on-1 with expert native teachers, rigorously vetted for exceptional teaching quality. Start your trial from just £3."
+                The only tutoring marketplace built exclusively for Arabic. Learn 1-on-1 with expert native teachers, rigorously vetted for exceptional teaching quality. Start your trial from just £3.
               </p>
 
               <div style={{ display:"flex", gap:10, justifyContent:"center",
