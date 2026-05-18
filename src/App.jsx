@@ -6200,7 +6200,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   <div style={{ maxWidth:270 }}>
                     <div style={{ marginBottom:14 }}><Logo height={22} light /></div>
                     <p style={{ color:"rgba(255,255,255,0.45)", fontSize:13, lineHeight:1.75 }}>
-                      The premium platform for 1-on-1 Arabic learning with verified native teachers.
+                      Expert Arabic tutoring, 1-on-1 with verified native teachers
                     </p>
 
                   </div>
