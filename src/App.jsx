@@ -6139,7 +6139,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   </div>
                   <p style={{ color:"rgba(255,255,255,0.5)", fontSize:13,
                     lineHeight:1.7, margin:0, maxWidth:300 }}>
-                    The premium platform for 1-on-1 Arabic learning with verified native teachers.
+                    Expert Arabic tutoring, 1-on-1 with verified native teachers
                   </p>
                 </div>
 
