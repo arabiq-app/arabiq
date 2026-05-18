@@ -1096,6 +1096,9 @@ function BookingFlow({ teacher, currentUser, onClose, onBooked, onNeedAuth, onGo
   const [paying,  setPaying]  = useState(false);
   const [stripeCard, setStripeCard] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
+const [savedCard, setSavedCard] = useState(null);
+const [useSavedCard, setUseSavedCard] = useState(false);
+const [saveCard, setSaveCard] = useState(false);
 
   // Helper — get next calendar date for a slot string
   const getSlotDate = (slotStr) => {
