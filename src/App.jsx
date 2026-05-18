@@ -1449,28 +1449,136 @@ const intentRes = await fetch("/api/create-payment-intent", {
         </>
       )}
 
-      {step === 3 && (
+{step === 3 && (
         <>
-          <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>Enter your payment details to confirm your booking.</p>
-          <div id="stripe-card-element" style={{ padding:"12px 14px", borderRadius:10,
-            border:`1.5px solid ${C.gray200}`, marginBottom:16, background:"#fff" }} />
-          <div id="stripe-card-errors" style={{ color:C.red, fontSize:12, marginBottom:12 }} />
+          <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>
+            Complete your payment to confirm your booking.
+          </p>
+
+          {/* Saved card option */}
+          {savedCard && (
+            <div style={{ marginBottom:16 }}>
+              <div style={{ fontSize:12, fontWeight:700, color:C.gray600,
+                textTransform:"uppercase", letterSpacing:0.5, marginBottom:8 }}>
+                Saved Card
+              </div>
+              <div onClick={()=>setUseSavedCard(true)}
+                style={{ padding:"14px 16px", borderRadius:10, cursor:"pointer",
+                  border:`2px solid ${useSavedCard?C.navy:C.gray200}`,
+                  background: useSavedCard?C.lb:"#fff",
+                  display:"flex", alignItems:"center", gap:12, marginBottom:8,
+                  transition:"all 0.2s" }}>
+                <div style={{ width:40, height:26, background:C.navy, borderRadius:5,
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  color:"#fff", fontSize:9, fontWeight:800 }}>
+                  {savedCard.brand.toUpperCase()}
+                </div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>
+                    •••• •••• •••• {savedCard.last4}
+                  </div>
+                  <div style={{ fontSize:11, color:C.gray400 }}>
+                    Expires {savedCard.expMonth}/{savedCard.expYear}
+                  </div>
+                </div>
+                {useSavedCard && <span style={{ color:C.green, fontSize:16 }}>✓</span>}
+              </div>
+              <div onClick={()=>setUseSavedCard(false)}
+                style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer",
+                  border:`2px solid ${!useSavedCard?C.navy:C.gray200}`,
+                  background: !useSavedCard?C.lb:"#fff",
+                  fontSize:13, fontWeight:600, color:C.navy,
+                  transition:"all 0.2s" }}>
+                + Use a different card
+              </div>
+            </div>
+          )}
+
+          {/* New card input */}
+          {!useSavedCard && (
+            <>
+              <div id="payment-request-button" style={{ display:"none", marginBottom:12 }} />
+              <div id="payment-divider" style={{ display:"none", textAlign:"center",
+                color:C.gray400, fontSize:12, margin:"8px 0" }}>or pay by card</div>
+              <div id="stripe-card-element" style={{ padding:"12px 14px", borderRadius:10,
+                border:`1.5px solid ${C.gray200}`, marginBottom:12, background:"#fff" }} />
+              <div id="stripe-card-errors" style={{ color:C.red, fontSize:12, marginBottom:8 }} />
+              {/* Save card checkbox */}
+              <div onClick={()=>setSaveCard(s=>!s)}
+                style={{ display:"flex", alignItems:"center", gap:10, marginBottom:16,
+                  cursor:"pointer", padding:"10px 14px", borderRadius:10,
+                  background:saveCard?C.lb:"#F9FAFB",
+                  border:`1.5px solid ${saveCard?C.navy:C.gray200}`,
+                  transition:"all 0.2s" }}>
+                <div style={{ width:18, height:18, borderRadius:5,
+                  border:`2px solid ${saveCard?C.navy:C.gray300}`,
+                  background:saveCard?C.navy:"#fff",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  flexShrink:0 }}>
+                  {saveCard && <span style={{ color:"#fff", fontSize:11 }}>✓</span>}
+                </div>
+                <span style={{ fontSize:13, color:C.navy, fontWeight:600 }}>
+                  Save card for future bookings
+                </span>
+              </div>
+            </>
+          )}
+
           <div style={{ background:"#F0FDF4", border:`1px solid ${C.green}30`,
-            borderRadius:10, padding:"10px 14px", marginBottom:20, display:"flex",
+            borderRadius:10, padding:"10px 14px", marginBottom:16, display:"flex",
             gap:8, alignItems:"center" }}>
             <span style={{ fontSize:16 }}>🔒</span>
-            <span style={{ fontSize:12, color:C.green, fontWeight:600 }}>Secured with 256-bit SSL encryption via Stripe</span>
+            <span style={{ fontSize:12, color:C.green, fontWeight:600 }}>
+              Secured with 256-bit SSL encryption via Stripe
+            </span>
           </div>
+
           <div style={{ background:C.lb, borderRadius:12, padding:"12px 16px",
             marginBottom:20, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
             <span style={{ color:C.gray600, fontSize:14 }}>Total due today</span>
             <span style={{ fontSize:22, fontWeight:800, color:C.navy }}>£{price.toFixed(2)}</span>
           </div>
+
           <div style={{ display:"flex", gap:10 }}>
             <Btn label="← Back" variant="outline" onClick={()=>setStep(2)} />
             <div style={{ flex:1 }}>
-              <Btn label={paying ? "Processing..." : `Pay £${price.toFixed(2)} & Confirm →`}
-                variant="gold" full disabled={paying} onClick={doPayAndBook} />
+              <Btn
+                label={paying ? "Processing..." : `Pay £${price.toFixed(2)} & Confirm →`}
+                variant="gold" full disabled={paying}
+                onClick={async ()=>{
+                  if (useSavedCard && savedCard) {
+                    // Pay with saved card
+                    setPaying(true);
+                    try {
+                      const intentRes = await fetch("/api/create-payment-intent", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          amount: price,
+                          teacherName: teacher.name,
+                          sessionType: sType,
+                          studentEmail: email,
+                          bookingId: `BK-${DB.nextBookingId + 1}`,
+                          teacherStripeAccountId: teacher.stripeAccountId || null,
+                        })
+                      });
+                      const { clientSecret, error: intentError } = await intentRes.json();
+                      if (intentError) throw new Error(intentError);
+                      const { paymentIntent, error } = await stripeCard.stripe.confirmCardPayment(clientSecret, {
+                        payment_method: savedCard.id,
+                      });
+                      if (error) throw new Error(error.message);
+                      if (paymentIntent.status === 'succeeded') await doBook(paymentIntent.id);
+                    } catch(e) {
+                      const el = document.getElementById('stripe-card-errors');
+                      if (el) el.textContent = e.message;
+                      setPaying(false);
+                    }
+                  } else {
+                    doPayAndBook();
+                  }
+                }}
+              />
             </div>
           </div>
         </>
