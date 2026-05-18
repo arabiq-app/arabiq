@@ -1302,7 +1302,7 @@ const doBook = async (paymentIntentId = null) => {
     if (!stripeCard) return;
     setPaying(true);
     try {
-      const intentRes = await fetch("/api/create-payment-intent", {
+const intentRes = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1311,9 +1311,12 @@ const doBook = async (paymentIntentId = null) => {
           sessionType: sType,
           studentEmail: email,
           bookingId: `BK-${DB.nextBookingId + 1}`,
+          teacherStripeAccountId: teacher.stripeAccountId || null,
+          saveCard,
         })
       });
-      const { clientSecret, error: intentError } = await intentRes.json();
+      const { clientSecret, error: intentError, savedCard: detectedCard } = await intentRes.json();
+      if (detectedCard && !savedCard) setSavedCard(detectedCard);
       if (intentError) throw new Error(intentError);
 
       const { paymentIntent, error } = await stripeCard.stripe.confirmCardPayment(clientSecret, {
