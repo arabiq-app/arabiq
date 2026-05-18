@@ -5059,7 +5059,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
 
               <p style={{ color:"rgba(255,255,255,0.7)", fontSize:15, lineHeight:1.75,
                 maxWidth:540, margin:"0 auto 32px", padding:"0 8px" }}>
-                The first Arabic-only learning platform for private 1-on-1 classes with expert native teachers, rigorously vetted by Arabiq - selected for their exceptional expertise and experience. Start with a trial from just £3.
+                The first and only Arabic tutoring marketplace for private 1-on-1 classes with expert native teachers — rigorously vetted by Arabiq. Start with a trial from just £3.
               </p>
 
               <div style={{ display:"flex", gap:10, justifyContent:"center",
