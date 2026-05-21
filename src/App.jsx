@@ -3305,10 +3305,11 @@ useEffect(() => {
                   </tr>
                 </thead>
                 <tbody>
-{teachers.map((t)=>(
+                  {adminTeachers.map((t)=>(
                     <tr key={t.id} style={{ borderBottom:`1px solid ${C.gray100}` }}
                       onMouseEnter={e=>e.currentTarget.style.background="#F9FAFF"}
                       onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+
                       <td style={{ padding:"11px 14px" }}>
                         <div style={{ display:"flex", gap:10, alignItems:"center" }}>
                           <Av init={t.avatar||t.name?.split(" ").map(n=>n[0]).join("").slice(0,2)||"T"} size={32}
