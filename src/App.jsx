@@ -5072,7 +5072,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                     transition:"transform 0.2s" }}
                   onMouseEnter={e=>e.currentTarget.style.transform="translateY(-2px)"}
                   onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}>
-                  Get Started Free →
+                  Get Started →
                 </button>
                 <button onClick={()=>setPage("how")}
                   style={{ background:"rgba(255,255,255,0.1)", color:"#fff",
