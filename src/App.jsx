@@ -5488,7 +5488,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   </tr>
                 </thead>
                 <tbody>
-                  {liveTeachers.map((t)=>(
+{liveTeachers.slice(0, 3).map((t)=>(
                     <tr key={t.id}
                       style={{ borderBottom:`1px solid ${C.gray100}` }}
                       onMouseEnter={e=>e.currentTarget.style.background="#F9FAFB"}
