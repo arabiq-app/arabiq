@@ -3305,7 +3305,7 @@ useEffect(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  {liveTeachers.map((t)=>(
+{teachers.map((t)=>(
                     <tr key={t.id} style={{ borderBottom:`1px solid ${C.gray100}` }}
                       onMouseEnter={e=>e.currentTarget.style.background="#F9FAFF"}
                       onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
