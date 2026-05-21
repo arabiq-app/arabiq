@@ -5117,11 +5117,11 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               </div>
               <div style={{ display:"grid",
                 gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:22 }}>
-                {teachers.map((t)=>(
-                  <TeacherCard key={t.id} t={t}
-                    onBook={t=>{ if(!currentUser){setAuthModal("login");}else{setBookingTeacher(t);} }}
-                    onView={t=>setViewingTeacher(t)} />
-                ))}
+                {liveTeachers.slice(0, 3).map((t)=>(
+  <TeacherCard key={t.id} t={t}
+    onBook={t=>{ if(!currentUser){setAuthModal("login");}else{setBookingTeacher(t);} }}
+    onView={t=>setViewingTeacher(t)} />
+))}
               </div>
               <div style={{ textAlign:"center", marginTop:36 }}>
                 <Btn label="See All Teachers →" variant="outline"
