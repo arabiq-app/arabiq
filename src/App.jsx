@@ -5314,7 +5314,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               ))}
             </div>
 
-          {/* FAQ */}
+{/* FAQ */}
             <div style={{ marginBottom:40 }}>
               <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
                 fontSize:26, fontWeight:800, marginBottom:20, textAlign:"center" }}>
@@ -5322,18 +5322,30 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               </h2>
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
                 {[
+                  { q:"What makes Arabiq different from other platforms?",
+                    a:"Arabiq is the only tutoring marketplace built exclusively for Arabic. Unlike generic platforms like iTalki or Preply which offer dozens of languages, every teacher, every feature, and every decision on Arabiq is focused entirely on Arabic learners. This means better vetted teachers, dialect-specific matching, and a platform designed around how Arabic is actually learned." },
+                  { q:"How are teachers vetted?",
+                    a:"Every teacher on Arabiq is personally reviewed by our team before being approved. We verify native fluency, teaching qualifications, and professional experience. Less than 1 in 3 applicants are accepted onto the platform." },
+                  { q:"What do I need to join a video lesson?",
+                    a:"Just a device with a camera and microphone — a laptop, tablet, or smartphone — and a stable internet connection. Your private video room link is sent to you by email after booking. No app downloads required." },
+                  { q:"What happens during a trial session?",
+                    a:"Your 30-minute trial is a chance to meet your teacher, discuss your goals, and experience their teaching style." },
                   { q:"Do I need to commit to a subscription?",
-                    a:"No. You pay per session, whenever you book. There are no monthly fees, no minimum sessions, and no lock-in period. Book one lesson or a hundred - completely up to you." },
-                  { q:"Can I switch teachers?",
-                    a:"Yes, completely. Since you pay per session you can book with any available teacher at any time. Many students try a few teachers before settling on their favourite." },
+                    a:"No. Arabiq is completely pay-as-you-go. You pay per session whenever you book. There are no monthly fees, no minimum sessions, and no lock-in period whatsoever." },
                   { q:"What is the cancellation policy?",
-                    a:"Cancel more than 24 hours before your session for a full refund. Cancellations within 24 hours are non-refundable to be fair to your teacher." },
-                  { q:"What payment methods are accepted?",
-                    a:"We accept all major credit and debit cards through Stripe - Visa, Mastercard, American Express, and most local cards. All payments are processed securely." },
-                  { q:"Are prices per person or per household?",
-                    a:"Per person. Each account is for one student. If you have multiple family members learning Arabic they each need their own account." },
-                  { q:"How do I join my video lesson?",
-                    a:"Once your booking is confirmed you will receive a confirmation email. Your private video room link is included in the email and also appears in your booking dashboard." },
+                    a:"Cancel more than 24 hours before your session for a full refund. Cancellations within 24 hours are non-refundable to protect your teacher's time. Trial sessions are non-refundable." },
+                  { q:"Which Arabic dialects can I learn?",
+                    a:"Arabiq offers lessons in Modern Standard Arabic (Fusha), Egyptian Arabic, Levantine Arabic, Gulf Arabic, and Maghrebi Arabic. You can filter teachers by dialect when browsing to find the right match for your goals." },
+                  { q:"Is Arabiq suitable for complete beginners?",
+                    a:"Absolutely. Many of our teachers specialise in teaching complete beginners from zero. When browsing teachers you can filter by level to find teachers who work specifically with beginners." },
+                  { q:"Can I switch teachers after my trial?",
+                    a:"Yes, completely. Since you pay per session there is no lock-in to any teacher. You can book trials with multiple teachers until you find the one that feels right, or switch at any point." },
+                  { q:"What if my teacher cancels?",
+                    a:"If a teacher cancels your session you will receive a full refund automatically. We take teacher reliability very seriously and repeated cancellations result in removal from the platform." },
+                  { q:"How much does a regular lesson cost?",
+                    a:"Regular 60-minute lessons are priced by the teacher and range from £8 to £15 per session. Trial sessions are a flat £3 for every teacher regardless of their regular rate." },
+                  { q:"Is my payment secure?",
+                    a:"Yes. All payments are processed through Stripe, one of the world's most trusted payment providers. Arabiq never stores your card details on our servers. Your payment is fully secured with 256-bit SSL encryption." },
                 ].map((faq,i)=>(
                   <div key={i} style={{ background:"#fff", borderRadius:14,
                     padding:"20px 22px", border:`1.5px solid ${C.gray200}` }}>
