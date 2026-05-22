@@ -5143,30 +5143,23 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   From sign-up to first lesson in under 10 minutes.
                 </p>
               </div>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:32 }}>
-  {STEPS.map((s,i)=>(
-    <div key={i} style={{ display:"flex", gap:32, alignItems:"flex-start",
-      padding:"28px 0" }}>
-      {/* Number */}
-      <div style={{ flexShrink:0, width:56, height:56, borderRadius:16,
-        background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
-        display:"flex", alignItems:"center", justifyContent:"center",
-        fontFamily:"'Playfair Display',serif", fontWeight:800,
-        fontSize:22, color:C.navy }}>
-        {i+1}
-      </div>
-      {/* Content */}
-      <div style={{ flex:1, paddingTop:6 }}>
-        <h3 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
-          fontSize:18, fontWeight:700, margin:"0 0 8px" }}>{s.title}</h3>
-        <p style={{ color:"rgba(255,255,255,0.6)", fontSize:14,
-          lineHeight:1.7, margin:0 }}>{s.desc}</p>
-      </div>
-      {/* Icon */}
-      <div style={{ flexShrink:0, fontSize:32, paddingTop:4 }}>{s.icon}</div>
-    </div>
-  ))}
-</div>
+          <div style={{ display:"grid",
+                gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))", gap:30 }}>
+                {STEPS.map((s,i)=>(
+                  <div key={i} style={{ textAlign:"center" }}>
+                    <div style={{ width:72, height:72, borderRadius:18, margin:"0 auto 16px",
+                      background: i%2===0?`linear-gradient(135deg,${C.gold},${C.goldLt})`:`rgba(255,255,255,0.1)`,
+                      display:"flex", alignItems:"center", justifyContent:"center",
+                      fontSize:28 }}>{s.icon}</div>
+                    <div style={{ color:C.gold, fontSize:11, fontWeight:700,
+                      letterSpacing:2, marginBottom:6 }}>{s.num}</div>
+                    <h3 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
+                      fontSize:17, fontWeight:700, marginBottom:8 }}>{s.title}</h3>
+                    <p style={{ color:"rgba(255,255,255,0.6)", fontSize:13,
+                      lineHeight:1.7 }}>{s.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
