@@ -5300,8 +5300,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               </p>
             </div>
 
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:32, marginBottom:64 }}>
-
+<div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))", gap:32, marginBottom:64 }}>
               {STEPS.map((s,i)=>(
                 <div key={i} style={{ display:"flex", gap:32, alignItems:"flex-start",
                   padding:"28px 0", borderBottom: i<STEPS.length-1?`1px solid ${C.gray200}`:"none" }}>
