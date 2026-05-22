@@ -5325,7 +5325,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   { q:"What makes Arabiq different from other platforms?",
                     a:"Arabiq is the only tutoring marketplace built exclusively for Arabic. Unlike generic platforms like iTalki or Preply which offer dozens of languages, every teacher, every feature, and every decision on Arabiq is focused entirely on Arabic learners. This means better vetted teachers, dialect-specific matching, and a platform designed around how Arabic is actually learned." },
                   { q:"How are teachers vetted?",
-                    a:"Every teacher on Arabiq is personally reviewed by our team before being approved. We verify native fluency, teaching qualifications, and professional experience. Less than 1 in 3 applicants are accepted onto the platform." },
+                    a:"Every teacher on Arabiq is personally reviewed by our team before being approved. We verify native fluency, teaching qualifications, and professional experience." },
                   { q:"What do I need to join a video lesson?",
                     a:"Just a device with a camera and microphone — a laptop, tablet, or smartphone — and a stable internet connection. Your private video room link is sent to you by email after booking. No app downloads required." },
                   { q:"What happens during a trial session?",
