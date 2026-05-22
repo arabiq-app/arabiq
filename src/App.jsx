@@ -5047,7 +5047,9 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 border:"1px solid rgba(201,150,26,0.3)",
                 borderRadius:40, padding:"7px 18px", marginBottom:26 }}>
                 <span style={{ color:C.goldLt, fontSize:13, fontWeight:600 }}>
-                  ✦ Expert 1-on-1 Arabic lessons - book your first for just £3
+                  ✦ Speak Arabic with confidence — get started for just £3
+
+
                 </span>
               </div>
 
