@@ -5309,22 +5309,6 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                     fontSize:18, fontWeight:700, marginBottom:8 }}>{s.title}</h3>
                   <p style={{ color:C.gray600, fontSize:13,
                     lineHeight:1.7 }}>{s.desc}</p>
-                </div>
-                  {/* Number */}
-                  <div style={{ flexShrink:0, width:56, height:56, borderRadius:16,
-                    background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
-                    display:"flex", alignItems:"center", justifyContent:"center",
-                    fontFamily:"'Playfair Display',serif", fontWeight:800,
-                    fontSize:22, color:"#fff" }}>
-                    {i+1}
-                  </div>
-                  {/* Content */}
-                  <div style={{ flex:1, paddingTop:6 }}>
-                    <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
-                      fontSize:18, fontWeight:700, margin:"0 0 8px" }}>{s.title}</h3>
-                    <p style={{ color:C.gray600, fontSize:14,
-                      lineHeight:1.7, margin:0 }}>{s.desc}</p>
-                  </div>
                 
                 </div>
               ))}
