@@ -627,7 +627,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                     <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
                       fontSize:22, fontWeight:800, margin:0 }}>Qualifications & Credentials</h2>
                   </div>
-                  <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+                  <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))", gap:30 }}>
                     {teacher.qualifications.map((q,i)=>(
                       <div key={i} style={{ display:"flex", gap:18, alignItems:"flex-start",
                         padding:"18px 0",
