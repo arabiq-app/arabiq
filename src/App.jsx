@@ -378,9 +378,10 @@ function TeacherCard({ t, onBook, onView }) {
       {/* Header */}
       <div style={{ display:"flex", gap:14, alignItems:"flex-start", marginBottom:14 }}>
         <Av init={t.avatar} size={58} bg={`linear-gradient(135deg,${t.accent},${C.gold})`} />
-        <div>
+        <div style={{ paddingRight:90 }}>
           <div style={{ fontWeight:700, fontSize:16, color:C.navy,
             fontFamily:"'Playfair Display',serif" }}>{t.name}</div>
+   
           <div style={{ color:C.gray600, fontSize:13, marginTop:2 }}>📍 {t.origin}</div>
           <div style={{ display:"flex", alignItems:"center", gap:6, marginTop:4 }}>
               {t.rating
