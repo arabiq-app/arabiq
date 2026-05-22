@@ -5143,10 +5143,10 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   From sign-up to first lesson in under 10 minutes.
                 </p>
               </div>
-            <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:32 }}>
   {STEPS.map((s,i)=>(
     <div key={i} style={{ display:"flex", gap:32, alignItems:"flex-start",
-      padding:"28px 0", borderBottom: i<STEPS.length-1?`1px solid rgba(255,255,255,0.08)`:"none" }}>
+      padding:"28px 0" }}>
       {/* Number */}
       <div style={{ flexShrink:0, width:56, height:56, borderRadius:16,
         background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
