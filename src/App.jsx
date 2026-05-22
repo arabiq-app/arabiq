@@ -5320,8 +5320,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                     <p style={{ color:C.gray600, fontSize:14,
                       lineHeight:1.7, margin:0 }}>{s.desc}</p>
                   </div>
-                  {/* Icon */}
-                  <div style={{ flexShrink:0, fontSize:32, paddingTop:4 }}>{s.icon}</div>
+                
                 </div>
               ))}
             </div>
