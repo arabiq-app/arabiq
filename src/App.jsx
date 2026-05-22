@@ -5300,24 +5300,27 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               </p>
             </div>
 
-            <div style={{ display:"grid",
-              gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))", gap:32,
-              marginBottom:64 }}>
+           <div style={{ display:"flex", flexDirection:"column", gap:0, marginBottom:64 }}>
               {STEPS.map((s,i)=>(
-                <div key={i} style={{ textAlign:"center" }}>
-                  <div style={{ width:76, height:76, borderRadius:18, margin:"0 auto 18px",
-                    background: i%2===0?C.navy:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
+                <div key={i} style={{ display:"flex", gap:32, alignItems:"flex-start",
+                  padding:"28px 0", borderBottom: i<STEPS.length-1?`1px solid ${C.gray200}`:"none" }}>
+                  {/* Number */}
+                  <div style={{ flexShrink:0, width:56, height:56, borderRadius:16,
+                    background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
                     display:"flex", alignItems:"center", justifyContent:"center",
-                    fontSize:30,
-                    boxShadow:`0 10px 28px ${i%2===0?"rgba(26,52,112,0.2)":"rgba(201,150,26,0.3)"}` }}>
-                    {s.icon}
+                    fontFamily:"'Playfair Display',serif", fontWeight:800,
+                    fontSize:22, color:"#fff" }}>
+                    {i+1}
                   </div>
-                  <div style={{ color:C.gold, fontSize:11, fontWeight:700,
-                    letterSpacing:2, marginBottom:6 }}>{s.num}</div>
-                  <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
-                    fontSize:18, fontWeight:700, marginBottom:8 }}>{s.title}</h3>
-                  <p style={{ color:C.gray600, fontSize:13,
-                    lineHeight:1.7 }}>{s.desc}</p>
+                  {/* Content */}
+                  <div style={{ flex:1, paddingTop:6 }}>
+                    <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                      fontSize:18, fontWeight:700, margin:"0 0 8px" }}>{s.title}</h3>
+                    <p style={{ color:C.gray600, fontSize:14,
+                      lineHeight:1.7, margin:0 }}>{s.desc}</p>
+                  </div>
+                  {/* Icon */}
+                  <div style={{ flexShrink:0, fontSize:32, paddingTop:4 }}>{s.icon}</div>
                 </div>
               ))}
             </div>
