@@ -838,7 +838,7 @@ This agreement was signed at arabiq.app/teacher-agreement
         });
 
         // Send confirmation to teacher
-        await fetch('/api/send-email', {
+        await fetch('https://arabiq.app/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
