@@ -5314,6 +5314,38 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               ))}
             </div>
 
+          {/* FAQ */}
+            <div style={{ marginBottom:40 }}>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                fontSize:26, fontWeight:800, marginBottom:20, textAlign:"center" }}>
+                Common questions
+              </h2>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+                {[
+                  { q:"Do I need to commit to a subscription?",
+                    a:"No. You pay per session, whenever you book. There are no monthly fees, no minimum sessions, and no lock-in period. Book one lesson or a hundred - completely up to you." },
+                  { q:"Can I switch teachers?",
+                    a:"Yes, completely. Since you pay per session you can book with any available teacher at any time. Many students try a few teachers before settling on their favourite." },
+                  { q:"What is the cancellation policy?",
+                    a:"Cancel more than 24 hours before your session for a full refund. Cancellations within 24 hours are non-refundable to be fair to your teacher." },
+                  { q:"What payment methods are accepted?",
+                    a:"We accept all major credit and debit cards through Stripe - Visa, Mastercard, American Express, and most local cards. All payments are processed securely." },
+                  { q:"Are prices per person or per household?",
+                    a:"Per person. Each account is for one student. If you have multiple family members learning Arabic they each need their own account." },
+                  { q:"How do I join my video lesson?",
+                    a:"Once your booking is confirmed you will receive a confirmation email. Your private video room link is included in the email and also appears in your booking dashboard." },
+                ].map((faq,i)=>(
+                  <div key={i} style={{ background:"#fff", borderRadius:14,
+                    padding:"20px 22px", border:`1.5px solid ${C.gray200}` }}>
+                    <h4 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                      fontSize:15, fontWeight:700, marginBottom:8 }}>{faq.q}</h4>
+                    <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7,
+                      margin:0 }}>{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* CTA */}
             <div style={{ background:C.navy, borderRadius:22,
               padding:"46px 40px", textAlign:"center" }}>
