@@ -802,76 +802,29 @@
         hour: '2-digit', minute: '2-digit'
       });
 
-      try {
-        // Notify Arabiq admin
-        await fetch('https://arabiq.app/api/send-email', {
+try {
+        // Submit to Formspree
+        const formspreeRes = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify({
-            type: 'contact',
-            to: 'hello@arabiq.app',
-            data: {
-              name,
-              email,
-              subject: `Teacher Agreement Signed — ${name}`,
-              message: `
-TEACHER AGREEMENT SIGNED
-━━━━━━━━━━━━━━━━━━━━━━━━
-
-Reference:     ${refNumber}
-Signed At:     ${signedAt}
-Full Name:     ${name}
-Email:         ${email}
-Location:      ${origin}
-Date Entered:  ${date}
-Signature:     ${signature}
-
-Declarations confirmed:
-✓ Read and understood full agreement
-✓ Accepted platform commission
-✓ Islamic oath accepted
-
-This agreement was signed at arabiq.app/teacher-agreement
-              `.trim()
-            }
+            _replyto: email,
+            _subject: `Teacher Agreement Signed — ${name}`,
+            reference_number: refNumber,
+            signed_at: signedAt,
+            full_name: name,
+            email: email,
+            location: origin,
+            date_entered: date,
+            signature: signature,
+            declarations: 'All 3 confirmed — full agreement, 30% commission, Islamic oath'
           })
         });
 
-        // Send confirmation to teacher
-        await fetch('https://arabiq.app/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'contact',
-            to: email,
-            data: {
-              name,
-              email,
-              subject: `Your Arabiq Teacher Agreement — ${refNumber}`,
-              message: `
-Assalamu Alaikum ${name},
-
-Thank you for signing your Arabiq Teacher Agreement.
-
-Your agreement has been recorded with the following details:
-
-Reference:  ${refNumber}
-Signed:     ${signedAt}
-Name:       ${name}
-Email:      ${email}
-
-This confirms your acceptance of all terms including the non-solicitation, non-circumvention, and confidentiality clauses.
-
-Please keep this email for your records.
-
-Jazakallah Khayran,
-The Arabiq Team
-hello@arabiq.app
-arabiq.app
-              `.trim()
-            }
-          })
-        });
+        if (!formspreeRes.ok) throw new Error('Formspree submission failed');
 
         // Show success
         document.getElementById('ref-number').textContent = 'REF: ' + refNumber;
