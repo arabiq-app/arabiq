@@ -368,7 +368,9 @@ function TeacherCard({ t, onBook, onView }) {
         {t.rating >= 4.8 && t.reviewCount >= 5 && (
           <Chip label="⭐ Top Rated" bg="#FEF9EC" color="#92400E" />
         )}
-        <Chip label="✓ Verified by Arabiq" bg={C.lb} color={C.navy} />
+<span style={{ background:C.navy, color:C.gold, fontSize:10, fontWeight:800,
+          padding:"4px 10px", borderRadius:20, whiteSpace:"nowrap",
+          letterSpacing:0.5, display:"inline-block" }}>✓ Arabiq Verified</span>
         {t.available
           ? <Chip label="● Available" bg="#ECFDF5" color={C.green} />
           : <Chip label="Fully Booked" bg={C.gray100} color={C.gray400} />}
