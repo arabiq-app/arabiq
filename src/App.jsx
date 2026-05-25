@@ -180,10 +180,10 @@ const SESSION_TYPES = [
 ];
 
 const STEPS = [
-  { num:"01", title:"Browse Teachers", desc:"Explore verified native Arabic teachers filtered by dialect, level, and availability.", icon:"🔍" },
-  { num:"02", title:"Book a Trial",    desc:"Schedule a discounted 30-minute trial session at a time that suits you.", icon:"📅" },
-  { num:"03", title:"Learn 1-on-1",   desc:"Join your private video class and get personalised feedback every session.", icon:"🎓" },
-  { num:"04", title:"Track Progress", desc:"View your booking history and progress in your personal dashboard after every class.", icon:"📈" },
+  { num:"01", title:"Browse Teachers", desc:"Explore verified native Arabic teachers\nfiltered by dialect, level, and availability.", icon:"🔍" },
+  { num:"02", title:"Book a Trial",    desc:"Schedule a discounted 30-minute trial\nat a time that suits you.", icon:"📅" },
+  { num:"03", title:"Learn 1-on-1",   desc:"Join your private video class and get\npersonalised feedback every session.", icon:"🎓" },
+  { num:"04", title:"Track Progress", desc:"View your booking history and progress\nin your personal dashboard after every class.", icon:"📈" },
 ];
 
 /* ─────────────────────────────────────────────────────────────────
