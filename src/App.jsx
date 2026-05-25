@@ -5965,7 +5965,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 Arabic made accessible<br />to the world
               </h1>
               <p style={{ color:"rgba(255,255,255,0.65)", fontSize:16, lineHeight:1.8, maxWidth:560, margin:"0 auto" }}>
-                Arabiq was built on a simple belief - that anyone, anywhere, should be able to learn Arabic from the best native teachers in the world.
+                Every great language deserves a great platform. Arabiq was built from the ground up to give Arabic learners access to the finest native teachers in the world — wherever they are, whatever their goal.
               </p>
             </div>
           </div>
