@@ -5979,7 +5979,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>Our Mission</h2>
               </div>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, margin:0 }}>
-                Arabiq is the first Arabic-only learning platform dedicated entirely to connecting students with expert native Arabic teachers for private 1-on-1 video lessons. We exist to make world-class Arabic education available to anyone - whether you are a complete beginner, a professional seeking business Arabic, a Muslim deepening your connection with the Quran, or a heritage learner reconnecting with your roots.
+                Arabiq is the first and only tutoring marketplace built exclusively for Arabic. While other platforms treat Arabic as an afterthought, we have dedicated everything — our teachers, our technology, and our team - to one language. Expert native teachers, every major dialect, private 1-on-1 lessons. For every learner, every goal, every dialect.
               </p>
             </div>
 
