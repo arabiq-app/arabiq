@@ -362,12 +362,13 @@ function TeacherCard({ t, onBook, onView }) {
         transition:"all 0.3s cubic-bezier(0.23,1,0.32,1)", position:"relative",
         cursor:"pointer" }}>
 
-      {/* Status badge */}
+{/* Status badge */}
       <div style={{ position:"absolute", top:16, right:16 }}>
       <div style={{ display:"flex", gap:6, flexDirection:"column", alignItems:"flex-end" }}>
         {t.rating >= 4.8 && t.reviewCount >= 5 && (
           <Chip label="⭐ Top Rated" bg="#FEF9EC" color="#92400E" />
         )}
+        <Chip label="✓ Verified by Arabiq" bg={C.lb} color={C.navy} />
         {t.available
           ? <Chip label="● Available" bg="#ECFDF5" color={C.green} />
           : <Chip label="Fully Booked" bg={C.gray100} color={C.gray400} />}
