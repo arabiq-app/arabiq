@@ -373,9 +373,7 @@ function TeacherCard({ t, onBook, onView }) {
           padding:"4px 10px", borderRadius:20, whiteSpace:"nowrap",
           letterSpacing:0.5, display:"inline-block",
           boxShadow:"0 2px 8px rgba(201,150,26,0.3)" }}> ✓ Arabiq Verified</span>
-        {t.available
-          ? <Chip label="● Available" bg="#ECFDF5" color={C.green} />
-          : <Chip label="Fully Booked" bg={C.gray100} color={C.gray400} />}
+        
       </div>
               </div>
 
