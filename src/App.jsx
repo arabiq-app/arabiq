@@ -5060,7 +5060,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 fontSize:"clamp(38px,6.5vw,72px)", fontWeight:800, color:"#fff",
                 lineHeight:1.1, marginBottom:22, letterSpacing:-1.5 }}>
          Learn Arabic 1-to-1<br />
-<span style={{ color:C.goldLt }}>with vetted native teachers.</span>
+<span style={{ color:C.goldLt }}>with verified native teachers.</span>
               </h1>
 
               <p style={{ color:"rgba(255,255,255,0.7)", fontSize:15, lineHeight:1.75,
