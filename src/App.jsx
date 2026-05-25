@@ -5102,28 +5102,6 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
             </div>
           </section>
 
-          {/* Trust Bar */}
-          <section style={{ background:"#fff", borderBottom:`1px solid ${C.gray200}`,
-            padding:"14px 24px" }}>
-            <div style={{ maxWidth:1100, margin:"0 auto",
-              display:"flex", alignItems:"center", justifyContent:"center",
-              gap:isMobile?16:40, flexWrap:"wrap" }}>
-              {[
-                { icon:"🔒", text:"Secure payments via Stripe" },
-                { icon:"🎥", text:"Private video via Whereby" },
-                { icon:"✅", text:"Verified native teachers" },
-                { icon:"⭐", text:"Trial sessions from just £3" },
-                { icon:"🌍", text:"Every Arabic dialect" },
-              ].map(({icon,text})=>(
-                <div key={text} style={{ display:"flex", alignItems:"center",
-                  gap:7, whiteSpace:"nowrap" }}>
-                  <span style={{ fontSize:15 }}>{icon}</span>
-                  <span style={{ fontSize:13, fontWeight:600, color:C.gray600 }}>{text}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-
           {/* Featured Teachers */}
           <section style={{ padding:isMobile?"40px 16px":"56px 24px", background:C.cream }}>
             <div style={{ maxWidth:1100, margin:"0 auto" }}>
