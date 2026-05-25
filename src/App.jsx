@@ -5990,7 +5990,8 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>Why Arabiq?</h2>
               </div>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, marginBottom:20 }}>
-                Most language platforms treat Arabic as an afterthought - one of dozens of languages on a generalised platform built for European languages. Arabic is different. It has multiple dialects, a rich classical tradition, and cultural nuances that demand specialist teachers and a purpose-built learning environment.
+                When we looked at the language learning market, Arabic was everywhere — and nowhere. Listed on every platform, yet never given the attention it deserves. No dialect filtering. No cultural context. No specialist vetting.
+So we built Arabiq. A platform dedicated entirely to Arabic, with hand-picked native teachers, every major dialect, and a learning experience designed from the ground up for Arabic students.
               </p>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, margin:0 }}>
                 Arabiq is built exclusively for Arabic. Every teacher on our platform is a native speaker, rigorously vetted by our team and selected for their exceptional expertise and teaching experience. Every feature of the platform - from the booking flow to the student dashboard - is designed with the Arabic learner in mind.
