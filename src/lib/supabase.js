@@ -301,7 +301,22 @@ export async function createReview({ teacherId, bookingId, studentName, studentE
   }
   return data;
 }
+export async function logActivity(event_type, title, description, icon='📅', color='#2563EB') {
+  const { error } = await supabase
+    .from('activity_log')
+    .insert([{ event_type, title, description, icon, color }]);
+  if (error) console.error('Activity log error:', error);
+}
 
+export async function getRecentActivity(limit=10) {
+  const { data, error } = await supabase
+    .from('activity_log')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data;
+}
 export async function getTeacherReviews(teacherId) {
   const { data, error } = await supabase.from('reviews').select('*').eq('teacher_id', String(teacherId)).order('created_at', { ascending: false });
   if (error) throw error;
