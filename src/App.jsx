@@ -1686,6 +1686,7 @@ function AuthModal({ initMode="login", onClose, onAuth }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ type: "welcome", to: email, data: { name } })
         }).catch(()=>{});
+        logActivity('user', 'New user registered', name, '👤', '#2563EB').catch(()=>{});
         setSuccess(true);
         setLoading(false);
         setTimeout(()=>{ onAuth(u); onClose(); }, 1800);
