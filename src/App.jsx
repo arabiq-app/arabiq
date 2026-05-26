@@ -1296,7 +1296,7 @@ const doBook = async (paymentIntentId = null) => {
         });
       } catch(e) { console.error("Teacher email failed:", e); }
     }
-
+logActivity('booking', 'Booking confirmed', `${name} booked with ${teacher.name}`, '📅', '#2563EB').catch(()=>{});
     setBooking(b);
     setDone(true);
     onBooked && onBooked(b);
