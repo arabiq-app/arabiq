@@ -3084,13 +3084,34 @@ useEffect(() => {
           <div>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))",
               gap:14, marginBottom:24 }}>
-              {[
-                { icon:"👥", label:"Total Users",    value:`${adminUsers.length}`, sub:"Registered", color:C.navy,   trend:12 },
-                { icon:"🎓", label:"Active Teachers",value:"4", sub:"2 pending",   color:"#7C3AED",  trend:0 },
-                { icon:"📅", label:"Bookings",       value:`${allBookings.length}`, sub:"All time",  color:C.blue,   trend:23 },
-                { icon:"💰", label:"Revenue",        value:"£6,840", sub:"This month",color:C.green, trend:22 },
-                { icon:"🚨", label:"Open Issues",    value:`${adminIssues.filter(i=>i.status!=="resolved").length}`, sub:"Need attention", color:C.red, trend:-40 },
-                { icon:"⭐", label:"Avg. Rating",    value:"4.97", sub:"All teachers", color:C.amber, trend:1 },
+           {[
+                { icon:"👥", label:"Total Users",
+                  value:`${adminUsers.length}`,
+                  sub:"Registered", color:C.navy, trend:0 },
+                { icon:"🎓", label:"Active Teachers",
+                  value:`${adminTeachers.filter(t=>t.status==="approved").length}`,
+                  sub:`${adminTeachers.filter(t=>t.status==="pending").length} pending`,
+                  color:"#7C3AED", trend:0 },
+                { icon:"📅", label:"Bookings",
+                  value:`${allBookings.length}`,
+                  sub:`${allBookings.filter(b=>b.status==="confirmed").length} confirmed`,
+                  color:C.blue, trend:0 },
+                { icon:"💰", label:"My Revenue",
+                  value:`£${allBookings.filter(b=>b.status==="completed"||b.status==="confirmed").reduce((sum,b)=>{
+                    const isTrialType = b.type==="Trial"||b.session_type==="Trial";
+                    return sum + (isTrialType ? 3 : (b.price||0)*0.3);
+                  },0).toFixed(0)}`,
+                  sub:"Arabiq earnings (all time)", color:C.green, trend:0 },
+                { icon:"🚨", label:"Open Issues",
+                  value:`${adminIssues.filter(i=>i.status!=="resolved").length}`,
+                  sub:"Need attention", color:C.red, trend:0 },
+                { icon:"⭐", label:"Avg. Rating",
+                  value: (() => {
+                    const rated = adminTeachers.filter(t=>t.rating);
+                    if (!rated.length) return "—";
+                    return (rated.reduce((s,t)=>s+t.rating,0)/rated.length).toFixed(1);
+                  })(),
+                  sub:"All teachers", color:C.amber, trend:0 },
               ].map(s=>(
                 <div key={s.label} style={{ background:"#fff", borderRadius:14,
                   padding:"18px 20px", border:`1px solid ${C.gray200}` }}>
