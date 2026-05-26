@@ -3404,6 +3404,7 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                                   await updateTeacherStatus(t.id, "approved");
                                   refreshTeachers();
                                   fire(`✅ ${t.name} approved!`);
+                                  logActivity('teacher', 'Teacher approved', `${t.name} is now live on Arabiq`, '🎓', '#D97706').catch(()=>{});
                                 } catch(e) {
                                   setAdminTeachers(arr=>arr.map(x=>x.id===t.id?{...x,status:"approved",verified:true}:x));
                                   fire(`✅ ${t.name} approved!`);
