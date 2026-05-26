@@ -4354,7 +4354,7 @@ const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' ||
                       </span>
                     </div>
                     <div style={{ fontWeight:800, color:C.navy, fontSize:16, minWidth:60, textAlign:"right" }}>
-                      £{((b.price||0)*0.7).toFixed(2)}
+                      £{(b.session_type === 'Trial' || b.type === 'Trial' ? 0 : (b.price||0)*0.7).toFixed(2)}
                     </div>
                     {b.status==="confirmed" && b.whereby_host_url && (
                       <button onClick={()=>window.open(b.whereby_host_url,"_blank")}
