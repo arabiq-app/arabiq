@@ -6134,7 +6134,7 @@ So we built Arabiq. A platform dedicated entirely to Arabic, with hand-picked na
                   <div style={{ maxWidth:270 }}>
                     <div style={{ marginBottom:14 }}><Logo height={22} light /></div>
                     <p style={{ color:"rgba(255,255,255,0.45)", fontSize:13, lineHeight:1.75 }}>
-                      Expert Arabic tutoring, 1-on-1 with verified native teachers
+                      The only tutoring marketplace built exclusively for Arabic
                     </p>
 
                   </div>
