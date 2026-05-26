@@ -2904,6 +2904,10 @@ function AdminPanel({ onExit, onTeachersChanged }) {
 
 
   useEffect(()=>{
+    getRecentActivity(5).then(setRecentActivity).catch(()=>{});
+  },[]);
+
+  useEffect(()=>{
     getAllIssues()
       .then(data=>{ if(data && data.length > 0) setAdminIssues(data.map(i=>({
         id: i.id,
