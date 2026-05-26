@@ -2900,6 +2900,8 @@ function AdminPanel({ onExit, onTeachersChanged }) {
  const [adminUsers, setAdminUsers] = useState([])
  const [adminTeachers, setAdminTeachers] = useState([]);
   const [adminIssues, setAdminIssues] = useState(ADMIN_ISSUES);
+  const [recentActivity, setRecentActivity] = useState([]);
+
 
   useEffect(()=>{
     getAllIssues()
