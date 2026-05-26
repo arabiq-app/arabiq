@@ -3150,12 +3150,32 @@ useEffect(() => {
                 <div style={{ fontSize:11, color:C.gray400, marginBottom:18 }}>
                   Sessions this week
                 </div>
-                <div style={{ display:"flex", alignItems:"flex-end", gap:10, height:120 }}>
-                  {[{d:"Mon",v:28},{d:"Tue",v:35},{d:"Wed",v:22},{d:"Thu",v:40,hi:true},{d:"Fri",v:31},{d:"Sat",v:18},{d:"Sun",v:12}].map(({d,v,hi})=>(
+              <div style={{ display:"flex", alignItems:"flex-end", gap:10, height:120 }}>
+                  {(()=>{
+                    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+                    const counts = [0,0,0,0,0,0,0];
+                    const now = new Date();
+                    const weekAgo = new Date(now.getTime() - 7*24*60*60*1000);
+                    allBookings.forEach(b=>{
+                      const d = new Date(b.booked_at||b.booked||0);
+                      if (d >= weekAgo) counts[d.getDay()]++;
+                    });
+                    const max = Math.max(...counts, 1);
+                    return ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(d=>{
+                      const i = days.indexOf(d);
+                      const v = counts[i];
+                      const hi = v === Math.max(...counts) && v > 0;
+                      return { d, v, hi };
+                    });
+                  })().map(({d,v,hi})=>(
                     <div key={d} style={{ flex:1, display:"flex", flexDirection:"column",
                       alignItems:"center", gap:4 }}>
                       <div style={{ fontSize:10, fontWeight:700, color:C.navy }}>{v}</div>
-                      <div style={{ width:"100%", height:`${(v/40)*100}px`,
+                      <div style={{ width:"100%", height:`${Math.max((v/Math.max(...allBookings.reduce((acc,b)=>{
+                        const day = new Date(b.booked_at||b.booked||0).getDay();
+                        acc[day]++;
+                        return acc;
+                      },[0,0,0,0,0,0,0])))*100, v>0?8:2)}px`,
                         background:hi?`linear-gradient(180deg,${C.gold},${C.goldLt})`:`linear-gradient(180deg,${C.navy},#2A4A9A)`,
                         borderRadius:"5px 5px 0 0", transition:"height 0.3s" }} />
                       <div style={{ fontSize:10, color:C.gray600 }}>{d}</div>
