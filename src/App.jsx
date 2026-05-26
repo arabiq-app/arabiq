@@ -3167,13 +3167,35 @@ useEffect(() => {
                 border:`1px solid ${C.gray200}` }}>
                 <div style={{ fontSize:14, fontWeight:800, color:C.navy,
                   marginBottom:14 }}>Live Activity</div>
-                {[
-                  { t:"2m ago",  e:"New user registered",        d:"Aisha Patel",         ic:"👤", c:C.blue },
-                  { t:"14m ago", e:"Teacher application",        d:"Khalid Mansour",      ic:"🎓", c:C.amber },
-                  { t:"32m ago", e:"Booking confirmed",          d:"BK-1006",             ic:"📅", c:C.green },
-                  { t:"1h ago",  e:"New support ticket",         d:"ISS-003 opened",      ic:"🚨", c:C.red },
-                  { t:"2h ago",  e:"Payment processed",          d:"£12 from David Park", ic:"💰", c:C.green },
-                ].map((a,i,arr)=>(
+                {(recentActivity.length > 0 ? recentActivity.map(a=>({
+                  t: (() => {
+                    const diff = Math.floor((Date.now()-new Date(a.created_at))/60000);
+                    if (diff < 60) return `${diff}m ago`;
+                    if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
+                    return `${Math.floor(diff/1440)}d ago`;
+                  })(),
+                  e: a.title,
+                  d: a.description,
+                  ic: a.icon,
+                  c: a.color,
+                })) : [...allBookings]
+                    .sort((a,b)=>new Date(b.booked_at||0)-new Date(a.booked_at||0))
+                    .slice(0,5)
+                    .map(b=>({
+                      t: (() => {
+                        const diff = b.booked_at ? Math.floor((Date.now()-new Date(b.booked_at))/60000) : null;
+                        if (!diff) return "recently";
+                        if (diff < 60) return `${diff}m ago`;
+                        if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
+                        return `${Math.floor(diff/1440)}d ago`;
+                      })(),
+                      e: "Booking confirmed",
+                      d: `${b.student||b.student_name||"Student"} · ${b.type==="Trial"||b.session_type==="Trial"?"Trial":"Regular"}`,
+                      ic: "📅",
+                      c: C.green,
+                    }))
+                ).map((a,i,arr)=>(
+             
                   <div key={i} style={{ display:"flex", gap:10, alignItems:"flex-start",
                     paddingBottom: i<arr.length-1?12:0, paddingTop: i>0?12:0,
                     borderBottom: i<arr.length-1?`1px solid ${C.gray100}`:"none" }}>
