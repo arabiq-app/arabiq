@@ -518,7 +518,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                     ? <><Stars r={teacher.rating} />
                         <span style={{ color:"rgba(255,255,255,0.8)", fontSize:13, fontWeight:600 }}>{teacher.rating}</span>
                         <span style={{ color:"rgba(255,255,255,0.45)", fontSize:13 }}>({(teacher.reviews||[]).length} reviews)</span></>
-                    : <span style={{ color:"rgba(255,255,255,0.5)", fontSize:13 }}>No reviews yet</span>}
+                    : null}
                 </div>
                 <span style={{ color:"rgba(255,255,255,0.3)", fontSize:14 }}>|</span>
                 <span style={{ color:"rgba(255,255,255,0.65)", fontSize:14 }}>
