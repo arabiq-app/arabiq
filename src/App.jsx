@@ -875,14 +875,15 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
           {/* RIGHT - sticky booking sidebar */}
           <div style={{ position:"sticky", top:24 }}>
 
-            {/* Stats row */}
+           {/* Stats row — only show if teacher has activity */}
+            {(teacher.studentCount > 0 || teacher.totalSessions > 0 || liveReviews.length > 0) && (
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:16 }}>
               {[
-                [teacher.studentCount,"Students taught"],
-                [teacher.totalSessions,"Lessons given"],
-                [liveRating ? `${liveRating} ★` : "-","Rating"],
-                [liveReviews.length,"Reviews"],
-              ].map(([val,label])=>(
+                teacher.studentCount > 0 ? [teacher.studentCount,"Students taught"] : null,
+                teacher.totalSessions > 0 ? [teacher.totalSessions,"Lessons given"] : null,
+                liveRating ? [`${liveRating} ★`,"Rating"] : null,
+                liveReviews.length > 0 ? [liveReviews.length,"Reviews"] : null,
+              ].filter(Boolean).map(([val,label])=>(
                 <div key={label} style={{ background:"#fff", borderRadius:14, padding:"14px 12px",
                   textAlign:"center", border:`1px solid ${C.gray200}`,
                   boxShadow:"0 1px 4px rgba(26,52,112,0.05)" }}>
@@ -892,6 +893,7 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                 </div>
               ))}
             </div>
+            )}
 
             {/* Trial booking card */}
             <div style={{ background:`linear-gradient(160deg,${C.navyDk},${C.navy})`,
