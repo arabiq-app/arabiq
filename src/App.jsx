@@ -4721,6 +4721,14 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
     return () => subscription.unsubscribe();
   },[]);
 
+  // Handle Supabase invite/password reset links
+  const [passwordSetupModal, setPasswordSetupModal] = useState(false);
+  useEffect(()=>{
+    const hash = window.location.hash;
+    if ((hash && hash.includes('type=invite')) || hash.includes('type=recovery')) {
+      setPasswordSetupModal(true);
+    }
+  },[]);
   // Load teachers from Supabase on mount
   useEffect(()=>{
     getTeachers()
