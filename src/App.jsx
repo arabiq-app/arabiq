@@ -3765,6 +3765,174 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
           </div>
         )}
 
+
+        {/* ── PAYOUTS ── */}
+        {page==="payouts" && (
+          <div>
+            {/* Summary cards */}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",
+              gap:14, marginBottom:24 }}>
+              {[
+                { icon:"💰", label:"Total Owed",
+                  value:`£${adminTeachers.filter(t=>t.status==="approved").reduce((sum,t)=>{
+                    const teacherBookings = allBookings.filter(b=>
+                      (b.teacherId===t.id||b.teacher_id===t.id) &&
+                      b.status==="completed" &&
+                      b.type!=="Trial" && b.session_type!=="Trial"
+                    );
+                    return sum + teacherBookings.reduce((s,b)=>(s+(b.price||0)*0.7),0);
+                  },0).toFixed(0)}`,
+                  color:C.green },
+                { icon:"📅", label:"This Month",
+                  value:`£${adminTeachers.filter(t=>t.status==="approved").reduce((sum,t)=>{
+                    const now = new Date();
+                    const teacherBookings = allBookings.filter(b=>{
+                      const d = new Date(b.booked_at||b.booked||0);
+                      return (b.teacherId===t.id||b.teacher_id===t.id) &&
+                        b.status==="completed" &&
+                        b.type!=="Trial" && b.session_type!=="Trial" &&
+                        d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+                    });
+                    return sum + teacherBookings.reduce((s,b)=>(s+(b.price||0)*0.7),0);
+                  },0).toFixed(0)}`,
+                  color:C.navy },
+                { icon:"🎓", label:"Teachers to Pay",
+                  value:`${adminTeachers.filter(t=>{
+                    const owed = allBookings.filter(b=>
+                      (b.teacherId===t.id||b.teacher_id===t.id) &&
+                      b.status==="completed" &&
+                      b.type!=="Trial" && b.session_type!=="Trial"
+                    ).reduce((s,b)=>(s+(b.price||0)*0.7),0);
+                    return owed > 0;
+                  }).length}`,
+                  color:"#7C3AED" },
+                { icon:"📆", label:"Next Payout",
+                  value:"1st of month",
+                  color:C.amber },
+              ].map(s=>(
+                <div key={s.label} style={{ background:"#fff", borderRadius:14,
+                  padding:"18px 20px", border:`1px solid ${C.gray200}` }}>
+                  <div style={{ width:40, height:40, borderRadius:10,
+                    background:`${s.color}18`, display:"flex", alignItems:"center",
+                    justifyContent:"center", fontSize:18, marginBottom:12 }}>{s.icon}</div>
+                  <div style={{ fontSize:24, fontWeight:800, color:s.color,
+                    lineHeight:1, marginBottom:3 }}>{s.value}</div>
+                  <div style={{ fontSize:12, fontWeight:600, color:C.gray800 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Info banner */}
+            <div style={{ background:"#EEF2FB", border:`1px solid ${C.navy}20`,
+              borderRadius:12, padding:"12px 18px", marginBottom:18,
+              display:"flex", alignItems:"center", gap:10, fontSize:13, color:C.navy }}>
+              <span style={{ fontSize:18 }}>ℹ️</span>
+              <span>Payouts are calculated from <strong>completed regular sessions only</strong>. Trial sessions (£3) are retained by Arabiq. Teachers receive <strong>70%</strong> of each regular session.</span>
+            </div>
+
+            {/* Teacher payout table */}
+            <div style={{ background:"#fff", borderRadius:16,
+              border:`1px solid ${C.gray200}`, overflow:"hidden" }}>
+              <div style={{ padding:"16px 20px", borderBottom:`1px solid ${C.gray100}`,
+                display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                <div style={{ fontSize:14, fontWeight:800, color:C.navy }}>Teacher Payouts</div>
+                <div style={{ fontSize:12, color:C.gray400 }}>
+                  Paid on 1st of each month via TapTap Send
+                </div>
+              </div>
+              <table style={{ width:"100%", borderCollapse:"collapse", fontSize:13 }}>
+                <thead>
+                  <tr style={{ background:C.gray50 }}>
+                    {["Teacher","Completed Lessons","Total Earned","Trials (retained)","Outstanding","Status","Action"].map(h=>(
+                      <th key={h} style={{ padding:"9px 14px", textAlign:"left",
+                        fontSize:10, fontWeight:700, color:C.gray600,
+                        textTransform:"uppercase", letterSpacing:0.5,
+                        borderBottom:`1px solid ${C.gray200}` }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminTeachers.filter(t=>t.status==="approved").map(t=>{
+                    const completedRegular = allBookings.filter(b=>
+                      (b.teacherId===t.id||b.teacher_id===t.id) &&
+                      b.status==="completed" &&
+                      b.type!=="Trial" && b.session_type!=="Trial"
+                    );
+                    const completedTrials = allBookings.filter(b=>
+                      (b.teacherId===t.id||b.teacher_id===t.id) &&
+                      b.status==="completed" &&
+                      (b.type==="Trial"||b.session_type==="Trial")
+                    );
+                    const totalEarned = completedRegular.reduce((s,b)=>(s+(b.price||0)*0.7),0);
+                    const trialsRetained = completedTrials.length * 3;
+                    return (
+                      <tr key={t.id} style={{ borderBottom:`1px solid ${C.gray100}` }}
+                        onMouseEnter={e=>e.currentTarget.style.background="#F9FAFF"}
+                        onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                        <td style={{ padding:"12px 14px" }}>
+                          <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                            <Av init={t.avatar||t.name?.split(" ").map(n=>n[0]).join("").slice(0,2)||"T"} size={32}
+                              bg={`linear-gradient(135deg,${C.navy},${C.gold})`} />
+                            <div>
+                              <div style={{ fontWeight:700, color:C.navy, fontSize:13 }}>{t.name}</div>
+                              <div style={{ fontSize:11, color:C.gray400 }}>{t.origin}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ padding:"12px 14px", fontWeight:700, color:C.navy }}>
+                          {completedRegular.length}
+                        </td>
+                        <td style={{ padding:"12px 14px", fontWeight:700, color:C.green }}>
+                          £{totalEarned.toFixed(2)}
+                        </td>
+                        <td style={{ padding:"12px 14px", color:C.gray600, fontSize:12 }}>
+                          {completedTrials.length} trials · £{trialsRetained.toFixed(2)} retained
+                        </td>
+                        <td style={{ padding:"12px 14px" }}>
+                          <span style={{ fontWeight:800, fontSize:15,
+                            color: totalEarned > 0 ? C.red : C.gray400 }}>
+                            £{totalEarned.toFixed(2)}
+                          </span>
+                        </td>
+                        <td style={{ padding:"12px 14px" }}>
+                          {totalEarned > 0
+                            ? <span style={{ background:"#FEF9EC", color:"#92400E",
+                                fontSize:11, fontWeight:700, padding:"3px 10px",
+                                borderRadius:20 }}>Unpaid</span>
+                            : <span style={{ background:"#ECFDF5", color:C.green,
+                                fontSize:11, fontWeight:700, padding:"3px 10px",
+                                borderRadius:20 }}>Up to date</span>
+                          }
+                        </td>
+                        <td style={{ padding:"12px 14px" }}>
+                          {totalEarned > 0 && (
+                            <button onClick={()=>{
+                                fire(`✅ Marked £${totalEarned.toFixed(2)} as paid to ${t.name}`);
+                              }}
+                              style={{ fontSize:11, padding:"6px 12px", borderRadius:8,
+                                border:`1px solid ${C.green}30`,
+                                background:`${C.green}10`, color:C.green,
+                                cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>
+                              ✓ Mark as Paid
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {adminTeachers.filter(t=>t.status==="approved").length === 0 && (
+                <div style={{ padding:"60px 40px", textAlign:"center", color:C.gray400 }}>
+                  <div style={{ fontSize:48, marginBottom:12 }}>💸</div>
+                  <p style={{ fontSize:15 }}>No approved teachers yet. Payouts will appear here once teachers are active.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        
         {/* ── ISSUES ── */}
         {page==="issues" && (
           <div>
