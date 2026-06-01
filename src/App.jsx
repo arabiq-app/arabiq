@@ -3870,6 +3870,11 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                       .filter(p=>p.teacher_id===t.id)
                       .reduce((s,p)=>(s+Number(p.amount)),0);
                     const outstanding = Math.max(totalEarned - totalPaid, 0);
+            
+                    const totalPaid = allPayouts
+                      .filter(p=>p.teacher_id===t.id)
+                      .reduce((s,p)=>(s+Number(p.amount)),0);
+                    const outstanding = Math.max(totalEarned - totalPaid, 0);
                     const trialsRetained = completedTrials.length * 3;
                     return (
                       <tr key={t.id} style={{ borderBottom:`1px solid ${C.gray100}` }}
