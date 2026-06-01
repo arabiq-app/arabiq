@@ -350,6 +350,130 @@ function Confirm({ msg, onYes, onNo, danger=false, yesLabel="Confirm" }) {
 /* ─────────────────────────────────────────────────────────────────
    TEACHER CARD
 ───────────────────────────────────────────────────────────────── */
+function PasswordSetupModal({ onDone }) {
+  const [pw, setPw] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [done, setDone] = useState(false);
+
+  const submit = async () => {
+    if (pw.length < 6) { setError("Password must be at least 6 characters."); return; }
+    if (pw !== confirm) { setError("Passwords do not match."); return; }
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pw });
+      if (error) throw error;
+      setDone(true);
+      setTimeout(()=>{ onDone(); window.location.reload(); }, 2500);
+    } catch(e) {
+      setError(e.message || "Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(10,20,60,0.7)",
+      backdropFilter:"blur(8px)", display:"flex", alignItems:"center",
+      justifyContent:"center", zIndex:1000, padding:16 }}>
+      <div style={{ background:"#fff", borderRadius:28, width:"100%", maxWidth:440,
+        boxShadow:"0 40px 120px rgba(0,0,0,0.3)", overflow:"hidden" }}>
+
+        {/* Header */}
+        <div style={{ background:`linear-gradient(135deg,${C.navy},${C.navy2})`,
+          padding:"36px 36px 28px", textAlign:"center" }}>
+          <div style={{ marginBottom:16 }}><Logo height={24} light /></div>
+          <div style={{ display:"inline-block", background:"rgba(201,150,26,0.2)",
+            border:"1px solid rgba(201,150,26,0.35)", color:C.goldLt,
+            fontSize:11, fontWeight:700, padding:"4px 14px", borderRadius:20,
+            letterSpacing:1, textTransform:"uppercase", marginBottom:14 }}>
+            Teacher Portal
+          </div>
+          <h2 style={{ fontFamily:"'Playfair Display',serif", color:"#fff",
+            fontSize:24, fontWeight:800, margin:"0 0 6px" }}>
+            {done ? "Password Set!" : "Set Your Password"}
+          </h2>
+          <p style={{ color:"rgba(255,255,255,0.6)", fontSize:13, margin:0 }}>
+            {done ? "Taking you to your dashboard..." : "Welcome to Arabiq. Create a secure password to access your teacher dashboard."}
+          </p>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding:"28px 36px 36px" }}>
+          {done ? (
+            <div style={{ textAlign:"center", padding:"20px 0" }}>
+              <div style={{ width:72, height:72, borderRadius:"50%",
+                background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                display:"flex", alignItems:"center", justifyContent:"center",
+                margin:"0 auto 16px", fontSize:34 }}>✅</div>
+              <p style={{ color:C.gray600, fontSize:15 }}>
+                Your password has been set. Redirecting to your dashboard now...
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* New password */}
+              <div style={{ marginBottom:16 }}>
+                <label style={{ display:"block", fontSize:11, fontWeight:700,
+                  color:C.gray600, marginBottom:5, textTransform:"uppercase",
+                  letterSpacing:0.5 }}>New Password</label>
+                <input type="password" value={pw}
+                  onChange={e=>{ setPw(e.target.value); setError(""); }}
+                  placeholder="Min. 6 characters"
+                  style={{ width:"100%", padding:"13px 15px", borderRadius:10,
+                    border:`1.5px solid ${error?C.red:C.gray200}`, fontSize:15,
+                    fontFamily:"inherit", outline:"none", color:C.navy,
+                    boxSizing:"border-box" }}
+                  onFocus={e=>e.target.style.borderColor=C.navy}
+                  onBlur={e=>e.target.style.borderColor=error?C.red:C.gray200} />
+              </div>
+
+              {/* Confirm password */}
+              <div style={{ marginBottom:20 }}>
+                <label style={{ display:"block", fontSize:11, fontWeight:700,
+                  color:C.gray600, marginBottom:5, textTransform:"uppercase",
+                  letterSpacing:0.5 }}>Confirm Password</label>
+                <input type="password" value={confirm}
+                  onChange={e=>{ setConfirm(e.target.value); setError(""); }}
+                  placeholder="Repeat your password"
+                  style={{ width:"100%", padding:"13px 15px", borderRadius:10,
+                    border:`1.5px solid ${error?C.red:C.gray200}`, fontSize:15,
+                    fontFamily:"inherit", outline:"none", color:C.navy,
+                    boxSizing:"border-box" }}
+                  onFocus={e=>e.target.style.borderColor=C.navy}
+                  onBlur={e=>e.target.style.borderColor=error?C.red:C.gray200} />
+              </div>
+
+              {error && (
+                <div style={{ background:"#FEF2F2", border:`1px solid ${C.red}30`,
+                  borderRadius:10, padding:"10px 14px", marginBottom:16,
+                  color:C.red, fontSize:13 }}>
+                  ⚠ {error}
+                </div>
+              )}
+
+              <button onClick={submit} disabled={loading}
+                style={{ width:"100%", padding:"15px",
+                  background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+                  color:"#fff", border:"none", borderRadius:12,
+                  fontWeight:800, fontSize:16, cursor:loading?"not-allowed":"pointer",
+                  fontFamily:"inherit", opacity:loading?0.7:1 }}>
+                {loading ? "Setting password..." : "Set Password & Continue →"}
+              </button>
+
+              <p style={{ textAlign:"center", color:C.gray400, fontSize:12,
+                marginTop:14, lineHeight:1.6 }}>
+                🔒 Your password is encrypted and never shared with anyone.
+              </p>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function TeacherCard({ t, onBook, onView }) {
   const [hov, setHov] = useState(false);
   return (
