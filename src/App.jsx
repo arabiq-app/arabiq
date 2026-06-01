@@ -3034,6 +3034,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
 
   useEffect(()=>{
     getRecentActivity(5).then(setRecentActivity).catch(()=>{});
+    getPayouts().then(setAllPayouts).catch(()=>{});
   },[]);
 
   useEffect(()=>{
