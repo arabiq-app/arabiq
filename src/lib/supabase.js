@@ -301,6 +301,21 @@ export async function createReview({ teacherId, bookingId, studentName, studentE
   }
   return data;
 }
+export async function recordPayout(teacherId, teacherName, amount, note='') {
+  const { error } = await supabase
+    .from('teacher_payouts')
+    .insert([{ teacher_id: teacherId, teacher_name: teacherName, amount, note }]);
+  if (error) throw error;
+}
+
+export async function getPayouts() {
+  const { data, error } = await supabase
+    .from('teacher_payouts')
+    .select('*')
+    .order('paid_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
 export async function logActivity(event_type, title, description, icon='📅', color='#2563EB') {
   const { error } = await supabase
     .from('activity_log')
