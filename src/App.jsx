@@ -3906,10 +3906,17 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                                 borderRadius:20 }}>Up to date</span>
                           }
                         </td>
-                        <td style={{ padding:"12px 14px" }}>
+                    <td style={{ padding:"12px 14px" }}>
                           {totalEarned > 0 && (
-                            <button onClick={()=>{
-                                fire(`✅ Marked £${totalEarned.toFixed(2)} as paid to ${t.name}`);
+                            <button onClick={async ()=>{
+                                try {
+                                  await recordPayout(t.id, t.name, totalEarned);
+                                  const updated = await getPayouts();
+                                  setAllPayouts(updated);
+                                  fire(`✅ £${totalEarned.toFixed(2)} marked as paid to ${t.name}`);
+                                } catch(e) {
+                                  fire(`❌ Failed to record payout: ${e.message}`);
+                                }
                               }}
                               style={{ fontSize:11, padding:"6px 12px", borderRadius:8,
                                 border:`1px solid ${C.green}30`,
