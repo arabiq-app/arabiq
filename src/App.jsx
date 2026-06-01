@@ -3095,11 +3095,12 @@ useEffect(() => {
 
   const W = isMobile ? 0 : (sCollapsed ? 64 : 224);
 
-  const navItems = [
+const navItems = [
     { id:"dashboard", label:"Dashboard", icon:"📊" },
     { id:"users",     label:"Users",     icon:"👥",  badge: adminUsers.length },
     { id:"teachers",  label:"Teachers",  icon:"🎓",  badge: adminTeachers.filter(t=>t.status==="pending").length, badgeColor:C.amber },
     { id:"bookings",  label:"Bookings",  icon:"📅",  badge: [...DB.bookings,...adminBookings].length },
+    { id:"payouts",   label:"Payouts",   icon:"💸" },
     { id:"issues",    label:"Issues",    icon:"🚨",  badge: adminIssues.filter(i=>i.status!=="resolved").length, badgeColor:C.red },
     { id:"settings",  label:"Settings",  icon:"⚙️" },
   ];
