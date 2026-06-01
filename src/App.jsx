@@ -6298,6 +6298,16 @@ So we built Arabiq. A platform dedicated entirely to Arabic, with hand-picked na
           }} />
       )}
 
+{/* ── PASSWORD SETUP MODAL ── */}
+      {passwordSetupModal && (
+        <PasswordSetupModal
+          onDone={()=>{
+            setPasswordSetupModal(false);
+            window.location.hash = '';
+          }}
+        />
+      )}
+
       {toast && <Toast msg={toast.msg} type={toast.type||"ok"}
         onDone={()=>setToast(null)} />}
     </div>
