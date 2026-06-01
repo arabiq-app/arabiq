@@ -3910,14 +3910,30 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                                 borderRadius:20 }}>Up to date</span>
                           }
                         </td>
-                    <td style={{ padding:"12px 14px" }}>
-                          {totalEarned > 0 && (
+                   <td style={{ padding:"12px 14px" }}>
+                          <span style={{ fontWeight:800, fontSize:15,
+                            color: outstanding > 0 ? C.red : C.gray400 }}>
+                            £{outstanding.toFixed(2)}
+                          </span>
+                        </td>
+                        <td style={{ padding:"12px 14px" }}>
+                          {outstanding > 0
+                            ? <span style={{ background:"#FEF9EC", color:"#92400E",
+                                fontSize:11, fontWeight:700, padding:"3px 10px",
+                                borderRadius:20 }}>Unpaid</span>
+                            : <span style={{ background:"#ECFDF5", color:C.green,
+                                fontSize:11, fontWeight:700, padding:"3px 10px",
+                                borderRadius:20 }}>Up to date</span>
+                          }
+                        </td>
+                        <td style={{ padding:"12px 14px" }}>
+                          {outstanding > 0 && (
                             <button onClick={async ()=>{
                                 try {
-                                  await recordPayout(t.id, t.name, totalEarned);
+                                  await recordPayout(t.id, t.name, outstanding);
                                   const updated = await getPayouts();
                                   setAllPayouts(updated);
-                                  fire(`✅ £${totalEarned.toFixed(2)} marked as paid to ${t.name}`);
+                                  fire(`✅ £${outstanding.toFixed(2)} marked as paid to ${t.name}`);
                                 } catch(e) {
                                   fire(`❌ Failed to record payout: ${e.message}`);
                                 }
