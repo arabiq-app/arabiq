@@ -3865,17 +3865,14 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                       b.status==="completed" &&
                       (b.type==="Trial"||b.session_type==="Trial")
                     );
+
             const totalEarned = completedRegular.reduce((s,b)=>(s+(b.price||0)*0.7),0);
                     const totalPaid = allPayouts
                       .filter(p=>p.teacher_id===t.id)
                       .reduce((s,p)=>(s+Number(p.amount)),0);
                     const outstanding = Math.max(totalEarned - totalPaid, 0);
-            
-                    const totalPaid = allPayouts
-                      .filter(p=>p.teacher_id===t.id)
-                      .reduce((s,p)=>(s+Number(p.amount)),0);
-                    const outstanding = Math.max(totalEarned - totalPaid, 0);
                     const trialsRetained = completedTrials.length * 3;
+         
                     return (
                       <tr key={t.id} style={{ borderBottom:`1px solid ${C.gray100}` }}
                         onMouseEnter={e=>e.currentTarget.style.background="#F9FAFF"}
