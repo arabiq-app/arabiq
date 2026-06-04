@@ -5907,7 +5907,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 gap:16 }}>
                 {[
                   { icon:"🌱", title:"Trial session - flat £3", desc:"Your first session with any teacher is always £3, regardless of their regular rate. A 30-minute taster so you can meet the teacher and decide if the fit is right before committing." },
-                  { icon:"🎓", title:"Regular session - teacher's rate", desc:"A full 60-minute private lesson at your chosen teacher's rate. Rates range from £8 to £15 per session depending on the teacher." },
+                  { icon:"🎓", title:"Regular session - teacher's rate", desc:"A full 60-minute private lesson at your chosen teacher's rate. Rates range from £8 to £16 per session depending on the teacher." },
                   { icon:"💳", title:"Pay only when you book", desc:"No monthly fees, no subscriptions, no minimum sessions. You pay at the time of booking and only for the sessions you actually take." },
                   { icon:"🔒", title:"No hidden charges", desc:"The price shown on each teacher's profile is exactly what you pay. Arabiq never adds booking fees or platform charges on top." },
                 ].map((s,i)=>(
