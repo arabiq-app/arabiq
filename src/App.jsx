@@ -161,7 +161,7 @@ const SESSION_TYPES = [
   {
     name: "Regular Session",
     duration: "60 min",
-    price: "£8 – £15",
+    price: "£8 – £16",
     priceNote: "per session, pay as you go",
     icon: "🎓",
     desc: "A full-length private lesson at your teacher's standard rate. Book as many or as few as you need.",
