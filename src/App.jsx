@@ -1186,7 +1186,9 @@ const convertSlotToUserTz = (slotStr) => {
     const dd = String(cairoDate.getDate()).padStart(2,'0');
     const hh = String(h).padStart(2,'0');
     const mn = String(m).padStart(2,'0');
-    const utcDate = new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00+02:00`);
+    const cairoTimeZone = 'Africa/Cairo';
+const utcDate = new Date(new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00`).toLocaleString('en-US', { timeZone: cairoTimeZone }));
+    
 
     const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const localDay  = utcDate.toLocaleDateString('en-GB',  { weekday:'short', timeZone: userTz });
