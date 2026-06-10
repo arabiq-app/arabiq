@@ -5761,7 +5761,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                   { q:"What if my teacher cancels?",
                     a:"If a teacher cancels your session you will receive a full refund automatically. We take teacher reliability very seriously and repeated cancellations result in removal from the platform." },
                   { q:"How much does a regular lesson cost?",
-                    a:"Regular 60-minute lessons are priced by the teacher and range from £8 to £15 per session. Trial sessions are a flat £3 for every teacher regardless of their regular rate." },
+                    a:"Regular 60-minute lessons are priced by the teacher and range from £8 to £16 per session. Trial sessions are a flat £3 for every teacher regardless of their regular rate." },
                   { q:"Is my payment secure?",
                     a:"Yes. All payments are processed through Stripe, one of the world's most trusted payment providers. Arabiq never stores your card details on our servers. Your payment is fully secured with 256-bit SSL encryption." },
                 ].map((faq,i)=>(
