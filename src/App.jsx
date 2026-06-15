@@ -1106,10 +1106,25 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                 </div>
                 <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
                   {(() => {
-                    const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-                    const grouped = {};
 
-                teacher.slots.forEach(s => {
+                const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+                    const grouped = {};
+                    const timeToMinutes = (timeStr) => {
+                      const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+                      if (!match) return 0;
+                      let h = parseInt(match[1]), m = parseInt(match[2]);
+                      const p = match[3].toUpperCase();
+                      if (p === 'PM' && h !== 12) h += 12;
+                      if (p === 'AM' && h === 12) h = 0;
+                      return h * 60 + m;
+                    };
+                    const sortedSlots = [...teacher.slots].sort((a, b) => {
+                      const dayA = dayOrder.indexOf(a.split(" ")[0]);
+                      const dayB = dayOrder.indexOf(b.split(" ")[0]);
+                      if (dayA !== dayB) return dayA - dayB;
+                      return timeToMinutes(a.split(" ").slice(1).join(" ")) - timeToMinutes(b.split(" ").slice(1).join(" "));
+                    });
+                    sortedSlots.forEach(s => {
                       const converted = convertSlotToUserTz(s);
                       const localDay = converted.display ? converted.display.split(" ")[0] : s.split(" ")[0];
                       const dayFull = { Mon:"Mon", Tue:"Tue", Wed:"Wed", Thu:"Thu", Fri:"Fri", Sat:"Sat", Sun:"Sun" };
@@ -1117,7 +1132,8 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                       if (!grouped[day]) grouped[day] = [];
                       grouped[day].push({ full: s, time: converted.display });
                     });
-
+                
+                 
 
                     const dayNames = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday", Sun:"Sunday" };
                     return dayOrder.filter(d => grouped[d]).map(day => (
