@@ -1286,7 +1286,7 @@ const [saveCard, setSaveCard] = useState(false);
 
   useEffect(()=>{
     if (step === 3 && window.Stripe) {
-      const stripe = window.Stripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+      const stripe = window.Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
       const elements = stripe.elements();
       const card = elements.create('card', {
         style: { base: { fontSize:'16px', color:'#0F2557', fontFamily:'DM Sans, sans-serif' } }
