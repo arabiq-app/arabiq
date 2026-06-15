@@ -1555,7 +1555,22 @@ const intentRes = await fetch("/api/create-payment-intent", {
           {availableSlots.length === 0
             ? <p style={{ color:C.gray400, fontSize:13, textAlign:"center", padding:"20px 0" }}>No available slots at this time.</p>
             : <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:22 }}>
-    {availableSlots.map(s => (
+  {[...availableSlots].sort((a, b) => {
+      const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+      const dayA = dayOrder.indexOf(a.split(" ")[0]);
+      const dayB = dayOrder.indexOf(b.split(" ")[0]);
+      if (dayA !== dayB) return dayA - dayB;
+      const toMins = t => {
+        const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!m) return 0;
+        let h = parseInt(m[1]);
+        const p = m[3].toUpperCase();
+        if (p==='PM' && h!==12) h+=12;
+        if (p==='AM' && h===12) h=0;
+        return h*60+parseInt(m[2]);
+      };
+      return toMins(a.split(" ").slice(1).join(" ")) - toMins(b.split(" ").slice(1).join(" "));
+    }).map(s => (
       <button key={s} onClick={()=>setSlot(s)}
         style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
           border:`2px solid ${slot===s?C.gold:C.gray200}`,
