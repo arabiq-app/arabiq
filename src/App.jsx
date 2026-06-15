@@ -1108,13 +1108,17 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                   {(() => {
                     const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
                     const grouped = {};
-                    teacher.slots.forEach(s => {
-                      const parts = s.split(" ");
-                      const day = parts[0];
-                      const time = parts.slice(1).join(" ");
+
+                teacher.slots.forEach(s => {
+                      const converted = convertSlotToUserTz(s);
+                      const localDay = converted.display ? converted.display.split(" ")[0] : s.split(" ")[0];
+                      const dayFull = { Mon:"Mon", Tue:"Tue", Wed:"Wed", Thu:"Thu", Fri:"Fri", Sat:"Sat", Sun:"Sun" };
+                      const day = dayFull[localDay] || localDay;
                       if (!grouped[day]) grouped[day] = [];
-                      grouped[day].push({ full: s, time });
+                      grouped[day].push({ full: s, time: converted.display });
                     });
+
+
                     const dayNames = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday", Sun:"Sunday" };
                     return dayOrder.filter(d => grouped[d]).map(day => (
                       <div key={day}>
