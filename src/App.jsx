@@ -3933,23 +3933,8 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                         <td style={{ padding:"12px 14px", color:C.gray600, fontSize:12 }}>
                           {completedTrials.length} trials · £{trialsRetained.toFixed(2)} retained
                         </td>
-                        <td style={{ padding:"12px 14px" }}>
-                          <span style={{ fontWeight:800, fontSize:15,
-                            color: totalEarned > 0 ? C.red : C.gray400 }}>
-                            £{totalEarned.toFixed(2)}
-                          </span>
-                        </td>
-                        <td style={{ padding:"12px 14px" }}>
-                          {totalEarned > 0
-                            ? <span style={{ background:"#FEF9EC", color:"#92400E",
-                                fontSize:11, fontWeight:700, padding:"3px 10px",
-                                borderRadius:20 }}>Unpaid</span>
-                            : <span style={{ background:"#ECFDF5", color:C.green,
-                                fontSize:11, fontWeight:700, padding:"3px 10px",
-                                borderRadius:20 }}>Up to date</span>
-                          }
-                        </td>
-                   <td style={{ padding:"12px 14px" }}>
+                                        <td style={{ padding:"12px 14px" }}>
+
                           <span style={{ fontWeight:800, fontSize:15,
                             color: outstanding > 0 ? C.red : C.gray400 }}>
                             £{outstanding.toFixed(2)}
