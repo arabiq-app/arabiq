@@ -1348,7 +1348,7 @@ const [saveCard, setSaveCard] = useState(false);
   },[step]);
   
 const doBook = async (paymentIntentId = null) => {
-    const bookingId = `BK-${++DB.nextBookingId}`;
+  const bookingId = `BK-${Date.now()}`;
 
   const getSessionDate = (slot) => {
     const days = { Mon:1,Monday:1, Tue:2,Tuesday:2, Wed:3,Wednesday:3, Thu:4,Thursday:4, Fri:5,Friday:5, Sat:6,Saturday:6, Sun:0,Sunday:0 };
