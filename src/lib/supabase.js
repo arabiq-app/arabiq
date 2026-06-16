@@ -270,6 +270,7 @@ export const restoreTeacherSlot = async (teacherId, slot) => {
   if (updateError) throw updateError;
   return mapTeacher(data);
 };
+
 export const updateTeacherStripeAccount = async (teacherId, stripeAccountId) => {
   const { data, error } = await supabase
     .from('teachers')
@@ -287,13 +288,13 @@ export const resetPassword = async (email) => {
   });
   if (error) throw error;
 };
+
 export async function createReview({ teacherId, bookingId, studentName, studentEmail, rating, comment }) {
   const { data, error } = await supabase
     .from('reviews')
     .insert([{ teacher_id: String(teacherId), booking_id: bookingId, student_name: studentName, student_email: studentEmail, rating, comment }])
     .select().single();
   if (error) throw error;
-  // Recalculate teacher avg rating
   const { data: allReviews } = await supabase.from('reviews').select('rating').eq('teacher_id', String(teacherId));
   if (allReviews && allReviews.length > 0) {
     const avg = allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length;
@@ -301,6 +302,7 @@ export async function createReview({ teacherId, bookingId, studentName, studentE
   }
   return data;
 }
+
 export async function recordPayout(teacherId, teacherName, amount, note='') {
   const { error } = await supabase
     .from('teacher_payouts')
@@ -316,6 +318,7 @@ export async function getPayouts() {
   if (error) throw error;
   return data;
 }
+
 export async function logActivity(event_type, title, description, icon='📅', color='#2563EB') {
   const { error } = await supabase
     .from('activity_log')
@@ -332,6 +335,7 @@ export async function getRecentActivity(limit=10) {
   if (error) throw error;
   return data;
 }
+
 export async function getTeacherReviews(teacherId) {
   const { data, error } = await supabase.from('reviews').select('*').eq('teacher_id', String(teacherId)).order('created_at', { ascending: false });
   if (error) throw error;
@@ -343,6 +347,7 @@ export async function getTeacherReviews(teacherId) {
     bookingId: r.booking_id,
   }));
 }
+
 export const getTeacherByEmail = async (email) => {
   const { data, error } = await supabase
     .from('teachers').select('*').eq('email', email).eq('status', 'approved').maybeSingle();
@@ -382,18 +387,6 @@ export const updateTeacherProfile = async (teacherId, updates) => {
     .eq('id', teacherId).select().single();
   if (error) throw error;
   return mapTeacher(data);
-
-};
-
-export const updateBookingStatus = async (bookingId, status) => {
-  const { data, error } = await supabase
-    .from('bookings')
-    .update({ status })
-    .eq('id', bookingId)
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
 };
 
 export const updateIssue = async (issueId, updates) => {
@@ -401,7 +394,6 @@ export const updateIssue = async (issueId, updates) => {
     .from('issues').update(updates).eq('id', issueId).select().single();
   if (error) throw error;
   return data;
-  
 };
 
 export const getTeacherBookedSlots = async (teacherId) => {
@@ -413,6 +405,5 @@ export const getTeacherBookedSlots = async (teacherId) => {
   if (error) return [];
   return data || [];
 };
-
 
 
