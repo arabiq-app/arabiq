@@ -275,6 +275,7 @@ case 'contact':
 
   } catch (error) {
     console.error('Handler error:', error.message);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message, stack: error.stack });
   }
+}
 }
