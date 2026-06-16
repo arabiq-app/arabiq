@@ -77,14 +77,14 @@ const teacherCancellationEmail = (booking) => ({
     <div style="background:#EEF2FB;border-radius:12px;padding:18px 22px;margin-bottom:24px;">
       <p style="color:#374151;font-size:14px;margin:0;">This time slot has been freed up and is now available for other students to book.</p>
     </div>
+
     <p style="color:#9CA3AF;font-size:13px;text-align:center;">Questions? Contact hello@arabiq.app</p>
   </div>${footerHtml}</div>`,
 });
 
-
-});
-
 const teacherNotificationEmail = (booking) => ({
+
+   
   subject: `New Booking - ${booking.sessionType} session on ${booking.slot}`,
   html: `<div style="${baseStyle}">${headerHtml}<div style="padding:40px;background:#FDFAF4;">
     <h1 style="color:#1A3470;font-size:24px;font-weight:800;margin:0 0 8px;">New session booked! 📅</h1>
