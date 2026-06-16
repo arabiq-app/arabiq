@@ -3115,6 +3115,12 @@ useEffect(()=>{
       .then(data=>{ if(data && data.length > 0) setAdminUsers(data); })
       .catch(()=>{});
   },[]);
+
+  useEffect(()=>{
+    getAllBookings()
+      .then(data=>{ if(data) setAdminBookings(data); })
+      .catch(()=>{});
+  },[]);
   
   const refreshTeachers = () => {
     getAllTeachersAdmin()
