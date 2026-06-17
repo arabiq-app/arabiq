@@ -5081,11 +5081,15 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
           joined: profile.created_at ? new Date(profile.created_at).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}) : "",
         };
         setCurrentUser(u);
-      }
+        }
     }).catch(()=>{});
+    })();
     
     // Keep session alive across refreshes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+
+        
+    
       if (event === "SIGNED_OUT") {
         setCurrentUser(null);
         setCurrentTeacher(null);
