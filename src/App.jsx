@@ -6094,8 +6094,10 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
         type:"contact",
         to:"hello@arabiq.app",
         data:{ name:nameVal, email:emailVal, subject:subjectVal, message:messageVal }
-      })
-      createIssue({
+        })
+    }).catch(()=>{});
+    createIssue({
+        
   id: `ISS-${Date.now()}`,
   user_name: nameVal,
   user_email: emailVal,
