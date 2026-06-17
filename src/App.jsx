@@ -3076,7 +3076,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
 
   useEffect(()=>{
     getAllIssues()
-      .then(data=>{ if(data && data.length > 0) setAdminIssues(data.map(i=>({
+      .then(data=>{ setAdminIssues((data||[]).map(i=>({
         id: i.id,
         user: i.user_name,
         type: i.type,
@@ -3084,9 +3084,10 @@ function AdminPanel({ onExit, onTeachersChanged }) {
         priority: i.priority,
         status: i.status,
         created: i.created_at ? new Date(i.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '',
-        assigned: i.assigned || 'Unassigned',
-        msgs: i.msgs || 1,
+        assigned: i.assigned_to || 'Unassigned',
+        msgs: i.messages || 1,
       }))); })
+    
       .catch(()=>{});
   },[]);
   const [adminBookings, setAdminBookings] = useState([...DB.bookings]);
