@@ -3064,7 +3064,7 @@ function AdminPanel({ onExit, onTeachersChanged }) {
   const [sCollapsed, setSCollapsed]= useState(false);
  const [adminUsers, setAdminUsers] = useState([])
  const [adminTeachers, setAdminTeachers] = useState([]);
-  const [adminIssues, setAdminIssues] = useState(ADMIN_ISSUES);
+  const [adminIssues, setAdminIssues] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
   const [allPayouts, setAllPayouts] = useState([]);
 
