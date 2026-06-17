@@ -5190,10 +5190,12 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 <input type={type} placeholder={ph}
                   value={adminLogin[key]} onChange={e=>setAdminLogin(s=>({...s,[key]:e.target.value,err:""}))}
                   onKeyDown={e=>{ if(e.key==="Enter") {
-                    if(adminLogin.email==="hello@arabiq.app"&&adminLogin.pw==="ProjectArabiq2026!")
+                    if(adminLogin.email==="hello@arabiq.app"&&adminLogin.pw==="ProjectArabiq2026!") {
+                      sessionStorage.setItem('arabiq_admin_authed', 'true');
                       setAdminLogin(s=>({...s,authed:true}));
-                    else setAdminLogin(s=>({...s,err:"Invalid credentials. Try hello@arabiq.app / ProjectArabiq2026!"}));
+                    } else setAdminLogin(s=>({...s,err:"Invalid credentials. Try hello@arabiq.app / ProjectArabiq2026!"}));
                   }}}
+                 
                   style={{ width:"100%", padding:"11px 13px", borderRadius:10,
                     border:`1.5px solid ${adminLogin.err?C.red:C.gray200}`, fontSize:14,
                     fontFamily:"inherit", outline:"none", color:C.navy,
