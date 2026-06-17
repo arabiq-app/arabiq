@@ -5053,14 +5053,18 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
   },[]);
   // Restore Supabase session on page load
   useEffect(()=>{
-    getCurrentUser().then(async profile => {
-      if (profile) {
-        // Check if this user is a teacher
-        const teacherProfile = await getTeacherByEmail(profile.email).catch(() => null);
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user?.email) {
+        const teacherProfile = await getTeacherByEmail(session.user.email).catch(() => null);
         if (teacherProfile) {
           setCurrentTeacher(teacherProfile);
           return;
         }
+      }
+      getCurrentUser().then(async profile => {
+      if (profile) {
+
         const u = {
           id: profile.id,
           name: profile.name || profile.email?.split("@")[0],
