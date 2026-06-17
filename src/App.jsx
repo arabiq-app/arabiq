@@ -3076,11 +3076,13 @@ function AdminPanel({ onExit, onTeachersChanged }) {
 
   useEffect(()=>{
     getAllIssues()
-      .then(data=>{ setAdminIssues((data||[]).map(i=>({
+    .then(data=>{ setAdminIssues((data||[]).map(i=>({
         id: i.id,
         user: i.user_name,
+        userEmail: i.user_email,
         type: i.type,
         subject: i.subject,
+        description: i.description,
         priority: i.priority,
         status: i.status,
         created: i.created_at ? new Date(i.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '',
