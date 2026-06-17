@@ -34,52 +34,25 @@ export default async function handler(req, res) {
       }
     }
 
-    const intentParams = {
+   const intentParams = {
       amount: Math.round(amount * 100),
       currency,
       metadata: { teacherName, sessionType, studentEmail, bookingId, platform: 'arabiq' },
       description: `Arabiq ${sessionType} session with ${teacherName}`,
       receipt_email: studentEmail,
-      ...(stripeCustomerId && { customer: stripeCustomerId }),
-      ...(saveCard && { setup_future_usage: 'on_session' }),
     };
-
     // Auto-split if teacher has a connected Stripe account
     if (teacherStripeAccountId && sessionType !== "Trial") {
       intentParams.application_fee_amount = Math.round(amount * 100 * 0.30);
       intentParams.transfer_data = { destination: teacherStripeAccountId };
     }
-
     const paymentIntent = await stripe.paymentIntents.create(intentParams);
-
-    // Fetch saved payment methods for this customer
-    let savedCard = null;
-    if (stripeCustomerId) {
-      const paymentMethods = await stripe.paymentMethods.list({
-        customer: stripeCustomerId,
-        type: 'card',
-      });
-      if (paymentMethods.data.length > 0) {
-        const pm = paymentMethods.data[0];
-        savedCard = {
-          id: pm.id,
-          brand: pm.card.brand,
-          last4: pm.card.last4,
-          expMonth: pm.card.exp_month,
-          expYear: pm.card.exp_year,
-        };
-      }
-    }
-
     return res.status(200).json({
       clientSecret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
-      savedCard,
-      customerId: stripeCustomerId,
     });
-
   } catch (error) {
     console.error('Stripe error:', error);
-    return res.status(500).json({ error: error.message, stack: error.stack, full: JSON.stringify(error) });
+    return res.status(500).json({ error: error.message });
   }
 }
