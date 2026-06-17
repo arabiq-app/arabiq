@@ -5020,7 +5020,7 @@ export default function Arabiq() {
   const [scrolled,      setScrolled]     = useState(false);
   const [toast,         setToast]        = useState(null);
   const [profileTab,    setProfileTab]   = useState("overview");
-  const [adminLogin,    setAdminLogin]   = useState({ open:false, email:"", pw:"", err:"" });
+  const [adminLogin,    setAdminLogin]   = useState({ open:false, email:"", pw:"", err:"", authed: typeof window !== 'undefined' && sessionStorage.getItem('arabiq_admin_authed') === 'true' });
   const [currentTeacher, setCurrentTeacher] = useState(null);
 
 const fire = (msg,type="ok")=>{ setToast({msg,type}); };
