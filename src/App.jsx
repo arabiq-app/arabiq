@@ -1624,45 +1624,6 @@ const intentRes = await fetch("/api/create-payment-intent", {
             Complete your payment to confirm your booking.
           </p>
 
-          {/* Saved card option */}
-          {savedCard && (
-            <div style={{ marginBottom:16 }}>
-              <div style={{ fontSize:12, fontWeight:700, color:C.gray600,
-                textTransform:"uppercase", letterSpacing:0.5, marginBottom:8 }}>
-                Saved Card
-              </div>
-              <div onClick={()=>setUseSavedCard(true)}
-                style={{ padding:"14px 16px", borderRadius:10, cursor:"pointer",
-                  border:`2px solid ${useSavedCard?C.navy:C.gray200}`,
-                  background: useSavedCard?C.lb:"#fff",
-                  display:"flex", alignItems:"center", gap:12, marginBottom:8,
-                  transition:"all 0.2s" }}>
-                <div style={{ width:40, height:26, background:C.navy, borderRadius:5,
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  color:"#fff", fontSize:9, fontWeight:800 }}>
-                  {savedCard.brand.toUpperCase()}
-                </div>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>
-                    •••• •••• •••• {savedCard.last4}
-                  </div>
-                  <div style={{ fontSize:11, color:C.gray400 }}>
-                    Expires {savedCard.expMonth}/{savedCard.expYear}
-                  </div>
-                </div>
-                {useSavedCard && <span style={{ color:C.green, fontSize:16 }}>✓</span>}
-              </div>
-              <div onClick={()=>setUseSavedCard(false)}
-                style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer",
-                  border:`2px solid ${!useSavedCard?C.navy:C.gray200}`,
-                  background: !useSavedCard?C.lb:"#fff",
-                  fontSize:13, fontWeight:600, color:C.navy,
-                  transition:"all 0.2s" }}>
-                + Use a different card
-              </div>
-            </div>
-          )}
-
           {/* New card input */}
           {!useSavedCard && (
             <>
