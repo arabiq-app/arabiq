@@ -5228,7 +5228,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
       <>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap&subset=latin-ext" />
         <AdminPanel
-          onExit={()=>{ setPage("home"); setAdminLogin({open:false,email:"",pw:"",err:"",authed:false}); }}
+          onExit={()=>{ setPage("home");(()=>{ sessionStorage.removeItem('arabiq_admin_authed'); setAdminLogin({open:false,email:"",pw:"",err:"",authed:false}); })(); }}
           onTeachersChanged={(teachers)=>setLiveTeachers(teachers)} />
       </>
     );
