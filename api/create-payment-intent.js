@@ -27,9 +27,10 @@ export default async function handler(req, res) {
       } else {
         const customer = await stripe.customers.create({ email: studentEmail });
         stripeCustomerId = customer.id;
-        await supabase.from('users')
+        const { error: updateErr } = await supabase.from('users')
           .update({ stripe_customer_id: stripeCustomerId })
           .eq('email', studentEmail);
+        if (updateErr) console.error('Failed to save stripe_customer_id:', updateErr, 'for email:', studentEmail);
       }
     }
 
