@@ -6112,7 +6112,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
     if (document.querySelector('#contact-subject')) document.querySelector('#contact-subject').value = '';
     document.querySelector('#contact-message').value = '';
 
-    alert("Thank you! We'll get back to you within a few hours.");
+    alert("Thank you! We'll get back to you as soon as possible");
     
   }}
   style={{ width:"100%", padding:"14px",
