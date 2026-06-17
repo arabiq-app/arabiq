@@ -6087,6 +6087,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
       })
     }).catch(()=>{});
     createIssue({
+  id: `ISS-${Date.now()}`,
   user_name: nameVal,
   user_email: emailVal,
   type: subjectVal || 'General',
@@ -6096,6 +6097,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
   status: 'open',
   assigned_to: 'Unassigned',
 }).catch(e => console.error('Issue creation failed:', e));
+ 
     
     alert("Thank you! We'll get back to you within a few hours.");
   }}
