@@ -4028,9 +4028,17 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                       </div>
                       <div style={{ fontWeight:700, color:C.navy, fontSize:14,
                         marginBottom:3 }}>{issue.subject}</div>
+                      {issue.description && (
+                        <div style={{ color:C.gray800, fontSize:13, lineHeight:1.6,
+                          marginBottom:6, background:C.gray50, borderRadius:8,
+                          padding:"8px 12px" }}>
+                          {issue.description}
+                        </div>
+                      )}
                       <div style={{ color:C.gray600, fontSize:12 }}>
-                        Reported by {issue.user} · {issue.created} · {issue.msgs} messages
+                        Reported by {issue.user} · {issue.userEmail} · {issue.created}
                       </div>
+                    
                     </div>
                     <div style={{ display:"flex", gap:8, flexShrink:0, flexWrap:"wrap" }}>
                       <span style={{ fontSize:12, color:C.gray600, alignSelf:"center" }}>
