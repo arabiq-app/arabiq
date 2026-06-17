@@ -3770,14 +3770,20 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                         </td>
                         <td style={{ padding:"10px 14px" }}>
                           <div style={{ display:"flex", gap:5 }}>
+
                             {b.status==="confirmed" && (
-                              <button onClick={()=>{
-                                  setAdminBookings(prev=>[...prev.filter(x=>x.id!==b.id),{...b,status:"completed"}]);
-                                  DB.bookings.forEach(x=>{ if(x.id===b.id) x.status="completed"; });
-                                if (b.teacherId) {
-  incrementTeacherStats(b.teacherId, b.studentEmail).catch(()=>{});
-}
-                                  fire(`✅ Booking ${b.id} marked as completed.`);
+                              <button onClick={async ()=>{
+                                  try {
+                                    await updateBookingStatus(b.id, "completed");
+                                    setAdminBookings(prev=>[...prev.filter(x=>x.id!==b.id),{...b,status:"completed"}]);
+                                    DB.bookings.forEach(x=>{ if(x.id===b.id) x.status="completed"; });
+                                    if (b.teacherId) {
+                                      incrementTeacherStats(b.teacherId, b.studentEmail).catch(()=>{});
+                                    }
+                                    fire(`✅ Booking ${b.id} marked as completed.`);
+                                  } catch(e) {
+                                    fire(`❌ Failed to update: ${e.message}`);
+                                  }
                                 }}
                                 style={{ fontSize:11, padding:"4px 10px", borderRadius:7,
                                   border:`1px solid ${C.green}20`,
@@ -3785,6 +3791,10 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                                   cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>
                                 ✓ Complete
                               </button>
+                            )}
+
+                            
+
                             )}
                             {b.status==="confirmed" && (
                               <button onClick={()=>{
