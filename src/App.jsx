@@ -5209,10 +5209,11 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               </div>
             )}
             <Btn label="Sign In to Admin →" variant="primary" full onClick={()=>{
-              if(adminLogin.email==="hello@arabiq.app"&&adminLogin.pw==="ProjectArabiq2026!")
+              if(adminLogin.email==="hello@arabiq.app"&&adminLogin.pw==="ProjectArabiq2026!") {
+                sessionStorage.setItem('arabiq_admin_authed', 'true');
                 setAdminLogin(s=>({...s,authed:true}));
-              else setAdminLogin(s=>({...s,err:"Invalid credentials. Try hello@arabiq.app / ProjectArabiq2026!"}));
-            }} />
+              } else setAdminLogin(s=>({...s,err:"Invalid credentials. Try hello@arabiq.app / ProjectArabiq2026!"}));
+            }} />   
             <div style={{ marginTop:16, textAlign:"center" }}>
               <span onClick={()=>{setPage("home");setAdminLogin({open:false,email:"",pw:"",err:"",authed:false});}}
                 style={{ color:C.gold, fontSize:13, cursor:"pointer", fontWeight:600 }}>
