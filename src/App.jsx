@@ -5215,7 +5215,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               } else setAdminLogin(s=>({...s,err:"Invalid credentials. Try hello@arabiq.app / ProjectArabiq2026!"}));
             }} />   
             <div style={{ marginTop:16, textAlign:"center" }}>
-              <span onClick={()=>{setPage("home");setAdminLogin({open:false,email:"",pw:"",err:"",authed:false});}}
+              <span onClick={()=>{setPage("home");(()=>{ sessionStorage.removeItem('arabiq_admin_authed'); setAdminLogin({open:false,email:"",pw:"",err:"",authed:false}); })();}}
                 style={{ color:C.gold, fontSize:13, cursor:"pointer", fontWeight:600 }}>
                 ← Back to main site
               </span>
