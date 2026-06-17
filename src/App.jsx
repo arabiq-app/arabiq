@@ -1672,25 +1672,7 @@ const intentRes = await fetch("/api/create-payment-intent", {
               <div id="stripe-card-element" style={{ padding:"12px 14px", borderRadius:10,
                 border:`1.5px solid ${C.gray200}`, marginBottom:12, background:"#fff" }} />
               <div id="stripe-card-errors" style={{ color:C.red, fontSize:12, marginBottom:8 }} />
-              {/* Save card checkbox */}
-              <div onClick={()=>setSaveCard(s=>!s)}
-                style={{ display:"flex", alignItems:"center", gap:10, marginBottom:16,
-                  cursor:"pointer", padding:"10px 14px", borderRadius:10,
-                  background:saveCard?C.lb:"#F9FAFB",
-                  border:`1.5px solid ${saveCard?C.navy:C.gray200}`,
-                  transition:"all 0.2s" }}>
-                <div style={{ width:18, height:18, borderRadius:5,
-                  border:`2px solid ${saveCard?C.navy:C.gray300}`,
-                  background:saveCard?C.navy:"#fff",
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                  flexShrink:0 }}>
-                  {saveCard && <span style={{ color:"#fff", fontSize:11 }}>✓</span>}
-                </div>
-                <span style={{ fontSize:13, color:C.navy, fontWeight:600 }}>
-                  Save card for future bookings
-                </span>
-              </div>
-            </>
+             </>
           )}
 
           <div style={{ background:"#F0FDF4", border:`1px solid ${C.green}30`,
