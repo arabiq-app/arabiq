@@ -6095,8 +6095,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
         to:"hello@arabiq.app",
         data:{ name:nameVal, email:emailVal, subject:subjectVal, message:messageVal }
       })
-    }).catch(()=>{});
-    createIssue({
+      createIssue({
   id: `ISS-${Date.now()}`,
   user_name: nameVal,
   user_email: emailVal,
@@ -6107,9 +6106,14 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
   status: 'open',
   assigned_to: 'Unassigned',
 }).catch(e => console.error('Issue creation failed:', e));
- 
-    
+
+    document.querySelector('#contact-name').value = '';
+    document.querySelector('#contact-email').value = '';
+    if (document.querySelector('#contact-subject')) document.querySelector('#contact-subject').value = '';
+    document.querySelector('#contact-message').value = '';
+
     alert("Thank you! We'll get back to you within a few hours.");
+    
   }}
   style={{ width:"100%", padding:"14px",
     background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
