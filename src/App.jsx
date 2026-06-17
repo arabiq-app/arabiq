@@ -2765,8 +2765,12 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
                       setReviewTarget(null);
                       setReviewRating(0);
                       setReviewComment("");
-                    } catch(e) { console.error("Review failed:", e); }
+                    } catch(e) {
+                      console.error("Review failed:", e);
+                      alert("Failed to submit review: " + e.message);
+                    }
                     setReviewSubmitting(false);
+                      
                   }}
                   style={{ flex:2, padding:"12px",
                     background: reviewRating > 0 ? `linear-gradient(135deg,${C.gold},${C.goldLt})` : C.gray100,
