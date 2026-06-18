@@ -2008,7 +2008,7 @@ function UserDropdown({ user, onProfile, onLogout }) {
 /* ─────────────────────────────────────────────────────────────────
    PROFILE PAGE
 ───────────────────────────────────────────────────────────────── */
-function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers }) {
+function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers, onViewTeacher }) {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState(initTab);
   const [cancelConfirm, setCancelConfirm] = useState(null);
