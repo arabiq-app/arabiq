@@ -2148,7 +2148,13 @@ useEffect(()=>{
                     <div style={{ color:"#fff", fontSize:20, fontWeight:800,
                       fontFamily:"'Playfair Display',serif", marginBottom:4 }}>
                       {nextSession.slot}
+                      {nextSession.sessionDate && (
+                        <span style={{ fontSize:13, fontWeight:600, color:C.goldLt, marginLeft:8 }}>
+                          ({new Date(nextSession.sessionDate).toLocaleDateString('en-GB', { day:'numeric', month:'long' })})
+                        </span>
+                      )}
                     </div>
+                   
                     <div style={{ color:"rgba(255,255,255,0.65)", fontSize:14 }}>
                       with {nextSession.teacherName} · {nextSession.topic}
                     </div>
