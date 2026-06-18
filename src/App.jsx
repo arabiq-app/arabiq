@@ -2993,7 +2993,30 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
 ───────────────────────────────────────────────────────────────── */
 
 const ADMIN_ISSUES = [
-    
+
+{ id:"ISS-001", user:"Emma Wilson",    type:"Payment",   subject:"Charged twice for March plan",        priority:"high",   status:"open",        created:"14 Mar 2026", assigned:"Unassigned",   msgs:3 },
+  { id:"ISS-002", user:"David Park",     type:"Technical", subject:"Video call dropped mid-session",      priority:"medium", status:"in-progress", created:"15 Mar 2026", assigned:"Tech Support", msgs:5 },
+  { id:"ISS-003", user:"Sarah Mitchell", type:"Teacher",   subject:"Teacher did not show for session",    priority:"high",   status:"open",        created:"16 Mar 2026", assigned:"Unassigned",   msgs:1 },
+  { id:"ISS-004", user:"Alex Johnson",   type:"Account",   subject:"Cannot update payment method",       priority:"low",    status:"resolved",    created:"10 Mar 2026", assigned:"Admin Team",   msgs:8 },
+  { id:"ISS-005", user:"James Chen",     type:"Refund",    subject:"Requesting refund for trial session", priority:"medium", status:"in-progress", created:"13 Mar 2026", assigned:"Billing",      msgs:4 },
+];
+
+function StatusBadge({ s }) {
+  const map = { active:{bg:"#ECFDF5",c:C.green}, suspended:{bg:"#FEF2F2",c:C.red},
+    approved:{bg:"#ECFDF5",c:C.green}, pending:{bg:"#FEF9EC",c:C.amber},
+    confirmed:{bg:"#EFF6FF",c:C.blue}, completed:{bg:"#ECFDF5",c:C.green},
+    cancelled:{bg:"#FEF2F2",c:C.red}, open:{bg:"#FEF2F2",c:C.red},
+    "in-progress":{bg:"#FEF9EC",c:C.amber}, resolved:{bg:"#ECFDF5",c:C.green},
+    high:{bg:"#FEF2F2",c:C.red}, medium:{bg:"#FEF9EC",c:C.amber},
+    low:{bg:"#EFF6FF",c:C.blue} };
+  const x = map[s?.toLowerCase()] || {bg:C.gray100,c:C.gray600};
+  return <span style={{ background:x.bg, color:x.c, fontSize:11, fontWeight:700,
+    padding:"3px 10px", borderRadius:20, whiteSpace:"nowrap" }}>{s}</span>;
+}
+
+function AdminPanel({ onExit, onTeachersChanged }) {
+
+  
 
 
 
