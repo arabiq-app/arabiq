@@ -2555,7 +2555,7 @@ setUser(u=>({...u, learningGoal: goal}));
                     fontFamily:"inherit" }}>
                   Keep Booking
                 </button>
-<button onClick={async ()=>{
+                <button onClick={async ()=>{
     const idx = DB.bookings.findIndex(x=>x.id===cancelConfirm.id);
     if(idx>=0) DB.bookings[idx].status="cancelled";
     const u = DB.users.find(u=>u.id===user.id);
@@ -2563,6 +2563,11 @@ setUser(u=>({...u, learningGoal: goal}));
       x.id===cancelConfirm.id ? {...x,status:"cancelled"} : x
     );
     updateBookingStatus(cancelConfirm.id, "cancelled").catch(()=>{});
+    if (cancelConfirm.teacherId && cancelConfirm.slot) {
+      restoreTeacherSlot(cancelConfirm.teacherId, cancelConfirm.slot).catch(()=>{});
+    }
+                
+
   const isTrial = cancelConfirm.type === "Trial";
 const sessionDate = cancelConfirm.sessionDate ? new Date(cancelConfirm.sessionDate) : null;
 const hoursUntilSession = sessionDate ? (sessionDate - new Date()) / (1000 * 60 * 60) : 0;
