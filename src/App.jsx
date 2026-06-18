@@ -638,12 +638,13 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                 </span>
                 <span style={{ color:"rgba(255,255,255,0.3)", fontSize:14 }}>|</span>
                 <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-                  {teacher.rating
-                    ? <><Stars r={teacher.rating} />
-                        <span style={{ color:"rgba(255,255,255,0.8)", fontSize:13, fontWeight:600 }}>{teacher.rating}</span>
-                        <span style={{ color:"rgba(255,255,255,0.45)", fontSize:13 }}>({(teacher.reviews||[]).length} reviews)</span></>
+                  {liveRating
+                    ? <><Stars r={liveRating} />
+                        <span style={{ color:"rgba(255,255,255,0.8)", fontSize:13, fontWeight:600 }}>{liveRating}</span>
+                        <span style={{ color:"rgba(255,255,255,0.45)", fontSize:13 }}>({liveReviews.length} reviews)</span></>
                     : null}
                 </div>
+                
 {teacher.studentCount > 0 && <>
                   <span style={{ color:"rgba(255,255,255,0.3)", fontSize:14 }}>|</span>
                   <span style={{ color:"rgba(255,255,255,0.65)", fontSize:14 }}>
