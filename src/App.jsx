@@ -1441,7 +1441,7 @@ const doBook = async (paymentIntentId = null) => {
           body: JSON.stringify({
             type: "teacher_notification",
             to: teacher.email,
-            data: { id: b.id, studentName: name, studentEmail: email, teacherName: teacher.name, slot: b.slot, sessionType: sType, topic: b.topic, hostRoomUrl: whereby_host_url }
+            data: { id: b.id, studentName: name, studentEmail: email, teacherName: teacher.name, slot: b.slot, sessionDate: getSessionDate(slot), sessionType: sType, topic: b.topic, hostRoomUrl: whereby_host_url }
           })
         });
       } catch(e) { console.error("Teacher email failed:", e); }
