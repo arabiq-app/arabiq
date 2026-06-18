@@ -6370,8 +6370,14 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
         currentUser ? (
           <ProfilePage user={currentUser} setUser={setCurrentUser}
             initTab={profileTab}
-            onBrowseTeachers={()=>setPage("teachers")} />
+            onBrowseTeachers={()=>setPage("teachers")}
+            onViewTeacher={(teacherId)=>{
+              const t = liveTeachers.find(t=>t.id===teacherId);
+              if (t) { setViewingTeacher(t); setPage("teachers"); window.scrollTo(0,0); }
+              else setPage("teachers");
+            }} />
         ) : (
+
           <div style={{ paddingTop:72, minHeight:"100vh", background:C.cream,
             display:"flex", alignItems:"center", justifyContent:"center",
             animation:"fadeIn 0.3s ease" }}>
