@@ -92,7 +92,7 @@ const teacherNotificationEmail = (booking) => ({
     <p style="color:#6B7280;font-size:15px;margin:0 0 24px;">A student has booked a ${booking.sessionType.toLowerCase()} session with you.</p>
     <div style="background:linear-gradient(135deg,#1A3470,#2A4A9A);border-radius:14px;padding:24px;margin-bottom:24px;color:#fff;">
       <div style="font-size:11px;font-weight:700;color:#F0C842;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;">Session Details</div>
-      <div style="font-size:22px;font-weight:800;margin-bottom:4px;color:#fff;">${booking.slot}</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:4px;color:#fff;">${booking.slot}${booking.sessionDate ? ` <span style="font-size:14px;color:#F0C842;">(${new Date(booking.sessionDate).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})})</span>` : ''}</div>
       <div style="font-size:14px;color:rgba(255,255,255,0.8);">${booking.sessionType} · ${booking.sessionType === 'Trial' ? '30 mins' : '60 mins'}</div>
     </div>
     <div style="background:#fff;border-radius:12px;border:1px solid #E8EDF8;overflow:hidden;margin-bottom:24px;">
