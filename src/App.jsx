@@ -2012,6 +2012,7 @@ function UserDropdown({ user, onProfile, onLogout }) {
 function ProfilePage({ user, setUser, initTab="overview", onBrowseTeachers, onViewTeacher }) {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState(initTab);
+  const [teacherCancelConfirm, setTeacherCancelConfirm] = useState(null);
   const [cancelConfirm, setCancelConfirm] = useState(null);
   const [reviewTarget, setReviewTarget] = useState(null);
   const [reviewRating, setReviewRating] = useState(0);
