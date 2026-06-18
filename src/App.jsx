@@ -1428,7 +1428,7 @@ const doBook = async (paymentIntentId = null) => {
         body: JSON.stringify({
           type: "booking_confirmation",
           to: email,
-          data: { id: b.id, studentName: name, studentEmail: email, teacherName: teacher.name, slot: b.slot, sessionType: sType, topic: b.topic, price, whereby_room_url }
+          data: { id: b.id, studentName: name, studentEmail: email, teacherName: teacher.name, slot: b.slot, sessionDate: getSessionDate(slot), sessionType: sType, topic: b.topic, price, whereby_room_url }
         })
       });
     } catch(e) { console.error("Student email failed:", e); }
