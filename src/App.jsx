@@ -4548,6 +4548,7 @@ await updateTeacher(editingTeacher.id, toSave);
 function TeacherDashboard({ teacher, setTeacher, onLogout }) {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState("overview");
+  const [teacherCancelConfirm, setTeacherCancelConfirm] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [slots, setSlots] = useState(teacher.slots || []);
   const [savingSlots, setSavingSlots] = useState(false);
