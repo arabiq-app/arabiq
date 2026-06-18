@@ -2542,10 +2542,10 @@ setUser(u=>({...u, learningGoal: goal}));
                   </div>
                 ))}
               </div>
-              <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7, marginBottom:22 }}>
-                Cancellations made more than 24 hours before your session are eligible
-                for a full refund. Late cancellations are non-refundable.
-                Our team will process your refund within 3-5 business days.
+            <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7, marginBottom:22 }}>
+                Cancel more than 24 hours before your session for a full refund.
+                Cancelling within 24 hours of your session is non-refundable.
+                Eligible refunds are processed within 3-5 business days.
               </p>
               <div style={{ display:"flex", gap:10 }}>
                 <button onClick={()=>setCancelConfirm(null)}
