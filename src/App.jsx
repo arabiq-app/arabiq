@@ -2983,12 +2983,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
             </div>
           </div>
         )}
-      </div>
-    </div>
-  );
-}      
-
-{toast && <Toast msg={toast} onDone={()=>setToast(null)} />}
+        </div>
     </div>
   );
 }
@@ -2998,6 +2993,7 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
 ───────────────────────────────────────────────────────────────── */
 
 const ADMIN_ISSUES = [
+    
 
 
 
