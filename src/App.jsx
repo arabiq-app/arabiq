@@ -2988,17 +2988,109 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
   );
 }      
 
+{/* Teacher Cancellation confirmation modal */}
+      {teacherCancelConfirm && (
+        <div style={{ position:"fixed", inset:0, background:"rgba(10,20,60,0.55)",
+          backdropFilter:"blur(6px)", display:"flex", alignItems:"center",
+          justifyContent:"center", zIndex:800, padding:16 }}
+          onClick={()=>setTeacherCancelConfirm(null)}>
+          <div style={{ background:"#fff", borderRadius:22, padding:36,
+            maxWidth:420, width:"100%",
+            boxShadow:"0 30px 80px rgba(0,0,0,0.2)", textAlign:"center" }}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{ fontSize:44, marginBottom:16 }}>⚠️</div>
+            <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+              fontSize:20, fontWeight:800, marginBottom:10 }}>
+              Cancel this session?
+            </h3>
+            <div style={{ background:C.lb, borderRadius:12, padding:"14px 18px",
+              marginBottom:16, textAlign:"left" }}>
+              {[
+                ["Student", teacherCancelConfirm.student_name],
+                ["Session", teacherCancelConfirm.slot],
+                ["Type", teacherCancelConfirm.session_type],
+              ].map(([k,v])=>(
+                <div key={k} style={{ display:"flex", justifyContent:"space-between",
+                  padding:"5px 0", borderBottom:`1px solid ${C.gray100}`, fontSize:13 }}>
+                  <span style={{ color:C.gray600 }}>{k}</span>
+                  <span style={{ fontWeight:600, color:C.navy }}>{v}</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7, marginBottom:22 }}>
+              The student will receive a full refund automatically since you are
+              cancelling this session. Please only cancel when truly necessary.
+            </p>
+            <div style={{ display:"flex", gap:10 }}>
+              <button onClick={()=>setTeacherCancelConfirm(null)}
+                style={{ flex:1, padding:"12px", background:C.gray100,
+                  color:C.navy, border:"none", borderRadius:10,
+                  fontWeight:700, fontSize:14, cursor:"pointer",
+                  fontFamily:"inherit" }}>
+                Keep Booking
+              </button>
+              <button onClick={async ()=>{
+                  try {
+                    await updateBookingStatus(teacherCancelConfirm.id, "cancelled");
+                    await restoreTeacherSlot(teacher.id, teacherCancelConfirm.slot).catch(()=>{});
+
+                    if (teacherCancelConfirm.payment_intent_id) {
+                      fetch("/api/refund", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ paymentIntentId: teacherCancelConfirm.payment_intent_id }),
+                      }).catch(()=>{});
+                    }
+
+                    fetch("/api/send-email", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        type: "cancellation",
+                        to: teacherCancelConfirm.student_email,
+                        data: {
+                          id: teacherCancelConfirm.id,
+                          teacherName: teacher.name,
+                          slot: teacherCancelConfirm.slot,
+                          price: teacherCancelConfirm.price,
+                          refundStatus: "refunded",
+                        }
+                      })
+                    }).catch(()=>{});
+
+                    setBookings(prev => prev.map(b =>
+                      b.id===teacherCancelConfirm.id ? {...b, status:"cancelled"} : b
+                    ));
+                    setTeacherCancelConfirm(null);
+                    fire("✅ Session cancelled. Student has been notified and refunded.");
+                  } catch(e) {
+                    fire("❌ Failed to cancel: " + e.message);
+                  }
+                }}
+                style={{ flex:1, padding:"12px",
+                  background:C.red, color:"#fff",
+                  border:"none", borderRadius:10, fontWeight:800,
+                  fontSize:14, cursor:"pointer", fontFamily:"inherit" }}>
+                Yes, Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {toast && <Toast msg={toast} onDone={()=>setToast(null)} />}
+    </div>
+  );
+}
+
 /* ─────────────────────────────────────────────────────────────────
    ADMIN PANEL (complete)
 ───────────────────────────────────────────────────────────────── */
 
 const ADMIN_ISSUES = [
-  { id:"ISS-001", user:"Emma Wilson",    type:"Payment",   subject:"Charged twice for March plan",        priority:"high",   status:"open",        created:"14 Mar 2026", assigned:"Unassigned",   msgs:3 },
-  { id:"ISS-002", user:"David Park",     type:"Technical", subject:"Video call dropped mid-session",      priority:"medium", status:"in-progress", created:"15 Mar 2026", assigned:"Tech Support", msgs:5 },
-  { id:"ISS-003", user:"Sarah Mitchell", type:"Teacher",   subject:"Teacher did not show for session",    priority:"high",   status:"open",        created:"16 Mar 2026", assigned:"Unassigned",   msgs:1 },
-  { id:"ISS-004", user:"Alex Johnson",   type:"Account",   subject:"Cannot update payment method",       priority:"low",    status:"resolved",    created:"10 Mar 2026", assigned:"Admin Team",   msgs:8 },
-  { id:"ISS-005", user:"James Chen",     type:"Refund",    subject:"Requesting refund for trial session", priority:"medium", status:"in-progress", created:"13 Mar 2026", assigned:"Billing",      msgs:4 },
-];
+
+
+
 
 function StatusBadge({ s }) {
   const map = { active:{bg:"#ECFDF5",c:C.green}, suspended:{bg:"#FEF2F2",c:C.red},
