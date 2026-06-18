@@ -2268,7 +2268,7 @@ useEffect(()=>{
                           {myBookings.filter(x=>x.teacherId===b.teacherId).length} lesson{myBookings.filter(x=>x.teacherId===b.teacherId).length!==1?"s":""}
                         </div>
                       </div>
-                      <button onClick={onBrowseTeachers}
+                      <button onClick={()=>{ if(onViewTeacher) onViewTeacher(b.teacherId); else onBrowseTeachers(); }}
                         style={{ background:C.navy, color:"#fff", border:"none",
                           borderRadius:8, padding:"6px 12px", fontSize:11,
                           fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
