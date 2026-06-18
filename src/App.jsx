@@ -4779,6 +4779,16 @@ const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' ||
                         Start Lesson →
                       </button>
                     )}
+                    {b.status==="confirmed" && (
+                      <button onClick={()=>setTeacherCancelConfirm(b)}
+                        style={{ background:"#FEF2F2", color:C.red,
+                          border:`1px solid ${C.red}30`, borderRadius:8,
+                          padding:"8px 14px", fontWeight:700, fontSize:12,
+                          cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+                        Cancel
+                      </button>
+                    )}
+               
                   </div>
                 ))}
               </div>
