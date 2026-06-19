@@ -5062,9 +5062,12 @@ const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' ||
                       })
                     }).catch(()=>{});
 
-                    setBookings(prev => prev.map(b =>
+                  setBookings(prev => prev.map(b =>
                       b.id===teacherCancelConfirm.id ? {...b, status:"cancelled"} : b
                     ));
+                    logActivity('cancellation', 'Teacher cancelled session',
+                      `${teacher.name} cancelled with ${teacherCancelConfirm.student_name} — £${(teacherCancelConfirm.price||0).toFixed(2)} refunded`,
+                      '🚫', '#DC2626').catch(()=>{});
                     setTeacherCancelConfirm(null);
                     fire("✅ Session cancelled. Student has been notified and refunded.");
                   } catch(e) {
