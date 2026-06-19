@@ -3360,6 +3360,53 @@ const navItems = [
               ))}
             </div>
 
+            {/* Monthly Growth Trend */}
+            <div style={{ background:"#fff", borderRadius:16, padding:22,
+              border:`1px solid ${C.gray200}`, marginBottom:18 }}>
+              <div style={{ fontSize:14, fontWeight:800, color:C.navy, marginBottom:3 }}>
+                Monthly Growth Trend
+              </div>
+              <div style={{ fontSize:11, color:C.gray400, marginBottom:18 }}>
+                Bookings over the last 6 months
+              </div>
+              <div style={{ display:"flex", alignItems:"flex-end", gap:14, height:140 }}>
+                {(()=>{
+                  const now = new Date();
+                  const months = [];
+                  for (let i = 5; i >= 0; i--) {
+                    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                    months.push({ year: d.getFullYear(), month: d.getMonth(), label: d.toLocaleDateString('en-GB', { month: 'short' }) });
+                  }
+                  const counts = months.map(m => allBookings.filter(b=>{
+                    const d = new Date(b.booked_at||b.booked||0);
+                    return d.getMonth()===m.month && d.getFullYear()===m.year;
+                  }).length);
+                  const max = Math.max(...counts, 1);
+                  return months.map((m, i) => {
+                    const v = counts[i];
+                    const isCurrent = i === months.length - 1;
+                    return { label: m.label, v, isCurrent };
+                  });
+                })().map(({label, v, isCurrent})=>(
+                  <div key={label} style={{ flex:1, display:"flex", flexDirection:"column",
+                    alignItems:"center", gap:6 }}>
+                    <div style={{ fontSize:12, fontWeight:700, color:C.navy }}>{v}</div>
+                    <div style={{ width:"100%", height:`${Math.max((v/Math.max(...[...Array(6)].map((_,idx)=>{
+                        const now = new Date();
+                        const d = new Date(now.getFullYear(), now.getMonth() - (5-idx), 1);
+                        return allBookings.filter(b=>{
+                          const bd = new Date(b.booked_at||b.booked||0);
+                          return bd.getMonth()===d.getMonth() && bd.getFullYear()===d.getFullYear();
+                        }).length;
+                      })))*100, v>0?8:2)}px`,
+                      background: isCurrent ? `linear-gradient(180deg,${C.gold},${C.goldLt})` : `linear-gradient(180deg,${C.navy},#2A4A9A)`,
+                      borderRadius:"5px 5px 0 0", transition:"height 0.3s" }} />
+                    <div style={{ fontSize:11, color:C.gray600, fontWeight:isCurrent?700:500 }}>{label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Chart + Activity */}
             <div style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:18 }}>
               <div style={{ background:"#fff", borderRadius:16, padding:22,
@@ -3367,6 +3414,10 @@ const navItems = [
                 <div style={{ fontSize:14, fontWeight:800, color:C.navy, marginBottom:3 }}>
                   Weekly Bookings
                 </div>
+
+
+
+            
                 <div style={{ fontSize:11, color:C.gray400, marginBottom:18 }}>
                   Sessions this week
                 </div>
