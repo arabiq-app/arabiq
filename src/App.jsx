@@ -3263,6 +3263,7 @@ const navItems = [
                   value:`${adminIssues.filter(i=>i.status!=="resolved").length}`,
                   sub:"Need attention", color:C.red, trend:0 },
 
+
             { icon:"⭐", label:"Avg. Rating",
                   value: (() => {
                     const rated = adminTeachers.filter(t=>t.rating);
@@ -3283,7 +3284,58 @@ const navItems = [
                     return `${Math.round((converted/trialStudents.size)*100)}%`;
                   })(),
                   sub:"Trial → Regular", color:"#7C3AED", trend:0 },
+                { icon:"🔁", label:"Repeat Booking Rate",
+                  value: (() => {
+                    const studentCounts = {};
+                    allBookings.forEach(b=>{
+                      const email = b.studentEmail||b.student_email;
+                      if (!email) return;
+                      studentCounts[email] = (studentCounts[email]||0) + 1;
+                    });
+                    const totalStudents = Object.keys(studentCounts).length;
+                    if (totalStudents === 0) return "—";
+                    const repeatStudents = Object.values(studentCounts).filter(c=>c>1).length;
+                    return `${Math.round((repeatStudents/totalStudents)*100)}%`;
+                  })(),
+                  sub:"Students who rebooked", color:C.blue, trend:0 },
+                { icon:"📊", label:"This Month vs Last",
+                  value: (() => {
+                    const now = new Date();
+                    const thisMonth = allBookings.filter(b=>{
+                      const d = new Date(b.booked_at||b.booked||0);
+                      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+                    }).length;
+                    const lastMonthDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
+                    const lastMonth = allBookings.filter(b=>{
+                      const d = new Date(b.booked_at||b.booked||0);
+                      return d.getMonth()===lastMonthDate.getMonth() && d.getFullYear()===lastMonthDate.getFullYear();
+                    }).length;
+                    if (lastMonth === 0) return `${thisMonth}`;
+                    const change = Math.round(((thisMonth-lastMonth)/lastMonth)*100);
+                    return `${thisMonth} (${change>=0?'+':''}${change}%)`;
+                  })(),
+                  sub:"Bookings this month", color:C.navy, trend:0 },
+                { icon:"🆕", label:"New Students",
+                  value: (() => {
+                    const now = new Date();
+                    const newThisMonth = adminUsers.filter(u=>{
+                      if (!u.joined && !u.created_at) return false;
+                      const d = new Date(u.created_at||u.joined);
+                      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+                    }).length;
+                    return `${newThisMonth}`;
+                  })(),
+                  sub:"Joined this month", color:C.green, trend:0 },
+                { icon:"❌", label:"Cancellation Rate",
+                  value: (() => {
+                    if (allBookings.length === 0) return "—";
+                    const cancelled = allBookings.filter(b=>b.status==="cancelled").length;
+                    return `${Math.round((cancelled/allBookings.length)*100)}%`;
+                  })(),
+                  sub:"Of all bookings", color:C.red, trend:0 },
               ].map(s=>(
+
+           
 
 
             
