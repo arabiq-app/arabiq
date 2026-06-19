@@ -3262,14 +3262,32 @@ const navItems = [
                 { icon:"🚨", label:"Open Issues",
                   value:`${adminIssues.filter(i=>i.status!=="resolved").length}`,
                   sub:"Need attention", color:C.red, trend:0 },
-                { icon:"⭐", label:"Avg. Rating",
+
+            { icon:"⭐", label:"Avg. Rating",
                   value: (() => {
                     const rated = adminTeachers.filter(t=>t.rating);
                     if (!rated.length) return "—";
                     return (rated.reduce((s,t)=>s+t.rating,0)/rated.length).toFixed(1);
                   })(),
                   sub:"All teachers", color:C.amber, trend:0 },
+                { icon:"🔄", label:"Conversion Rate",
+                  value: (() => {
+                    const trialStudents = new Set(
+                      allBookings.filter(b=>b.type==="Trial"||b.session_type==="Trial").map(b=>b.studentEmail||b.student_email)
+                    );
+                    const regularStudents = new Set(
+                      allBookings.filter(b=>b.type!=="Trial"&&b.session_type!=="Trial").map(b=>b.studentEmail||b.student_email)
+                    );
+                    if (trialStudents.size === 0) return "—";
+                    const converted = [...trialStudents].filter(email => regularStudents.has(email)).length;
+                    return `${Math.round((converted/trialStudents.size)*100)}%`;
+                  })(),
+                  sub:"Trial → Regular", color:"#7C3AED", trend:0 },
               ].map(s=>(
+
+
+            
+
                 <div key={s.label} style={{ background:"#fff", borderRadius:14,
                   padding:"18px 20px", border:`1px solid ${C.gray200}` }}>
                   <div style={{ display:"flex", justifyContent:"space-between",
