@@ -3326,14 +3326,40 @@ const navItems = [
                     return `${newThisMonth}`;
                   })(),
                   sub:"Joined this month", color:C.green, trend:0 },
-                { icon:"❌", label:"Cancellation Rate",
+
+            { icon:"❌", label:"Cancellation Rate",
                   value: (() => {
                     if (allBookings.length === 0) return "—";
                     const cancelled = allBookings.filter(b=>b.status==="cancelled").length;
                     return `${Math.round((cancelled/allBookings.length)*100)}%`;
                   })(),
                   sub:"Of all bookings", color:C.red, trend:0 },
+                { icon:"💵", label:"Est. Net Profit",
+                  value: (() => {
+                    const completedBookings = allBookings.filter(b=>b.status==="completed"||b.status==="confirmed");
+                    const revenue = completedBookings.reduce((sum,b)=>{
+                      const isTrialType = b.type==="Trial"||b.session_type==="Trial";
+                      return sum + (isTrialType ? 3 : (b.price||0)*0.3);
+                    },0);
+                    const stripeFees = completedBookings.reduce((sum,b)=>{
+                      const price = b.price || 0;
+                      return sum + (price * 0.014 + 0.20);
+                    },0);
+                    const totalMinutes = completedBookings.reduce((sum,b)=>{
+                      const isTrialType = b.type==="Trial"||b.session_type==="Trial";
+                      return sum + (isTrialType ? 60 : 120);
+                    },0);
+                    const wherebyFree = 2000;
+                    const wherebyOverage = Math.max(totalMinutes - wherebyFree, 0) * 0.004;
+                    const wherebyBase = 9.99;
+                    const fixedCosts = wherebyBase + 0.83;
+                    const netProfit = revenue - stripeFees - wherebyOverage - fixedCosts;
+                    return `£${netProfit.toFixed(0)}`;
+                  })(),
+                  sub:"Revenue minus est. costs", color:"#059669", trend:0 },
               ].map(s=>(
+            
+
 
            
 
