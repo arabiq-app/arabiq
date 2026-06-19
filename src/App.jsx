@@ -2619,12 +2619,23 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
     body: JSON.stringify({ paymentIntentId: cancelConfirm.paymentIntentId }),
   })
   .then(r => r.json())
-  .then(() => fire("✅ Booking cancelled and refund issued."))
+  .then(() => {
+    fire("✅ Booking cancelled and refund issued.");
+    logActivity('cancellation', 'Student cancelled booking',
+      `${cancelConfirm.student || user.name} cancelled with ${cancelConfirm.teacherName} — £${(cancelConfirm.price||0).toFixed(2)} refunded`,
+      '🚫', '#DC2626').catch(()=>{});
+  })
   .catch(() => fire("⚠️ Booking cancelled but refund failed — please contact us."));
 } else if (isTrial) {
   fire("✅ Trial booking cancelled. Trial sessions are non-refundable.");
+  logActivity('cancellation', 'Student cancelled trial',
+    `${cancelConfirm.student || user.name} cancelled trial with ${cancelConfirm.teacherName} — non-refundable`,
+    '🚫', '#DC2626').catch(()=>{});
 } else {
   fire("✅ Booking cancelled. Cancellations within 24hrs of the session are non-refundable.");
+  logActivity('cancellation', 'Student cancelled booking',
+    `${cancelConfirm.student || user.name} cancelled with ${cancelConfirm.teacherName} — no refund (within 24hrs)`,
+    '🚫', '#DC2626').catch(()=>{});
 }
   
     if (user?.email) {
