@@ -4993,12 +4993,15 @@ const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' ||
                       <div style={{ fontWeight:700, color:C.navy, fontSize:15 }}>{b.student_name}</div>
                       <div style={{ color:C.gray600, fontSize:13 }}>{b.topic}</div>
                     </div>
+
                     <div style={{ minWidth:140 }}>
-                      <div style={{ fontWeight:600, color:C.navy, fontSize:13 }}>{b.slot}</div>
+                      <div style={{ fontWeight:600, color:C.navy, fontSize:13 }}>{b.slot} <span style={{ fontSize:10, color:C.gray400 }}>(Cairo)</span></div>
                       <div style={{ color:C.gray400, fontSize:11 }}>
                         {b.booked_at ? new Date(b.booked_at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) : ""}
                       </div>
                     </div>
+
+
                     <div style={{ display:"flex", gap:8, alignItems:"center" }}>
                       <span style={{ background:b.session_type==="Trial"?"#FEF9EC":C.lb,
                         color:b.session_type==="Trial"?C.amber:C.navy,
