@@ -2264,8 +2264,29 @@ const [settingsForm, setSettingsForm] = useState({
   const [activeChat, setActiveChat] = useState(null);
 const [studentConversations, setStudentConversations] = useState([]);
 
-  useEffect(()=>{ setTab(initTab); },[initTab]);
+useEffect(()=>{ setTab(initTab); },[initTab]);
 
+  useEffect(()=>{
+    const loadStudentConversations = async () => {
+      if (!user?.email) return;
+      try {
+        const { data } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('student_email', user.email)
+          .order('created_at', { ascending: false });
+        // Group by teacher_email, get latest message per teacher
+        const seen = {};
+        (data || []).forEach(m => {
+          if (!seen[m.teacher_email]) seen[m.teacher_email] = m;
+        });
+        setStudentConversations(Object.values(seen));
+      } catch(e) {}
+    };
+    loadStudentConversations();
+    const interval = setInterval(loadStudentConversations, 10000);
+    return () => clearInterval(interval);
+  }, [user?.email]);
 
   // Derive bookings - match by email OR by id in user.bookings array
  const [myBookings, setMyBookings] = useState([]);
