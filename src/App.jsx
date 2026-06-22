@@ -2375,14 +2375,22 @@ const subTabs = [["overview","Overview"],["sessions","My Bookings"],["messages",
         position:"sticky", top:72, zIndex:50 }}>
         <div style={{ maxWidth:1100, margin:"0 auto", padding:"0 40px",
           display:"flex", overflowX:"auto", WebkitOverflowScrolling:"touch" }}>
-          {subTabs.map(([id,label])=>(
+      {subTabs.map(([id,label])=>(
             <button key={id} onClick={()=>setTab(id)}
               style={{ padding:"15px 18px", background:"none", border:"none",
                 borderBottom:`3px solid ${tab===id?C.gold:"transparent"}`,
                 color: tab===id?C.navy:C.gray600,
                 fontWeight: tab===id?700:500, fontSize:14, fontFamily:"inherit",
-                cursor:"pointer", transition:"all 0.2s", whiteSpace:"nowrap" }}>
+                cursor:"pointer", transition:"all 0.2s", whiteSpace:"nowrap",
+                position:"relative", display:"inline-flex", alignItems:"center", gap:6 }}>
               {label}
+              {id==="messages" && studentUnreadCount > 0 && (
+                <span style={{ display:"inline-flex", alignItems:"center", justifyContent:"center",
+                  background:C.red, color:"#fff", borderRadius:"50%",
+                  width:16, height:16, fontSize:9, fontWeight:800, lineHeight:1 }}>
+                  {studentUnreadCount > 9 ? "9+" : studentUnreadCount}
+                </span>
+              )}
             </button>
           ))}
         </div>
