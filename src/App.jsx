@@ -4994,8 +4994,23 @@ const [slots, setSlots] = useState(
     setSlots(prev => prev.includes(slot) ? prev.filter(s => s !== slot) : [...prev, slot]);
   };
 
+useEffect(() => {
+    const loadConversations = async () => {
+      try {
+        const convs = await getTeacherConversations(teacher.email);
+        setConversations(convs);
+        const count = await getUnreadCount(teacher.email, 'teacher');
+        setUnreadCount(count);
+      } catch(e) {}
+    };
+    loadConversations();
+    const interval = setInterval(loadConversations, 10000);
+    return () => clearInterval(interval);
+  }, [teacher.email]);
+
   const confirmed = bookings.filter(b => b.status === "confirmed");
   const completed = bookings.filter(b => b.status === "completed");
+  
 const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' || b.type === 'Trial' ? 0 : (b.price || 0) * 0.7), 0);
   const [conversations, setConversations] = useState([]);
 const [activeChat, setActiveChat] = useState(null);
