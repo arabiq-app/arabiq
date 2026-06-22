@@ -1259,9 +1259,14 @@ const convertSlotToUserTz = (slotStr) => {
     const hh = String(h).padStart(2,'0');
     const mn = String(m).padStart(2,'0');
 
-    // ✅ Correctly create UTC date from Cairo time (UTC+2)
-    // Cairo offset = +120 minutes, so subtract to get UTC
-    const cairoOffsetMs = 120 * 60 * 1000;
+ // Dynamically get Cairo's current UTC offset (handles DST automatically)
+    const cairoSampleDate = new Date(`${yyyy}-${mm}-${dd}T12:00:00Z`);
+    const cairoLocalStr = cairoSampleDate.toLocaleString('en-US', { timeZone: 'Africa/Cairo', hour12: false, hour: '2-digit', minute: '2-digit' });
+    const utcLocalStr = cairoSampleDate.toLocaleString('en-US', { timeZone: 'UTC', hour12: false, hour: '2-digit', minute: '2-digit' });
+    const cairoHour = parseInt(cairoLocalStr.split(':')[0]);
+    const utcHour = parseInt(utcLocalStr.split(':')[0]);
+    const cairoOffsetHours = cairoHour - utcHour;
+    const cairoOffsetMs = cairoOffsetHours * 60 * 60 * 1000;
     const utcMs = Date.UTC(parseInt(yyyy), parseInt(mm)-1, parseInt(dd), h, m) - cairoOffsetMs;
     const utcDate = new Date(utcMs);
 
