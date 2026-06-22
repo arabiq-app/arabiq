@@ -4997,7 +4997,7 @@ const [slots, setSlots] = useState(
   const confirmed = bookings.filter(b => b.status === "confirmed");
   const completed = bookings.filter(b => b.status === "completed");
 const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' || b.type === 'Trial' ? 0 : (b.price || 0) * 0.7), 0);
-  const subTabs = [["overview","Overview"],["bookings","My Bookings"],["availability","Availability"],["profile","My Profile"]];
+  const subTabs = [["overview","Overview"],["bookings","My Bookings"],["availability","Availability"],["profile","My Profile"],["messages","Messages"]];
 
   return (
     <div style={{ minHeight:"100vh", background:C.cream, fontFamily:"'DM Sans',sans-serif" }}>
