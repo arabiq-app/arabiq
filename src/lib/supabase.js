@@ -406,4 +406,63 @@ export const getTeacherBookedSlots = async (teacherId) => {
   return data || [];
 };
 
+// ── MESSAGING ──
+
+export const sendMessage = async ({ teacherEmail, studentEmail, senderType, content }) => {
+  const { data, error } = await supabase
+    .from('messages')
+    .insert([{ teacher_email: teacherEmail, student_email: studentEmail, sender_type: senderType, content }])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+export const getConversation = async (teacherEmail, studentEmail) => {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('teacher_email', teacherEmail)
+    .eq('student_email', studentEmail)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data || [];
+};
+
+export const getTeacherConversations = async (teacherEmail) => {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('teacher_email', teacherEmail)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  // Group by student_email, get latest message per student
+  const seen = {};
+  (data || []).forEach(m => {
+    if (!seen[m.student_email]) seen[m.student_email] = m;
+  });
+  return Object.values(seen);
+};
+
+export const markMessagesRead = async (teacherEmail, studentEmail, readerType) => {
+  const field = readerType === 'teacher' ? 'read_by_teacher' : 'read_by_student';
+  const { error } = await supabase
+    .from('messages')
+    .update({ [field]: true })
+    .eq('teacher_email', teacherEmail)
+    .eq('student_email', studentEmail)
+    .eq(field, false);
+  if (error) throw error;
+};
+
+export const getUnreadCount = async (teacherEmail, readerType) => {
+  const field = readerType === 'teacher' ? 'read_by_teacher' : 'read_by_student';
+  const { count, error } = await supabase
+    .from('messages')
+    .select('*', { count: 'exact', head: true })
+    .eq('teacher_email', teacherEmail)
+    .eq(field, false);
+  if (error) return 0;
+  return count || 0;
+};
 
