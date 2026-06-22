@@ -5320,8 +5320,83 @@ const [unreadCount, setUnreadCount] = useState(0);
           </div>
         )}
 
+        {/* ── MESSAGES ── */}
+        {tab==="messages" && (
+          <div>
+            <h2 style={{ fontSize:20, fontWeight:800, color:C.navy, margin:"0 0 8px" }}>Messages</h2>
+            <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>
+              Students who have booked with you can send you messages here.
+            </p>
+            {conversations.length === 0 ? (
+              <div style={{ background:"#fff", borderRadius:20, padding:"60px 40px",
+                textAlign:"center", border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ fontSize:48, marginBottom:16 }}>💬</div>
+                <p style={{ color:C.gray600 }}>No messages yet. Students can message you after booking.</p>
+              </div>
+            ) : (
+              <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                {conversations.map((conv, i) => (
+                  <div key={i} onClick={()=>setActiveChat({
+                    teacherEmail: teacher.email,
+                    teacherName: teacher.name,
+                    studentEmail: conv.student_email,
+                    studentName: conv.student_email.split('@')[0],
+                  })}
+                    style={{ background:"#fff", borderRadius:16,
+                      padding:"16px 20px", border:`1.5px solid ${C.gray200}`,
+                      display:"flex", alignItems:"center", gap:14,
+                      cursor:"pointer", transition:"all 0.15s" }}
+                    onMouseEnter={e=>e.currentTarget.style.background=C.lb}
+                    onMouseLeave={e=>e.currentTarget.style.background="#fff"}>
+                    <div style={{ width:44, height:44, borderRadius:"50%",
+                      background:`linear-gradient(135deg,${C.navy},${C.gold})`,
+                      display:"flex", alignItems:"center", justifyContent:"center",
+                      color:"#fff", fontWeight:800, fontSize:16, flexShrink:0 }}>
+                      {conv.student_email[0].toUpperCase()}
+                    </div>
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>
+                        {conv.student_email}
+                      </div>
+                      <div style={{ color:C.gray400, fontSize:12,
+                        whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                        {conv.content}
+                      </div>
+                    </div>
+                    <div style={{ display:"flex", flexDirection:"column",
+                      alignItems:"flex-end", gap:4, flexShrink:0 }}>
+                      <div style={{ fontSize:11, color:C.gray400 }}>
+                        {new Date(conv.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' })}
+                      </div>
+                      {!conv.read_by_teacher && (
+                        <div style={{ background:C.navy, color:"#fff",
+                          fontSize:10, fontWeight:800, padding:"2px 8px",
+                          borderRadius:20 }}>NEW</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {activeChat && (
+              <ChatModal
+                teacherEmail={activeChat.teacherEmail}
+                teacherName={activeChat.teacherName}
+                studentEmail={activeChat.studentEmail}
+                studentName={activeChat.studentName}
+                senderType="teacher"
+                onClose={()=>setActiveChat(null)}
+              />
+            )}
+          </div>
+        )}
+
         {/* ── PROFILE ── */}
         {tab==="profile" && (
+
+
+
+        
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"1fr 1fr", gap:20 }}>
             <div style={{ background:"#fff", borderRadius:20, padding:28,
               border:`1.5px solid ${C.gray200}` }}>
