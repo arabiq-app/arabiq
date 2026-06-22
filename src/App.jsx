@@ -1310,8 +1310,19 @@ function ChatModal({ teacherEmail, teacherName, studentEmail, studentName, sende
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+const detectContactInfo = (text) => {
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+    const phoneRegex = /(\+?[\d\s\-().]{7,})/;
+    const socialRegex = /(whatsapp|telegram|instagram|snapchat|facebook|signal|skype|zoom|teams|discord|t\.me\/|@[a-zA-Z0-9_]{3,})/i;
+    return emailRegex.test(text) || phoneRegex.test(text) || socialRegex.test(text);
+  };
+
   const handleSend = async () => {
     if (!input.trim() || sending) return;
+    if (detectContactInfo(input.trim())) {
+      alert("⚠️ Sharing contact details, phone numbers or social media handles is not allowed. Please keep all communication within Arabiq.");
+      return;
+    }
     setSending(true);
     try {
       await sendMessage({ teacherEmail, studentEmail, senderType, content: input.trim() });
@@ -1320,6 +1331,10 @@ function ChatModal({ teacherEmail, teacherName, studentEmail, studentName, sende
     } catch(e) { alert("Failed to send message. Please try again."); }
     setSending(false);
   };
+
+
+
+  
 
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(10,20,60,0.55)",
