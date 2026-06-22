@@ -2716,9 +2716,23 @@ setUser(u=>({...u, learningGoal: goal}));
                         </button>
                       </div>
                     )}
+
+                    {(b.status==="confirmed" || b.status==="completed") && (
+                      <button onClick={()=>setActiveChat({
+                          teacherEmail: b.teacherEmail,
+                          teacherName: b.teacherName,
+                          studentEmail: user.email,
+                          studentName: user.name,
+                        })}
+                        style={{ background:C.lb, color:C.navy,
+                          border:`1px solid ${C.gray200}`, borderRadius:8,
+                          padding:"8px 14px", fontWeight:700, fontSize:12,
+                          cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+                        💬 Message
+                      </button>
+                    )}
                     {b.status==="confirmed" && (
                       <div style={{ display:"flex", gap:8 }}>
-
                         <button
                           onClick={()=>{ if(b.whereby_room_url) window.open(b.whereby_room_url, "_blank"); }}
                           style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
@@ -2736,6 +2750,14 @@ setUser(u=>({...u, learningGoal: goal}));
                         </button>
                       </div>
                     )}
+
+
+                    
+
+
+
+                    
+
                   </div>
                 ))}
               </div>
