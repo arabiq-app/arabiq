@@ -1283,7 +1283,145 @@ const convertSlotToUserTz = (slotStr) => {
 
 
 
+/* ─────────────────────────────────────────────────────────────────
+   CHAT MODAL
+───────────────────────────────────────────────────────────────── */
+function ChatModal({ teacherEmail, teacherName, studentEmail, studentName, senderType, onClose }) {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [sending, setSending] = useState(false);
+  const bottomRef = useRef(null);
 
+  const loadMessages = async () => {
+    try {
+      const msgs = await getConversation(teacherEmail, studentEmail);
+      setMessages(msgs);
+      await markMessagesRead(teacherEmail, studentEmail, senderType);
+    } catch(e) {}
+  };
+
+  useEffect(() => {
+    loadMessages();
+    const interval = setInterval(loadMessages, 5000);
+    return () => clearInterval(interval);
+  }, [teacherEmail, studentEmail]);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim() || sending) return;
+    setSending(true);
+    try {
+      await sendMessage({ teacherEmail, studentEmail, senderType, content: input.trim() });
+      setInput("");
+      await loadMessages();
+    } catch(e) { alert("Failed to send message. Please try again."); }
+    setSending(false);
+  };
+
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(10,20,60,0.55)",
+      backdropFilter:"blur(6px)", display:"flex", alignItems:"center",
+      justifyContent:"center", zIndex:900, padding:16 }}
+      onClick={onClose}>
+      <div style={{ background:"#fff", borderRadius:22, width:"100%", maxWidth:480,
+        height:"85vh", display:"flex", flexDirection:"column",
+        boxShadow:"0 30px 80px rgba(0,0,0,0.25)", overflow:"hidden" }}
+        onClick={e=>e.stopPropagation()}>
+
+        {/* Header */}
+        <div style={{ background:`linear-gradient(135deg,${C.navy},#2A4A9A)`,
+          padding:"18px 22px", display:"flex", alignItems:"center",
+          justifyContent:"space-between" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            <div style={{ width:38, height:38, borderRadius:"50%",
+              background:`linear-gradient(135deg,${C.gold},${C.goldLt})`,
+              display:"flex", alignItems:"center", justifyContent:"center",
+              fontWeight:800, color:C.navy, fontSize:14 }}>
+              {(senderType === 'student' ? teacherName : studentName)?.split(" ").map(n=>n[0]).join("").slice(0,2).toUpperCase()}
+            </div>
+            <div>
+              <div style={{ color:"#fff", fontWeight:700, fontSize:15 }}>
+                {senderType === 'student' ? teacherName : studentName}
+              </div>
+              <div style={{ color:"rgba(255,255,255,0.5)", fontSize:11 }}>
+                {senderType === 'student' ? 'Your Teacher' : 'Your Student'}
+              </div>
+            </div>
+          </div>
+          <button onClick={onClose}
+            style={{ background:"rgba(255,255,255,0.1)", border:"none",
+              borderRadius:"50%", width:32, height:32, cursor:"pointer",
+              color:"#fff", fontSize:16, display:"flex", alignItems:"center",
+              justifyContent:"center" }}>✕</button>
+        </div>
+
+        {/* Warning banner */}
+        <div style={{ background:"#FEF9EC", padding:"8px 16px",
+          fontSize:11, color:"#92400E", textAlign:"center",
+          borderBottom:`1px solid #FDE68A` }}>
+          ⚠️ Arranging lessons outside Arabiq violates our Terms of Service
+        </div>
+
+        {/* Messages */}
+        <div style={{ flex:1, overflowY:"auto", padding:"16px",
+          display:"flex", flexDirection:"column", gap:10 }}>
+          {messages.length === 0 ? (
+            <div style={{ textAlign:"center", color:C.gray400,
+              fontSize:13, margin:"auto" }}>
+              <div style={{ fontSize:40, marginBottom:12 }}>💬</div>
+              <p>No messages yet. Start the conversation!</p>
+            </div>
+          ) : messages.map((m, i) => {
+            const isMe = m.sender_type === senderType;
+            return (
+              <div key={m.id || i} style={{ display:"flex",
+                justifyContent: isMe ? "flex-end" : "flex-start" }}>
+                <div style={{ maxWidth:"75%", padding:"10px 14px",
+                  borderRadius: isMe ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+                  background: isMe ? `linear-gradient(135deg,${C.navy},#2A4A9A)` : C.gray100,
+                  color: isMe ? "#fff" : C.navy,
+                  fontSize:14, lineHeight:1.5 }}>
+                  <div>{m.content}</div>
+                  <div style={{ fontSize:10, marginTop:4, opacity:0.6, textAlign:"right" }}>
+                    {new Date(m.created_at).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' })}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Input */}
+        <div style={{ padding:"12px 16px", borderTop:`1px solid ${C.gray100}`,
+          display:"flex", gap:10, alignItems:"flex-end" }}>
+          <textarea
+            value={input}
+            onChange={e=>setInput(e.target.value)}
+            onKeyDown={e=>{ if(e.key==="Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }}}
+            placeholder="Type a message..."
+            rows={1}
+            style={{ flex:1, padding:"10px 14px", borderRadius:12,
+              border:`1.5px solid ${C.gray200}`, fontSize:14,
+              fontFamily:"inherit", resize:"none", outline:"none",
+              color:C.navy, maxHeight:100, overflowY:"auto" }} />
+          <button onClick={handleSend} disabled={!input.trim() || sending}
+            style={{ background: input.trim() ? `linear-gradient(135deg,${C.navy},#2A4A9A)` : C.gray200,
+              border:"none", borderRadius:12, width:44, height:44,
+              cursor: input.trim() ? "pointer" : "default",
+              color:"#fff", fontSize:20, display:"flex",
+              alignItems:"center", justifyContent:"center",
+              flexShrink:0 }}>
+            {sending ? "..." : "➤"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
 
