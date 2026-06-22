@@ -2261,7 +2261,8 @@ const [settingsForm, setSettingsForm] = useState({
 });
 
   const [savingSettings, setSavingSettings] = useState(false);
-const [activeChat, setActiveChat] = useState(null);
+  const [activeChat, setActiveChat] = useState(null);
+const [studentConversations, setStudentConversations] = useState([]);
 
   useEffect(()=>{ setTab(initTab); },[initTab]);
 
