@@ -1206,13 +1206,17 @@ const convertSlotToUserTz = (slotStr) => {
     const hh = String(h).padStart(2,'0');
     const mn = String(m).padStart(2,'0');
 
-    // ✅ Correctly create date IN Cairo timezone (UTC+2) using offset
-    const utcDate = new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00+02:00`);
+    // ✅ Correctly create UTC date from Cairo time (UTC+2)
+    // Cairo offset = +120 minutes, so subtract to get UTC
+    const cairoOffsetMs = 120 * 60 * 1000;
+    const utcMs = Date.UTC(parseInt(yyyy), parseInt(mm)-1, parseInt(dd), h, m) - cairoOffsetMs;
+    const utcDate = new Date(utcMs);
 
     const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const localDay  = utcDate.toLocaleDateString('en-GB',  { weekday:'short', timeZone: userTz });
-    const localTime = utcDate.toLocaleTimeString('en-GB',  { hour:'2-digit', minute:'2-digit', hour12:true, timeZone: userTz });
-    const tzLabel   = userTz.split('/').pop().replace(/_/g,' ');
+    const localDay = utcDate.toLocaleDateString('en-GB', { weekday:'short', timeZone: userTz });
+    // Use en-US for reliable 12-hour format across all browsers
+    const localTime = utcDate.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true, timeZone: userTz }).toLowerCase();
+    const tzLabel = userTz.split('/').pop().replace(/_/g,' ');
 
     return { display: `${localDay} ${localTime}`, tzLabel, original: timeStr };
   } catch(e) { return { display: slotStr, tzLabel: '', original: slotStr }; }
