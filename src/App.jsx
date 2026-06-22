@@ -5227,23 +5227,7 @@ const [unreadCount, setUnreadCount] = useState(0);
                       £{(b.session_type === 'Trial' || b.type === 'Trial' ? 0 : (b.price||0)*0.7).toFixed(2)}
                     </div>
 
-                    {(b.status==="confirmed" || b.status==="completed") && (
-  <button onClick={()=>setActiveChat({
-    teacherEmail: b.teacher_email,
-    teacherName: b.teacherName || b.teacher_name,
-    studentEmail: user.email,
-    studentName: user.name,
-  })}
-    style={{ background:C.lb, color:C.navy,
-      border:`1px solid ${C.gray200}`, borderRadius:8,
-      padding:"8px 14px", fontWeight:700, fontSize:12,
-      cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
-    💬 Message
-  </button>
-)}
-
-                    
-
+  
                     
                     {b.status==="confirmed" && b.whereby_host_url && (
                       <button onClick={()=>window.open(b.whereby_host_url,"_blank")}
