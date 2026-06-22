@@ -3041,6 +3041,79 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
           </div>
         )}
 
+        {/* ── MESSAGES ── */}
+        {tab==="messages" && (
+          <div>
+            <h2 style={{ fontSize:20, fontWeight:800, color:C.navy, margin:"0 0 8px" }}>Messages</h2>
+            <p style={{ color:C.gray600, fontSize:13, marginBottom:20 }}>
+              Your conversations with teachers you have booked with.
+            </p>
+            {studentConversations.length === 0 ? (
+              <div style={{ background:"#fff", borderRadius:20, padding:"60px 40px",
+                textAlign:"center", border:`1.5px solid ${C.gray200}` }}>
+                <div style={{ fontSize:48, marginBottom:16 }}>💬</div>
+                <h3 style={{ fontFamily:"'Playfair Display',serif", color:C.navy,
+                  fontSize:20, marginBottom:8 }}>No messages yet</h3>
+                <p style={{ color:C.gray600, fontSize:14, marginBottom:20 }}>
+                  You can message teachers after booking a session with them.
+                </p>
+                <Btn label="Browse Teachers →" variant="primary" onClick={onBrowseTeachers} />
+              </div>
+            ) : (
+              <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+                {studentConversations.map((conv, i) => {
+                  const booking = myBookings.find(b => b.teacherEmail === conv.teacher_email);
+                  const teacherName = booking?.teacherName || conv.teacher_email;
+                  const teacherAvatar = booking?.teacherAvatar || conv.teacher_email[0].toUpperCase();
+                  return (
+                    <div key={i} onClick={()=>setActiveChat({
+                        teacherEmail: conv.teacher_email,
+                        teacherName: teacherName,
+                        studentEmail: user.email,
+                        studentName: user.name,
+                      })}
+                      style={{ background:"#fff", borderRadius:16,
+                        padding:"16px 20px", border:`1.5px solid ${C.gray200}`,
+                        display:"flex", alignItems:"center", gap:14,
+                        cursor:"pointer", transition:"all 0.15s" }}
+                      onMouseEnter={e=>e.currentTarget.style.background=C.lb}
+                      onMouseLeave={e=>e.currentTarget.style.background="#fff"}>
+                      <div style={{ width:44, height:44, borderRadius:"50%",
+                        background:`linear-gradient(135deg,${C.navy},${C.gold})`,
+                        display:"flex", alignItems:"center", justifyContent:"center",
+                        color:"#fff", fontWeight:800, fontSize:16, flexShrink:0 }}>
+                        {typeof teacherAvatar === 'string' && teacherAvatar.length <= 2
+                          ? teacherAvatar
+                          : conv.teacher_email[0].toUpperCase()}
+                      </div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>
+                          {teacherName}
+                        </div>
+                        <div style={{ color:C.gray400, fontSize:12,
+                          whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                          {conv.content}
+                        </div>
+                      </div>
+                      <div style={{ display:"flex", flexDirection:"column",
+                        alignItems:"flex-end", gap:4, flexShrink:0 }}>
+                        <div style={{ fontSize:11, color:C.gray400 }}>
+                          {new Date(conv.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' })}
+                        </div>
+                        {!conv.read_by_student && conv.sender_type === 'teacher' && (
+                          <div style={{ background:C.gold, color:C.navy,
+                            fontSize:10, fontWeight:800, padding:"2px 8px",
+                            borderRadius:20 }}>NEW</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* ── PROGRESS ── */}
         {tab==="progress" && (
           <div style={{ display:"grid", gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
