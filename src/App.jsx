@@ -5503,13 +5503,18 @@ const [unreadCount, setUnreadCount] = useState(0);
                     </div>
                     <div style={{ flex:1, minWidth:0 }}>
                       <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>
-                        {conv.student_email}
+                        {(() => {
+                          const booking = bookings.find(b => b.student_email === conv.student_email);
+                          if (booking?.student_name) return booking.student_name.split(" ")[0];
+                          return "Student";
+                        })()}
                       </div>
                       <div style={{ color:C.gray400, fontSize:12,
                         whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
                         {conv.content}
                       </div>
                     </div>
+                  
                     <div style={{ display:"flex", flexDirection:"column",
                       alignItems:"flex-end", gap:4, flexShrink:0 }}>
                       <div style={{ fontSize:11, color:C.gray400 }}>
