@@ -2306,8 +2306,10 @@ useEffect(()=>{
   const totalHours = myBookings.reduce((sum, b) => sum + (b.type === "Trial" ? 0.5 : 1), 0);
   const firstBookingDate = myBookings.length > 0 ? myBookings[myBookings.length - 1].booked : null;
 
-  const subTabs = [["overview","Overview"],["sessions","My Bookings"],["progress","Progress"],["settings","Settings"]];
+const subTabs = [["overview","Overview"],["sessions","My Bookings"],["messages","Messages"],["progress","Progress"],["settings","Settings"]];
 
+
+  
   return (
     <div style={{ paddingTop:72, minHeight:"100vh", background:C.cream }}>
       {/* Banner */}
