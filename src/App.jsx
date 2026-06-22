@@ -5051,8 +5051,9 @@ const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' ||
               <div>
                 <h2 style={{ fontSize:20, fontWeight:800, color:C.navy, margin:"0 0 4px" }}>Manage Availability</h2>
                 <p style={{ color:C.gray600, fontSize:13 }}>
-                  Click slots to toggle them. Students can only book active slots.
+                  Click slots to toggle them. All times are in <strong>Cairo time (Egypt)</strong>. Students will see these converted to their local timezone automatically.
                 </p>
+               
               </div>
               <Btn label={savingSlots?"Saving…":"Save Changes"} variant="gold"
                 disabled={savingSlots}
