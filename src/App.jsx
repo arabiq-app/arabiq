@@ -1579,20 +1579,29 @@ const intentRes = await fetch("/api/create-payment-intent", {
         return h*60+parseInt(m[2]);
       };
       return toMins(a.split(" ").slice(1).join(" ")) - toMins(b.split(" ").slice(1).join(" "));
-    }).map(s => (
-      <button key={s} onClick={()=>setSlot(s)}
-        style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
-          border:`2px solid ${slot===s?C.gold:C.gray200}`,
-          background: slot===s?"#FEF9EC":"#fff",
-          color: slot===s?"#92400E":C.gray800,
-          fontWeight: slot===s?700:500, fontSize:13, transition:"all 0.2s",
-          textAlign:"left" }}>
-        🕐 {convertSlotToUserTz(s).display}
-        <div style={{ fontSize:11, color: slot===s?"#92400E":C.gray400, marginTop:2 }}>
-          {convertSlotToUserTz(s).tzLabel} time
-        </div>
-      </button>
-    ))}
+
+      }).map(s => {
+      const converted = convertSlotToUserTz(s);
+      return (
+        <button key={s} onClick={()=>setSlot(s)}
+          style={{ padding:"12px 16px", borderRadius:10, cursor:"pointer", fontFamily:"inherit",
+            border:`2px solid ${slot===s?C.gold:C.gray200}`,
+            background: slot===s?"#FEF9EC":"#fff",
+            color: slot===s?"#92400E":C.gray800,
+            fontWeight: slot===s?700:500, fontSize:13, transition:"all 0.2s",
+            textAlign:"left" }}>
+          🕐 {converted.display || s}
+          <div style={{ fontSize:11, color: slot===s?"#92400E":C.gray400, marginTop:2 }}>
+            {converted.tzLabel ? `${converted.tzLabel} time` : 'local time'}
+          </div>
+        </button>
+      );
+    })}
+
+      
+
+              
+
   </div>
           }
           <Btn label="Continue →" variant="primary" full disabled={!slot} onClick={()=>setStep(2)} />
