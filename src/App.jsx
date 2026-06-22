@@ -5241,10 +5241,19 @@ const [unreadCount, setUnreadCount] = useState(0);
                 borderBottom:`3px solid ${tab===id?C.gold:"transparent"}`,
                 color: tab===id?C.navy:C.gray600,
                 fontWeight: tab===id?700:500, fontSize:14, fontFamily:"inherit",
-                cursor:"pointer", transition:"all 0.2s", whiteSpace:"nowrap" }}>
+                cursor:"pointer", transition:"all 0.2s", whiteSpace:"nowrap",
+                position:"relative", display:"inline-flex", alignItems:"center", gap:6 }}>
               {label}
+              {id==="messages" && unreadCount > 0 && (
+                <span style={{ display:"inline-flex", alignItems:"center", justifyContent:"center",
+                  background:C.red, color:"#fff", borderRadius:"50%",
+                  width:16, height:16, fontSize:9, fontWeight:800, lineHeight:1 }}>
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
             </button>
           ))}
+
         </div>
       </div>
 
