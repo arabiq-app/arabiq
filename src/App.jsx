@@ -1185,31 +1185,29 @@ const convertSlotToUserTz = (slotStr) => {
     const dayStr = parts[0];
     const timeStr = parts.slice(1).join(' ');
     const targetDay = dayMap[dayStr];
-    if (targetDay === undefined) return slotStr;
+    if (targetDay === undefined) return { display: slotStr, tzLabel: '', original: slotStr };
 
     const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)?/i);
-    if (!match) return slotStr;
+    if (!match) return { display: slotStr, tzLabel: '', original: slotStr };
     let h = parseInt(match[1]), m = parseInt(match[2]);
     const p = match[3]?.toUpperCase();
     if (p === 'PM' && h !== 12) h += 12;
     if (p === 'AM' && h === 12) h = 0;
 
-    // Find next occurrence of this day in Cairo
+    // Find next occurrence of this day
     const now = new Date();
-    const cairoNow = new Date(now.toLocaleString('en-US', { timeZone: 'Africa/Cairo' }));
-    let diff = (targetDay - cairoNow.getDay() + 7) % 7 || 7;
-    const cairoDate = new Date(cairoNow);
-    cairoDate.setDate(cairoNow.getDate() + diff);
+    let daysUntil = (targetDay - now.getDay() + 7) % 7 || 7;
+    const targetDate = new Date(now);
+    targetDate.setDate(now.getDate() + daysUntil);
 
-    // Build ISO string in Cairo time (UTC+2) and parse to UTC
-    const yyyy = cairoDate.getFullYear();
-    const mm = String(cairoDate.getMonth()+1).padStart(2,'0');
-    const dd = String(cairoDate.getDate()).padStart(2,'0');
+    const yyyy = targetDate.getFullYear();
+    const mm = String(targetDate.getMonth()+1).padStart(2,'0');
+    const dd = String(targetDate.getDate()).padStart(2,'0');
     const hh = String(h).padStart(2,'0');
     const mn = String(m).padStart(2,'0');
-    const cairoTimeZone = 'Africa/Cairo';
-const utcDate = new Date(new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00`).toLocaleString('en-US', { timeZone: cairoTimeZone }));
-    
+
+    // ✅ Correctly create date IN Cairo timezone (UTC+2) using offset
+    const utcDate = new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00+02:00`);
 
     const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const localDay  = utcDate.toLocaleDateString('en-GB',  { weekday:'short', timeZone: userTz });
@@ -1219,6 +1217,12 @@ const utcDate = new Date(new Date(`${yyyy}-${mm}-${dd}T${hh}:${mn}:00`).toLocale
     return { display: `${localDay} ${localTime}`, tzLabel, original: timeStr };
   } catch(e) { return { display: slotStr, tzLabel: '', original: slotStr }; }
 };
+
+
+
+
+
+
 
 
 /* ─────────────────────────────────────────────────────────────────
