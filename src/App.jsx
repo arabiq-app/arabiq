@@ -4248,12 +4248,15 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                           <span style={{ fontFamily:"monospace", fontWeight:700,
                             color:C.navy, fontSize:12 }}>{b.id}</span>
                         </td>
+
                         <td style={{ padding:"10px 14px", fontWeight:600, color:C.navy }}>
-                          {b.student}
+                          {b.student_name || b.student || "—"}
                         </td>
                         <td style={{ padding:"10px 14px", color:C.gray800, fontSize:12 }}>
-                          {b.teacherName}
+                          {b.teacher_name || b.teacherName || "—"}
                         </td>
+                        
+                      
                         <td style={{ padding:"10px 14px", color:C.gray800, fontSize:12 }}>
                           {b.slot}
                         </td>
