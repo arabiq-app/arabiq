@@ -2693,10 +2693,18 @@ setUser(u=>({...u, learningGoal: goal}));
                       </div>
                       <div style={{ color:C.gray600, fontSize:13 }}>{b.topic}</div>
                     </div>
+
                     <div style={{ minWidth:140 }}>
-                      <div style={{ fontWeight:600, color:C.navy, fontSize:13 }}>{b.slot}</div>
+                      <div style={{ fontWeight:600, color:C.navy, fontSize:13 }}>
+                        {convertSlotToUserTz(b.slot).display || b.slot}
+                        <span style={{ fontSize:10, color:C.gray400, marginLeft:4 }}>
+                          ({convertSlotToUserTz(b.slot).tzLabel})
+                        </span>
+                      </div>
                       <div style={{ color:C.gray400, fontSize:11 }}>Booked {b.booked}</div>
                     </div>
+
+
                     <div style={{ display:"flex", gap:8, alignItems:"center" }}>
                       <Chip label={b.type}
                         bg={b.type==="Trial"?"#FEF9EC":C.lb}
