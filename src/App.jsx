@@ -2244,9 +2244,12 @@ const [settingsForm, setSettingsForm] = useState({
   level: user.level || "",
   dialect: user.dialect || "",
 });
-const [savingSettings, setSavingSettings] = useState(false);
+
+  const [savingSettings, setSavingSettings] = useState(false);
+const [activeChat, setActiveChat] = useState(null);
 
   useEffect(()=>{ setTab(initTab); },[initTab]);
+
 
   // Derive bookings - match by email OR by id in user.bookings array
  const [myBookings, setMyBookings] = useState([]);
