@@ -3215,14 +3215,24 @@ if (isEligibleForRefund && cancelConfirm.paymentIntentId) {
             </div>
           </div>
         )}
-        </div>
+
+</div>
+
+      {activeChat && (
+        <ChatModal
+          teacherEmail={activeChat.teacherEmail}
+          teacherName={activeChat.teacherName}
+          studentEmail={activeChat.studentEmail}
+          studentName={activeChat.studentName}
+          senderType="student"
+          onClose={()=>setActiveChat(null)}
+        />
+      )}
     </div>
   );
 }
-
-/* ─────────────────────────────────────────────────────────────────
-   ADMIN PANEL (complete)
-───────────────────────────────────────────────────────────────── */
+        
+   
 
 const ADMIN_ISSUES = [
 
