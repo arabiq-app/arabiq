@@ -4261,10 +4261,11 @@ fire(`✅ Onboarding link copied! Send it to ${t.name}`);
                           {b.slot}
                         </td>
                         <td style={{ padding:"10px 14px" }}>
-                          <Chip label={b.type}
-                            bg={b.type==="Trial"?"#FEF9EC":C.lb}
-                            color={b.type==="Trial"?C.amber:C.navy} />
+                          <Chip label={b.session_type||b.type||"—"}
+                            bg={(b.session_type||b.type)==="Trial"?"#FEF9EC":C.lb}
+                            color={(b.session_type||b.type)==="Trial"?C.amber:C.navy} />
                         </td>
+                       
                         <td style={{ padding:"10px 14px", fontWeight:800, color:C.navy }}>
                           £{b.price?.toFixed(2)||"-"}
                         </td>
