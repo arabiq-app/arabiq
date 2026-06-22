@@ -4910,15 +4910,22 @@ const earned = completed.reduce((sum, b) => sum + (b.session_type === 'Trial' ||
                 borderRadius:20, padding:26, gridColumn:"1 / -1" }}>
                 <div style={{ color:C.goldLt, fontSize:11, fontWeight:700,
                   letterSpacing:1, marginBottom:8 }}>NEXT BOOKING</div>
-              <div style={{ color:"#fff", fontSize:20, fontWeight:800,
+                <div style={{ color:"#fff", fontSize:20, fontWeight:800,
                   fontFamily:"'Playfair Display',serif", marginBottom:4 }}>
                   {confirmed[0].slot}
+                  <span style={{ fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.45)", marginLeft:8 }}>
+                    (Cairo time)
+                  </span>
                   {confirmed[0].session_date && (
                     <span style={{ fontSize:13, fontWeight:600, color:C.goldLt, marginLeft:8 }}>
-                      ({new Date(confirmed[0].session_date).toLocaleDateString('en-GB', { day:'numeric', month:'long' })})
+                      · {new Date(confirmed[0].session_date).toLocaleDateString('en-GB', { day:'numeric', month:'long' })}
                     </span>
                   )}
                 </div>
+
+
+                
+         
                 <div style={{ color:"rgba(255,255,255,0.65)", fontSize:14, marginBottom:16 }}>
                   with {confirmed[0].student_name} · {confirmed[0].session_type} session
                 </div>
