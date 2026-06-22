@@ -4783,7 +4783,27 @@ function TeacherDashboard({ teacher, setTeacher, onLogout }) {
   const [tab, setTab] = useState("overview");
   const [teacherCancelConfirm, setTeacherCancelConfirm] = useState(null);
   const [bookings, setBookings] = useState([]);
-  const [slots, setSlots] = useState(teacher.slots || []);
+  const normalizeSlot = (slot) => {
+  if (!slot || typeof slot !== 'string') return null;
+  // Already correct format e.g. "Mon 9:00 AM"
+  if (/^[A-Z][a-z]{2}\s\d+:\d{2}\s(AM|PM)$/.test(slot)) return slot;
+  // Normalize old format e.g. "mon 9:00am" → "Mon 9:00 AM"
+  const parts = slot.trim().split(/\s+/);
+  if (parts.length < 2) return null;
+  const day = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+  const timePart = parts.slice(1).join(' ');
+  const match = timePart.match(/(\d+):(\d+)\s*(am|pm)/i);
+  if (!match) return null;
+  const h = match[1];
+  const m = match[2];
+  const ampm = match[3].toUpperCase();
+  const validDays = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  if (!validDays.includes(day)) return null;
+  return `${day} ${h}:${m} ${ampm}`;
+};
+const [slots, setSlots] = useState(
+  (teacher.slots || []).map(normalizeSlot).filter(Boolean)
+);
   const [savingSlots, setSavingSlots] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [toast, setToast] = useState(null);
