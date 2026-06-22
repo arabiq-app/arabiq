@@ -1108,42 +1108,86 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                 <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
                   {(() => {
 
-                const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-                    const grouped = {};
-                    const timeToMinutes = (timeStr) => {
-                      const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-                      if (!match) return 0;
-                      let h = parseInt(match[1]), m = parseInt(match[2]);
-                      const p = match[3].toUpperCase();
-                      if (p === 'PM' && h !== 12) h += 12;
-                      if (p === 'AM' && h === 12) h = 0;
-                      return h * 60 + m;
-                    };
-                    const sortedSlots = [...teacher.slots].sort((a, b) => {
-                      const dayA = dayOrder.indexOf(a.split(" ")[0]);
-                      const dayB = dayOrder.indexOf(b.split(" ")[0]);
-                      if (dayA !== dayB) return dayA - dayB;
-                      return timeToMinutes(a.split(" ").slice(1).join(" ")) - timeToMinutes(b.split(" ").slice(1).join(" "));
-                    });
-                    sortedSlots.forEach(s => {
-                      const converted = convertSlotToUserTz(s);
-                      const localDay = converted.display ? converted.display.split(" ")[0] : s.split(" ")[0];
-                      const dayFull = { Mon:"Mon", Tue:"Tue", Wed:"Wed", Thu:"Thu", Fri:"Fri", Sat:"Sat", Sun:"Sun" };
-                      const day = dayFull[localDay] || localDay;
-                      if (!grouped[day]) grouped[day] = [];
-                      grouped[day].push({ full: s, time: converted.display });
-                    });
-                
-                 
 
-                    const dayNames = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday", Sun:"Sunday" };
-                    return dayOrder.filter(d => grouped[d]).map(day => (
-                      <div key={day}>
+                const dayOrder = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+                    const fullDayNames = { Mon:"Monday", Tue:"Tuesday", Wed:"Wednesday", Thu:"Thursday", Fri:"Friday", Sat:"Saturday", Sun:"Sunday" };
+
+                    // Convert all slots first, then sort by local day + local time
+                    const convertedSlots = teacher.slots.map(s => {
+                      const converted = convertSlotToUserTz(s);
+                      // Get the local date of this slot to extract day index
+                      const dayMap = { Sun:0,Sunday:0,Mon:1,Monday:1,Tue:2,Tuesday:2,Wed:3,Wednesday:3,Thu:4,Thursday:4,Fri:5,Friday:5,Sat:6,Saturday:6 };
+                      const parts = s.trim().split(/\s+/);
+                      const cairoDay = parts[0];
+                      const timeStr = parts.slice(1).join(' ');
+                      const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)?/i);
+                      let h = 0, m = 0;
+                      if (match) {
+                        h = parseInt(match[1]); m = parseInt(match[2]);
+                        const p = match[3]?.toUpperCase();
+                        if (p === 'PM' && h !== 12) h += 12;
+                        if (p === 'AM' && h === 12) h = 0;
+                      }
+                      const targetDay = dayMap[cairoDay];
+                      const now = new Date();
+                      let daysUntil = ((targetDay - now.getDay()) + 7) % 7 || 7;
+                      const targetDate = new Date(now);
+                      targetDate.setDate(now.getDate() + daysUntil);
+                      const yyyy = targetDate.getFullYear();
+                      const mm = String(targetDate.getMonth()+1).padStart(2,'0');
+                      const dd = String(targetDate.getDate()).padStart(2,'0');
+                      const cairoOffsetMs = 120 * 60 * 1000;
+                      const utcMs = Date.UTC(parseInt(yyyy), parseInt(mm)-1, parseInt(dd), h, m) - cairoOffsetMs;
+                      const utcDate = new Date(utcMs);
+                      const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                      // Get local day index for sorting
+                      const localDayNum = utcDate.toLocaleDateString('en-US', { weekday:'short', timeZone: userTz });
+                      const localDayOrder = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+                      const localDayIndex = localDayOrder[localDayNum] ?? dayOrder.indexOf(cairoDay);
+                      // Get local time in minutes for sorting
+                      const localHour = parseInt(utcDate.toLocaleString('en-US', { hour:'numeric', hour12:false, timeZone: userTz }));
+                      const localMin = utcDate.getUTCMinutes(); // minutes don't change with timezone
+                      const localTimeMinutes = (isNaN(localHour) ? h : localHour) * 60 + m;
+                      return {
+                        original: s,
+                        display: converted.display || s,
+                        tzLabel: converted.tzLabel || '',
+                        localDayIndex,
+                        localDayShort: localDayNum,
+                        localTimeMinutes,
+                      };
+                    });
+
+                    // Sort by local day then local time
+                    convertedSlots.sort((a, b) => {
+                      if (a.localDayIndex !== b.localDayIndex) return a.localDayIndex - b.localDayIndex;
+                      return a.localTimeMinutes - b.localTimeMinutes;
+                    });
+
+                    // Group by local day short name
+                    const grouped = {};
+                    convertedSlots.forEach(slot => {
+                      const key = slot.localDayShort;
+                      if (!grouped[key]) grouped[key] = [];
+                      grouped[key].push(slot);
+                    });
+
+                    // Render in day order
+                    const localDayOrderArr = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun","Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+                    return Object.keys(grouped)
+                      .sort((a,b) => {
+                        const order = { Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6 };
+                        return (order[a]??7) - (order[b]??7);
+                      })
+                      .map(dayKey => (
+                      <div key={dayKey}>
                         <div style={{ fontSize:11, fontWeight:700, color:C.gold,
                           letterSpacing:1, textTransform:"uppercase",
-                          marginBottom:4, marginTop:4 }}>{dayNames[day]}</div>
-                        {grouped[day].map(({full, time}) => (
-                          <div key={full} onClick={()=>teacher.available && onBook(teacher)}
+                          marginBottom:4, marginTop:4 }}>
+                          {fullDayNames[dayKey] || dayKey}
+                        </div>
+                        {grouped[dayKey].map(({original, display, tzLabel}) => (
+                          <div key={original} onClick={()=>teacher.available && onBook(teacher)}
                             style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
                               padding:"9px 14px", background:C.cream, borderRadius:9,
                               fontSize:13, color:C.navy, fontWeight:600,
@@ -1153,13 +1197,22 @@ function TeacherProfilePage({ teacher, currentUser, onBack, onBook }) {
                               transition:"all 0.15s" }}
                             onMouseEnter={e=>{ if(teacher.available) e.currentTarget.style.background=C.lb; }}
                             onMouseLeave={e=>e.currentTarget.style.background=C.cream}>
-                            <span>🕐 {convertSlotToUserTz(full).display}</span>
-<span style={{ fontSize:10, color:C.gray400 }}>{convertSlotToUserTz(full).tzLabel} time</span>
+                            <span>🕐 {display}</span>
+                            <span style={{ fontSize:10, color:C.gray400 }}>{tzLabel ? `${tzLabel} time` : 'local time'}</span>
                             {teacher.available && <span style={{ color:C.gold, fontSize:12, fontWeight:700 }}>Book →</span>}
                           </div>
                         ))}
                       </div>
                     ));
+
+
+                
+
+
+
+
+
+                
                   })()}
                   {teacher.slots.length > 6 && (
                     <div style={{ color:C.gray400, fontSize:12, textAlign:"center", paddingTop:4 }}>
