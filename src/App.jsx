@@ -7207,7 +7207,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
             <div style={{ maxWidth:800, margin:"0 auto", textAlign:"center", position:"relative", zIndex:2 }}>
               <p style={{ color:C.gold, fontWeight:700, fontSize:12, letterSpacing:2, textTransform:"uppercase", marginBottom:12 }}>Our Story</p>
            <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#fff", fontSize:"clamp(32px,5vw,52px)", fontWeight:800, lineHeight:1.1, margin:"0 0 20px", letterSpacing:-1 }}>
-                The finest Arabic teachers,<br />wherever you are
+                The finest Arabic teachers,<br />wherever you are.
               </h1>
               <p style={{ color:"rgba(255,255,255,0.65)", fontSize:16, lineHeight:1.8, maxWidth:560, margin:"0 auto" }}>
                 Arabiq was built from the ground up to connect Arabic learners with the finest native teachers in the world - wherever they are, whatever their goal.
