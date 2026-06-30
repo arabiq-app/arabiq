@@ -7224,7 +7224,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>Our Mission</h2>
               </div>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, margin:0 }}>
-                Arabiq is the first and only tutoring marketplace built exclusively for Arabic. While other platforms treat Arabic as an afterthought, we have dedicated everything — our teachers, our technology, and our team - to one language. Expert native teachers, every major dialect, private 1-on-1 lessons. For every learner, every goal, every dialect.
+                We believe the right teacher changes everything. Our mission is to make it easier for every learner to find truly great Arabic teachers.
               </p>
             </div>
 
