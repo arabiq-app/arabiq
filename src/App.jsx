@@ -6553,7 +6553,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
                 {[
                   { q:"What makes Arabiq different from other platforms?",
-                    a:"Arabiq is the only tutoring marketplace built exclusively for Arabic. Unlike generic platforms like iTalki or Preply which offer dozens of languages, every teacher, every feature, and every decision on Arabiq is focused entirely on Arabic learners." },
+                    a:"Arabiq is the only tutoring platform built exclusively for Arabic. Unlike generic platforms like iTalki or Preply which offer dozens of languages, every teacher, every feature, and every decision on Arabiq is focused entirely on Arabic learners." },
                   { q:"How are teachers vetted?",
                     a:"Every teacher on Arabiq is personally reviewed by our team before being approved. We verify native fluency, teaching qualifications, and professional experience." },
                   { q:"What do I need to join a video lesson?",
