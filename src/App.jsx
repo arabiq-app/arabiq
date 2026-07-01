@@ -7239,7 +7239,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 When we looked at the language learning market, we noticed something surprising. Arabic was everywhere - yet nowhere. It was listed alongside dozens of other languages on general tutoring platforms, but never given the focus it deserved. Finding a great teacher often meant scrolling through hundreds of profiles, with no guarantee they'd be the right fit. We believed Arabic deserved better. So we built Arabiq - a tutoring marketplace built exclusively for Arabic.
               </p>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, margin:0 }}>
-                Every teacher is a native speaker, rigorously vetted for exceptional teaching quality. Whether you're learning Modern Standard Arabic or a regional dialect - Egyptian, Levantine, Gulf, or Maghrebi - you'll find a teacher who specialises in your goals. Unlike general marketplaces, every part of Arabiq has been designed with one purpose: helping you find the right teacher and make meaningful progress in Arabic.
+                Every teacher is a native speaker, carefully selected for exceptional teaching quality. Whether you're learning Modern Standard Arabic or a regional dialect - Egyptian, Levantine, Gulf, or Maghrebi - you'll find a teacher who specialises in your goals. Unlike general marketplaces, every part of Arabiq has been designed with one purpose: helping you find the right teacher and make meaningful progress in Arabic.
               </p>
               
             </div>
