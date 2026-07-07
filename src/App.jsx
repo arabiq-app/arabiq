@@ -1313,7 +1313,8 @@ function ChatModal({ teacherEmail, teacherName, studentEmail, studentName, sende
 const detectContactInfo = (text) => {
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
     const phoneRegex = /(\+?[\d\s\-().]{7,})/;
-    const socialRegex = /(whatsapp|telegram|instagram|snapchat|facebook|signal|skype|zoom|teams|discord|t\.me\/|@[a-zA-Z0-9_]{3,})/i;
+  const socialRegex = /(whatsapp|telegram|instagram|snapchat|facebook|signal|skype|discord|t\.me\/|@[a-zA-Z0-9_]{3,})/i;
+
     return emailRegex.test(text) || phoneRegex.test(text) || socialRegex.test(text);
   };
 
