@@ -6394,6 +6394,25 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
             </div>
           </section>
 
+
+          {/* Business Arabic doorway */}
+          <section style={{ padding:isMobile?"36px 16px":"48px 24px", background:"#fff" }}>
+            <div style={{ maxWidth:900, margin:"0 auto", background:`linear-gradient(135deg,${C.navyDk},${C.navy})`, borderRadius:22, padding:isMobile?"30px 24px":"38px 44px", display:"flex", alignItems:"center", gap:24, flexWrap:"wrap" }}>
+              <div style={{ flex:1, minWidth:240 }}>
+                <p style={{ color:C.gold, fontWeight:700, fontSize:11, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>For Professionals</p>
+                <h3 style={{ fontFamily:"'Playfair Display',serif", color:"#fff", fontSize:24, fontWeight:800, margin:"0 0 8px" }}>Relocating to the Middle East for work?</h3>
+                <p style={{ color:"rgba(255,255,255,0.6)", fontSize:14, lineHeight:1.7, margin:0 }}>Business Arabic and culture training in the dialect of your destination — before your flight.</p>
+              </div>
+              <button onClick={()=>{ setPage("business"); setViewingTeacher(null); window.scrollTo(0,0); }}
+                style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`, color:C.navy, border:"none", borderRadius:12, padding:"13px 26px", fontWeight:800, fontSize:14, cursor:"pointer", fontFamily:"inherit", boxShadow:"0 6px 22px rgba(201,150,26,0.35)", whiteSpace:"nowrap" }}>
+                Business Arabic →
+              </button>
+            </div>
+          </section>
+
+
+          
+
           {/* Early adopter section */}
           <section style={{ padding:isMobile?"36px 16px":"48px 24px", background:C.cream }}>
             <div style={{ maxWidth:760, margin:"0 auto", textAlign:"center" }}>
