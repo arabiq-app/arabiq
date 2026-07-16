@@ -6780,6 +6780,192 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
         </div>
       )}
 
+
+
+      {/* ───── BUSINESS ARABIC ───── */}
+      {page==="business" && !viewingTeacher && (
+        <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream, animation:"fadeIn 0.3s ease" }}>
+
+          {/* Hero */}
+          <div style={{ background:`linear-gradient(135deg,${C.navyDk},${C.navy})`, padding:"72px 40px 80px", position:"relative", overflow:"hidden" }}>
+            <div style={{ position:"absolute", top:-80, right:-80, width:400, height:400, borderRadius:"50%", border:"1px solid rgba(201,150,26,0.08)", pointerEvents:"none" }} />
+            <div style={{ position:"absolute", bottom:-60, left:-40, width:240, height:240, borderRadius:"50%", border:"1px solid rgba(255,255,255,0.04)", pointerEvents:"none" }} />
+            <div style={{ maxWidth:800, margin:"0 auto", textAlign:"center", position:"relative", zIndex:2 }}>
+              <p style={{ color:C.gold, fontWeight:700, fontSize:12, letterSpacing:2, textTransform:"uppercase", marginBottom:12 }}>Business Arabic & Culture</p>
+              <h1 style={{ fontFamily:"'Playfair Display',serif", color:"#fff", fontSize:"clamp(32px,5vw,52px)", fontWeight:800, lineHeight:1.1, margin:"0 0 20px", letterSpacing:-1 }}>
+                Moving to the Middle East for work?<br /><span style={{ color:C.goldLt }}>Arrive speaking their language.</span>
+              </h1>
+              <p style={{ color:"rgba(255,255,255,0.65)", fontSize:16, lineHeight:1.8, maxWidth:580, margin:"0 auto 32px" }}>
+                1-on-1 Business Arabic and culture training with verified native teachers — built for professionals relocating to Dubai, Riyadh, Doha, Cairo, Amman, and across the region.
+              </p>
+              <button onClick={()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }}
+                style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`, color:C.navy, border:"none", borderRadius:14, padding:"15px 32px", fontWeight:800, fontSize:16, cursor:"pointer", fontFamily:"inherit", boxShadow:"0 8px 28px rgba(201,150,26,0.4)" }}>
+                Book a £3 Trial Lesson →
+              </button>
+            </div>
+          </div>
+
+          <div style={{ maxWidth:900, margin:"0 auto", padding:isMobile?"16px 16px 40px":"60px 40px" }}>
+
+            {/* The problem */}
+            <div style={{ background:"#fff", borderRadius:20, padding:"40px 44px", border:`1.5px solid ${C.gray200}`, marginBottom:24, boxShadow:"0 2px 16px rgba(26,52,112,0.06)" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
+                <div style={{ width:4, height:28, background:`linear-gradient(180deg,${C.gold},${C.goldLt})`, borderRadius:2 }} />
+                <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>You got the role. Now the clock is ticking.</h2>
+              </div>
+              <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, marginBottom:16 }}>
+                Your colleagues will speak English. Your success won't depend on it.
+              </p>
+              <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, marginBottom:16 }}>
+                The professionals who thrive in the Middle East are the ones who greet a client properly, know when to accept the third coffee, understand what "insha'Allah" means in a deadline conversation, and show respect in the details locals notice instantly.
+              </p>
+              <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, margin:0 }}>
+                None of that is in your relocation pack. All of it can be learned before your flight.
+              </p>
+            </div>
+
+            {/* What you'll learn */}
+            <div style={{ background:"#fff", borderRadius:20, padding:"40px 44px", border:`1.5px solid ${C.gray200}`, marginBottom:24, boxShadow:"0 2px 16px rgba(26,52,112,0.06)" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
+                <div style={{ width:4, height:28, background:`linear-gradient(180deg,${C.navy},#2A4A9A)`, borderRadius:2 }} />
+                <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>What you'll learn</h2>
+              </div>
+              <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, marginBottom:20 }}>
+                Arabic that works in a boardroom — and at the dinner you'll be invited to.
+              </p>
+              {[
+                "Professional greetings and introductions that make the right first impression",
+                "The essential courtesy phrases used daily in offices across the region",
+                "Meeting and negotiation culture: pacing, hierarchy, small talk that isn't small",
+                "Hospitality etiquette — coffee, meals, invitations, and what refusing them signals",
+                "Everyday survival Arabic: taxis, restaurants, and daily life in your new city",
+              ].map((item,i)=>(
+                <div key={i} style={{ display:"flex", gap:12, alignItems:"flex-start", marginBottom:12 }}>
+                  <div style={{ width:22, height:22, borderRadius:"50%", background:`linear-gradient(135deg,${C.gold},${C.goldLt})`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1 }}>
+                    <span style={{ color:C.navyDk, fontSize:11, fontWeight:800 }}>✓</span>
+                  </div>
+                  <span style={{ color:C.gray800, fontSize:14, lineHeight:1.7 }}>{item}</span>
+                </div>
+              ))}
+              <p style={{ color:C.gray600, fontSize:13, lineHeight:1.8, margin:"16px 0 0" }}>
+                Every lesson is 1-on-1 with a native speaker of your destination's dialect, tailored to your industry and your timeline.
+              </p>
+            </div>
+
+            {/* Dialect by destination */}
+            <div style={{ background:"#fff", borderRadius:20, padding:"40px 44px", border:`1.5px solid ${C.gray200}`, marginBottom:24, boxShadow:"0 2px 16px rgba(26,52,112,0.06)" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:20 }}>
+                <div style={{ width:4, height:28, background:`linear-gradient(180deg,${C.gold},${C.goldLt})`, borderRadius:2 }} />
+                <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>The right Arabic for your destination</h2>
+              </div>
+              <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, marginBottom:22 }}>
+                Arabic isn't one language on the ground — and learning the wrong version is the classic expat mistake. Tell us where you're heading, and we match you with a native teacher of exactly that dialect.
+              </p>
+              {[
+                ["UAE · Saudi Arabia · Qatar · Kuwait · Bahrain · Oman","Gulf Arabic"],
+                ["Egypt","Egyptian Arabic"],
+                ["Jordan · Lebanon · Syria · Palestine","Levantine Arabic"],
+                ["Morocco · Algeria · Tunisia","Maghrebi Arabic"],
+              ].map(([dest,dialect],i)=>(
+                <div key={dialect} onClick={()=>{ setFilterDialect(dialect); setFilterLevel("All"); setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }}
+                  style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:14,
+                    padding:"16px 20px", background:i===0?C.lb:C.cream, borderRadius:12,
+                    border:`1px solid ${C.gray200}`, marginBottom:10, cursor:"pointer",
+                    transition:"all 0.15s", flexWrap:"wrap" }}
+                  onMouseEnter={e=>e.currentTarget.style.borderColor=C.gold}
+                  onMouseLeave={e=>e.currentTarget.style.borderColor=C.gray200}>
+                  <div>
+                    <div style={{ fontWeight:700, color:C.navy, fontSize:14 }}>{dest}</div>
+                    <div style={{ color:C.gray600, fontSize:12, marginTop:2 }}>{dialect}</div>
+                  </div>
+                  <span style={{ color:C.gold, fontSize:13, fontWeight:700, whiteSpace:"nowrap" }}>Find a teacher →</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Why professionals choose Arabiq */}
+            <div style={{ background:"#fff", borderRadius:20, padding:"40px 44px", border:`1.5px solid ${C.gray200}`, marginBottom:24, boxShadow:"0 2px 16px rgba(26,52,112,0.06)" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:28 }}>
+                <div style={{ width:4, height:28, background:`linear-gradient(180deg,${C.navy},#2A4A9A)`, borderRadius:2 }} />
+                <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:24, fontWeight:800, margin:0 }}>Why professionals choose Arabiq</h2>
+              </div>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))", gap:18 }}>
+                {[
+                  { icon:"✅", title:"Verified native teachers", desc:"Every teacher is personally vetted before joining — no open marketplace, no gamble." },
+                  { icon:"🗺️", title:"The right dialect for your city", desc:"Not textbook Arabic nobody speaks in your new office. Gulf, Egyptian, Levantine, or Maghrebi — matched to your destination." },
+                  { icon:"🗓️", title:"Built around your schedule", desc:"Evening and weekend slots, entirely online, from wherever you are before the move. Most relocating professionals take 2-3 lessons a week in their final months." },
+                  { icon:"💳", title:"No subscriptions", desc:"Pay as you go. Start with a trial lesson for £3 to find the right teacher before committing to anything." },
+                ].map(({icon,title,desc})=>(
+                  <div key={title} style={{ background:C.cream, borderRadius:14, padding:"22px 20px" }}>
+                    <div style={{ fontSize:28, marginBottom:10 }}>{icon}</div>
+                    <div style={{ fontFamily:"'Playfair Display',serif", fontWeight:700, color:C.navy, fontSize:16, marginBottom:8 }}>{title}</div>
+                    <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7, margin:0 }}>{desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* FAQ */}
+            <div style={{ marginBottom:32 }}>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:26, fontWeight:800, marginBottom:20, textAlign:"center" }}>
+                Common questions
+              </h2>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+                {[
+                  { q:"How much Arabic can I realistically learn before I move?",
+                    a:"In 2-3 months of consistent lessons: proper greetings, courtesy phrases, business etiquette, and enough survival Arabic for daily life. You won't be fluent — anyone promising that is selling something — but you'll arrive functional and respected, which is what actually matters in month one." },
+                  { q:"I'm moving somewhere everyone speaks English. Is this worth it?",
+                    a:"You can survive in English in Dubai or Doha. You'll stand out in Arabic. Clients and colleagues across the region consistently treat professionals who've made the effort differently — it signals respect, commitment, and seriousness about the place you've moved to." },
+                  { q:"Which dialect will I learn?",
+                    a:"The one spoken where you're going — Gulf, Egyptian, Levantine, or Maghrebi — with Modern Standard Arabic elements where useful for formal and written contexts." },
+                  { q:"Can my company pay?",
+                    a:"Yes — many employers cover relocation language training. Contact us at hello@arabiq.app and we can provide invoices for expense claims or corporate billing." },
+                ].map((faq,i)=>(
+                  <div key={i} style={{ background:"#fff", borderRadius:14, padding:"20px 22px", border:`1.5px solid ${C.gray200}` }}>
+                    <h4 style={{ fontFamily:"'Playfair Display',serif", color:C.navy, fontSize:15, fontWeight:700, marginBottom:8 }}>{faq.q}</h4>
+                    <p style={{ color:C.gray600, fontSize:13, lineHeight:1.7, margin:0 }}>{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div style={{ background:`linear-gradient(135deg,${C.navy},${C.navy2})`, borderRadius:20, padding:"48px 44px", textAlign:"center" }}>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", color:"#fff", fontSize:28, fontWeight:800, marginBottom:12 }}>
+                Land ahead of every colleague who "meant to learn some Arabic"
+              </h2>
+              <p style={{ color:"rgba(255,255,255,0.65)", fontSize:15, lineHeight:1.7, marginBottom:28 }}>
+                Book a £3 trial with a teacher of your destination's dialect. Tell them your role, destination, and departure date — and get a lesson plan built around your timeline.
+              </p>
+              <button onClick={()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }}
+                style={{ background:`linear-gradient(135deg,${C.gold},${C.goldLt})`, color:C.navy, border:"none", borderRadius:12, padding:"14px 30px", fontWeight:800, fontSize:15, cursor:"pointer", fontFamily:"inherit", boxShadow:"0 6px 22px rgba(201,150,26,0.35)" }}>
+                Start with a £3 Trial →
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+      
       {/* ───── CONTACT US ───── */}
       {page==="contact" && !viewingTeacher && (
         <div style={{ paddingTop:100, minHeight:"100vh", background:C.cream, animation:"fadeIn 0.3s ease" }}>
