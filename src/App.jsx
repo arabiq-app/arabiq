@@ -5791,11 +5791,11 @@ export default function Arabiq() {
 const fire = (msg,type="ok")=>{ setToast({msg,type}); };
 
   // Sync URL with page state
-  useEffect(()=>{
+ useEffect(()=>{
     const pathMap = { home:'/', teachers:'/teachers', how:'/how',
       pricing:'/pricing', about:'/about', contact:'/contact',
       teach:'/teach', privacy:'/privacy', terms:'/terms',
-      profile:'/profile', admin:'/admin' };
+      profile:'/profile', admin:'/admin', business:'/business-arabic' };
     const path = pathMap[page] || '/';
     if (window.location.pathname !== path) {
       window.history.pushState({ page }, '', path);
