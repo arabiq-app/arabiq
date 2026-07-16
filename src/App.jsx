@@ -7596,11 +7596,14 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
 
                   </div>
                   {[
-                    ["Platform", [
+
+                ["Platform", [
                       { label:"Find a Teacher",  action:()=>{ setPage("teachers"); setViewingTeacher(null); window.scrollTo(0,0); }},
                       { label:"How It Works",    action:()=>{ setPage("how"); setViewingTeacher(null); window.scrollTo(0,0); }},
                       { label:"Pricing",         action:()=>{ setPage("pricing"); setViewingTeacher(null); window.scrollTo(0,0); }},
+                      { label:"Business Arabic", action:()=>{ setPage("business"); setViewingTeacher(null); window.scrollTo(0,0); }},
                     ]],
+                
                     ["Company", [
                       { label:"About Us",        action:()=>{ setPage("about"); setViewingTeacher(null); window.scrollTo(0,0); }},
                       { label:"Teach on Arabiq", action:()=>{ setPage("teach"); setViewingTeacher(null); window.scrollTo(0,0); }},
