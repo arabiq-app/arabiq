@@ -5808,7 +5808,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
       const pathMap = { '/':'home', '/teachers':'teachers', '/how':'how',
         '/pricing':'pricing', '/about':'about', '/contact':'contact',
         '/teach':'teach', '/privacy':'privacy', '/terms':'terms',
-        '/profile':'profile', '/admin':'admin' };
+        '/profile':'profile', '/admin':'admin', '/business-arabic':'business' };
       const newPage = pathMap[window.location.pathname] || 'home';
       setPage(newPage);
       setViewingTeacher(null);
