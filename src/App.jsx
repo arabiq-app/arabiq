@@ -6836,7 +6836,7 @@ const fire = (msg,type="ok")=>{ setToast({msg,type}); };
                 Your colleagues will speak English. Your success won't depend on it.
               </p>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, marginBottom:16 }}>
-                The professionals who thrive in the Middle East are the ones who greet a client properly, know when to accept the third coffee, understand what "insha'Allah" means in a deadline conversation, and show respect in the details locals notice instantly.
+                The professionals who thrive in the Middle East are the ones who greet a client properly, know when to accept the third coffee, understand that the first ten minutes of small talk aren't a delay before the meeting — they are the meeting — and show respect in the details locals notice instantly.
               </p>
               <p style={{ color:C.gray800, fontSize:15, lineHeight:1.9, margin:0 }}>
                 None of that is in your relocation pack. All of it can be learned before your flight.
